@@ -1,78 +1,2016 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Vtiger-mobile-client-ios by gixWorks</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Vtiger-mobile-client-ios : A client sample app for vTigerCRM Mobile API written in Objective-C, built for iOS" />
 
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Vtiger-mobile-client-ios</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/gixWorks/vtiger-mobile-client-ios">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/gixWorks/vtiger-mobile-client-ios/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/gixWorks/vtiger-mobile-client-ios/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
 
-    <div class="wrapper">
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/gixWorks/vtiger-mobile-client-ios">View on GitHub</a>
 
-      <section>
-        <div id="title">
-          <h1>Vtiger-mobile-client-ios</h1>
-          <p>A client sample app for vTigerCRM Mobile API written in Objective-C, built for iOS</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/gixWorks">gixWorks</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
+          <h1 id="project_title">Vtiger-mobile-client-ios</h1>
+          <h2 id="project_tagline">A client sample app for vTigerCRM Mobile API written in Objective-C, built for iOS</h2>
 
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/gixWorks/vtiger-mobile-client-ios/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/gixWorks/vtiger-mobile-client-ios/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>vTiger Mobile API </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h1>
+<a name="endpoint" class="anchor" href="#endpoint"><span class="octicon octicon-link"></span></a>Endpoint</h1>
+
+<p><a href="http://localhost:8888/vtigercrm520/modules/Mobile/api.php">http://localhost:8888/vtigercrm520/modules/Mobile/api.php</a></p>
+
+<p>All operations are POST requests</p>
+
+<h1>
+<a name="file-structure" class="anchor" href="#file-structure"><span class="octicon octicon-link"></span></a>File Structure</h1>
+
+<ul>
+<li>
+<p>/modules/mobile/</p>
+
+<ul>
+<li><p>api.php  endpoint for mobile web services. Send all POST requests there. Do not use arguments, but form arguments </p></li>
+<li><p>index.php  HTML page for mobile web service</p></li>
+</ul>
+</li>
+<li>
+<p>/modules/mobile/api/</p>
+
+<ul>
+<li>Request.php is the file containing the Request "model"</li>
+</ul>
+</li>
+<li>
+<p>/modules/mobile/api/ws/</p>
+
+<ul>
+<li><p>contains one file for each operation</p></li>
+<li><p>Utils.php utilities file, not a proper request</p></li>
+</ul>
+</li>
+</ul><h1>
+<a name="operations" class="anchor" href="#operations"><span class="octicon octicon-link"></span></a>Operations</h1>
+
+<h2>
+<a name="dump-of-operations-from-php-files" class="anchor" href="#dump-of-operations-from-php-files"><span class="octicon octicon-link"></span></a>Dump of operations from php files</h2>
+
+<p><code>'login'                   =&gt; array('file' =&gt; '/api/ws/Login.php', 'class' =&gt; 'Mobile_WS_Login'),</code></p>
+
+<p><code>'loginAndFetchModules'    =&gt; array('file' =&gt; '/api/ws/LoginAndFetchModules.php', 'class' =&gt; 'Mobile_WS_LoginAndFetchModules'),</code></p>
+
+<p><code>'fetchModuleFilters'      =&gt; array('file' =&gt; '/api/ws/FetchModuleFilters.php'  , 'class' =&gt; 'Mobile_WS_FetchModuleFilters'),</code></p>
+
+<p><code>'filterDetailsWithCount'  =&gt; array('file' =&gt; '/api/ws/FilterDetailsWithCount.php', 'class' =&gt; 'Mobile_WS_FilterDetailsWithCount'),</code></p>
+
+<p><code>'fetchAllAlerts'          =&gt; array('file' =&gt; '/api/ws/FetchAllAlerts.php', 'class' =&gt; 'Mobile_WS_FetchAllAlerts'),</code></p>
+
+<p><code>'alertDetailsWithMessage' =&gt; array('file' =&gt; '/api/ws/AlertDetailsWithMessage.php', 'class' =&gt; 'Mobile_WS_AlertDetailsWithMessage'),</code></p>
+
+<p><code>'listModuleRecords'       =&gt; array('file' =&gt; '/api/ws/ListModuleRecords.php', 'class' =&gt; 'Mobile_WS_ListModuleRecords'),</code></p>
+
+<p><code>'fetchRecord'             =&gt; array('file' =&gt; '/api/ws/FetchRecord.php', 'class' =&gt; 'Mobile_WS_FetchRecord'),</code></p>
+
+<p><code>'fetchRecordWithGrouping' =&gt; array('file' =&gt; '/api/ws/FetchRecordWithGrouping.php', 'class' =&gt; 'Mobile_WS_FetchRecordWithGrouping'),</code></p>
+
+<p><code>'fetchRecordsWithGrouping' =&gt; array('file' =&gt; '/api/ws/FetchRecordsWithGrouping.php', 'class' =&gt; 'Mobile_WS_FetchRecordsWithGrouping'),</code></p>
+
+<p><code>'describe'                =&gt; array('file' =&gt; '/api/ws/Describe.php', 'class' =&gt; 'Mobile_WS_Describe'),</code></p>
+
+<p><code>'saveRecord'              =&gt; array('file' =&gt; '/api/ws/SaveRecord.php', 'class' =&gt; 'Mobile_WS_SaveRecord'),</code></p>
+
+<p><code>'syncModuleRecords'       =&gt; array('file' =&gt; '/api/ws/SyncModuleRecords.php', 'class' =&gt; 'Mobile_WS_SyncModuleRecords'),</code></p>
+
+<p><code></code></p>
+
+<p><code>'query'                   =&gt; array('file' =&gt; '/api/ws/Query.php', 'class' =&gt; 'Mobile_WS_Query'),</code></p>
+
+<p><code>'queryWithGrouping'       =&gt; array('file' =&gt; '/api/ws/QueryWithGrouping.php', 'class' =&gt; 'Mobile_WS_QueryWithGrouping'),</code></p>
+
+<p><code></code></p>
+
+<p><code>'relatedRecordsWithGrouping' =&gt; array('file' =&gt; '/api/ws/RelatedRecordsWithGrouping.php', 'class' =&gt; 'Mobile_WS_RelatedRecordsWithGrouping'),</code></p>
+
+<p><code>'deleteRecords'              =&gt; array('file' =&gt; '/api/ws/DeleteRecords.php', 'class' =&gt; 'Mobile_WS_DeleteRecords'),</code></p>
+
+<p><code></code></p>
+
+<p><code>'addRecordComment'           =&gt; array('file' =&gt; '/api/ws/AddRecordComment.php', 'class' =&gt; 'Mobile_WS_AddRecordComment'),</code></p>
+
+<h2>
+<a name="details-of-operations" class="anchor" href="#details-of-operations"><span class="octicon octicon-link"></span></a>Details of Operations</h2>
+
+<p>NOTE: Looks like all operations support more parameters than the ones that are needed. Parameters such as <code>action</code>, <code>file</code> and <code>search</code> can be left out and what happens is that php.log will display <em>Notice</em>-level errors. Depending on the php.ini configuration, this can clutter the log file. </p>
+
+<h3>
+<a name="login" class="anchor" href="#login"><span class="octicon octicon-link"></span></a>login</h3>
+
+<p>Params:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>login</td>
+  </tr>
+<tr>
+<td>username</td>
+    <td>username</td>
+  </tr>
+<tr>
+<td>password</td>
+    <td>password</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Response:</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "login": {
+            "userid": "1",
+            "session": "fa000f0a6c5a414e62dcc4cbf99175d6",
+            "vtiger_version": "5.2.0",
+            "mobile_module_version": "1.2.1"
+        }
+    }
+}</code></p>
+
+<h3>
+<a name="loginandfetchmodules" class="anchor" href="#loginandfetchmodules"><span class="octicon octicon-link"></span></a>loginAndFetchModules</h3>
+
+<p>It’s used by the mobile web client to display a list of modules to the user after the login is successful. It’s also useful to check if a module is enabled or not. </p>
+
+<p>Params:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>login</td>
+  </tr>
+<tr>
+<td>username</td>
+    <td>username</td>
+  </tr>
+<tr>
+<td>password</td>
+    <td>password</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Response:</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "login": {
+            "userid": "1",
+            "session": "fa000f0a6c5a414e62dcc4cbf99175d6",
+            "vtiger_version": "5.2.0",
+            "mobile_module_version": "1.2.1"
+        },
+        "modules": [
+            {
+                "id": "1",
+                "name": "Calendar",
+                "isEntity": true,
+                "label": "Calendar",
+                "singular": "To Do"
+            },
+            {
+                "id": "2",
+                "name": "Leads",
+                "isEntity": true,
+                "label": "Leads",
+                "singular": "Lead"
+            },
+            {
+                "id": "3",
+                "name": "Accounts",
+                "isEntity": true,
+                "label": "Accounts",
+                "singular": "Account"
+            },
+            {
+                "id": "4",
+                "name": "Contacts",
+                "isEntity": true,
+                "label": "Contacts",
+                "singular": "Contact"
+            },
+            {
+                "id": "5",
+                "name": "Potentials",
+                "isEntity": true,
+                "label": "Potentials",
+                "singular": "Potential"
+            },
+            {
+                "id": "6",
+                "name": "Products",
+                "isEntity": true,
+                "label": "Products",
+                "singular": "Product"
+            },
+            {
+                "id": "7",
+                "name": "Documents",
+                "isEntity": true,
+                "label": "Documents",
+                "singular": "Document"
+            },
+            {
+                "id": "8",
+                "name": "Emails",
+                "isEntity": true,
+                "label": "Email",
+                "singular": "Email"
+            },
+            {
+                "id": "9",
+                "name": "HelpDesk",
+                "isEntity": true,
+                "label": "Trouble Tickets",
+                "singular": "Ticket"
+            },
+            {
+                "id": "10",
+                "name": "Faq",
+                "isEntity": true,
+                "label": "FAQ",
+                "singular": "Faq"
+            },
+            {
+                "id": "11",
+                "name": "Vendors",
+                "isEntity": true,
+                "label": "Vendors",
+                "singular": "Vendor"
+            },
+            {
+                "id": "12",
+                "name": "PriceBooks",
+                "isEntity": true,
+                "label": "Price Books",
+                "singular": "PriceBook"
+            },
+            {
+                "id": "13",
+                "name": "Quotes",
+                "isEntity": true,
+                "label": "Quotes",
+                "singular": "Quote"
+            },
+            {
+                "id": "14",
+                "name": "PurchaseOrder",
+                "isEntity": true,
+                "label": "Purchase Order",
+                "singular": "PurchaseOrder"
+            },
+            {
+                "id": "15",
+                "name": "SalesOrder",
+                "isEntity": true,
+                "label": "Sales Order",
+                "singular": "SalesOrder"
+            },
+            {
+                "id": "16",
+                "name": "Invoice",
+                "isEntity": true,
+                "label": "Invoice",
+                "singular": "Invoice"
+            },
+            {
+                "id": "17",
+                "name": "Campaigns",
+                "isEntity": true,
+                "label": "Campaigns",
+                "singular": "Campaign"
+            },
+            {
+                "id": "23",
+                "name": "PBXManager",
+                "isEntity": true,
+                "label": "PBX Manager",
+                "singular": "SINGLE_PBXManager"
+            },
+            {
+                "id": "24",
+                "name": "ServiceContracts",
+                "isEntity": true,
+                "label": "Service Contracts",
+                "singular": "Service Contract"
+            },
+            {
+                "id": "25",
+                "name": "Services",
+                "isEntity": true,
+                "label": "Services",
+                "singular": "Service"
+            },
+            {
+                "id": "26",
+                "name": "Assets",
+                "isEntity": true,
+                "label": "Assets",
+                "singular": "Asset"
+            },
+            {
+                "id": "27",
+                "name": "ModComments",
+                "isEntity": true,
+                "label": "Comments",
+                "singular": "Comment"
+            },
+            {
+                "id": "28",
+                "name": "ProjectMilestone",
+                "isEntity": true,
+                "label": "Project Milestones",
+                "singular": "Project Milestone"
+            },
+            {
+                "id": "29",
+                "name": "ProjectTask",
+                "isEntity": true,
+                "label": "Project Tasks",
+                "singular": "Project Task"
+            },
+            {
+                "id": "30",
+                "name": "Project",
+                "isEntity": true,
+                "label": "Projects",
+                "singular": "Project"
+            },
+            {
+                "id": "31",
+                "name": "SMSNotifier",
+                "isEntity": true,
+                "label": "SMSNotifier",
+                "singular": "SMS Info"
+            }
+        ]
+    }
+}</code></p>
+
+<h3>
+<a name="describe" class="anchor" href="#describe"><span class="octicon octicon-link"></span></a>Describe</h3>
+
+<p>Describe queries the API for a specified module and returns its configuration.</p>
+
+<p>Custom fields are returned.</p>
+
+<p>Parameters:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>describe</td>
+  </tr>
+<tr>
+<td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+<tr>
+<td>module</td>
+    <td>Module</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Allowed values for <code>module</code>:</p>
+
+<ul>
+<li>Calendar</li>
+</ul><p>Example of return result:</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "describe": {
+            "label": "Calendar",
+            "name": "Calendar",
+            "createable": true,
+            "updateable": true,
+            "deleteable": true,
+            "retrieveable": true,
+            "fields": [
+                {
+                    "name": "subject",
+                    "label": "Subject",
+                    "mandatory": true,
+                    "type": {
+                        "name": "string"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "assigned_user_id",
+                    "label": "Assigned To",
+                    "mandatory": true,
+                    "type": {
+                        "name": "owner"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "default": "0",
+                    "uitype": null
+                },
+                {
+                    "name": "date_start",
+                    "label": "Start Date &amp; Time",
+                    "mandatory": true,
+                    "type": {
+                        "format": "yyyy-mm-dd",
+                        "name": "date"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "time_start",
+                    "label": "Time Start",
+                    "mandatory": false,
+                    "type": {
+                        "name": "time"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": 252
+                },
+                {
+                    "name": "time_end",
+                    "label": "End Time",
+                    "mandatory": false,
+                    "type": {
+                        "name": "time"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": 252
+                },
+                {
+                    "name": "due_date",
+                    "label": "Due Date",
+                    "mandatory": true,
+                    "type": {
+                        "format": "yyyy-mm-dd",
+                        "name": "date"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "parent_id",
+                    "label": "Related to",
+                    "mandatory": false,
+                    "type": {
+                        "refersTo": [
+                            "Accounts",
+                            "HelpDesk",
+                            "Leads",
+                            "Potentials",
+                            "Invoice",
+                            "Quotes",
+                            "PurchaseOrder",
+                            "SalesOrder",
+                            "Campaigns"
+                        ],
+                        "name": "reference"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "contact_id",
+                    "label": "Contact Name",
+                    "mandatory": false,
+                    "type": {
+                        "refersTo": [
+                            "Contacts"
+                        ],
+                        "name": "reference"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "default": "0",
+                    "uitype": null
+                },
+                {
+                    "name": "taskstatus",
+                    "label": "Status",
+                    "mandatory": true,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "Not Started",
+                                "value": "Not Started"
+                            },
+                            {
+                                "label": "In Progress",
+                                "value": "In Progress"
+                            },
+                            {
+                                "label": "Completed",
+                                "value": "Completed"
+                            },
+                            {
+                                "label": "Pending Input",
+                                "value": "Pending Input"
+                            },
+                            {
+                                "label": "Deferred",
+                                "value": "Deferred"
+                            },
+                            {
+                                "label": "Planned",
+                                "value": "Planned"
+                            }
+                        ],
+                        "defaultValue": "Not Started",
+                        "name": "picklist"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "eventstatus",
+                    "label": "Status",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "Planned",
+                                "value": "Planned"
+                            },
+                            {
+                                "label": "Held",
+                                "value": "Held"
+                            },
+                            {
+                                "label": "Not Held",
+                                "value": "Not Held"
+                            }
+                        ],
+                        "defaultValue": "Planned",
+                        "name": "picklist"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "taskpriority",
+                    "label": "Priority",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "High",
+                                "value": "High"
+                            },
+                            {
+                                "label": "Medium",
+                                "value": "Medium"
+                            },
+                            {
+                                "label": "Low",
+                                "value": "Low"
+                            }
+                        ],
+                        "defaultValue": "High",
+                        "name": "picklist"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "sendnotification",
+                    "label": "Send Notification",
+                    "mandatory": false,
+                    "type": {
+                        "name": "boolean"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "default": "0",
+                    "uitype": null
+                },
+                {
+                    "name": "createdtime",
+                    "label": "Created Time",
+                    "mandatory": false,
+                    "type": {
+                        "name": "datetime"
+                    },
+                    "nullable": false,
+                    "editable": false,
+                    "uitype": null
+                },
+                {
+                    "name": "modifiedtime",
+                    "label": "Modified Time",
+                    "mandatory": false,
+                    "type": {
+                        "name": "datetime"
+                    },
+                    "nullable": false,
+                    "editable": false,
+                    "uitype": null
+                },
+                {
+                    "name": "activitytype",
+                    "label": "Activity Type",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "Call",
+                                "value": "Call"
+                            },
+                            {
+                                "label": "Meeting",
+                                "value": "Meeting"
+                            }
+                        ],
+                        "defaultValue": "Call",
+                        "name": "picklist"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "visibility",
+                    "label": "Visibility",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "Private",
+                                "value": "Private"
+                            },
+                            {
+                                "label": "Public",
+                                "value": "Public"
+                            }
+                        ],
+                        "defaultValue": "Private",
+                        "name": "picklist"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "default": "all",
+                    "uitype": null
+                },
+                {
+                    "name": "description",
+                    "label": "Description",
+                    "mandatory": false,
+                    "type": {
+                        "name": "text"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "duration_hours",
+                    "label": "Duration",
+                    "mandatory": false,
+                    "type": {
+                        "name": "time"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "duration_minutes",
+                    "label": "Duration Minutes",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "00",
+                                "value": "00"
+                            },
+                            {
+                                "label": "15",
+                                "value": "15"
+                            },
+                            {
+                                "label": "30",
+                                "value": "30"
+                            },
+                            {
+                                "label": "45",
+                                "value": "45"
+                            }
+                        ],
+                        "defaultValue": "00",
+                        "name": "picklist"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "location",
+                    "label": "Location",
+                    "mandatory": false,
+                    "type": {
+                        "name": "string"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "reminder_time",
+                    "label": "Send Reminder",
+                    "mandatory": false,
+                    "type": {
+                        "name": "integer"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "recurringtype",
+                    "label": "Recurrence",
+                    "mandatory": false,
+                    "type": {
+                        "picklistValues": [
+                            {
+                                "label": "--None--",
+                                "value": "--None--"
+                            },
+                            {
+                                "label": "Day(s)",
+                                "value": "Daily"
+                            },
+                            {
+                                "label": "Week(s)",
+                                "value": "Weekly"
+                            },
+                            {
+                                "label": "Month(s)",
+                                "value": "Monthly"
+                            },
+                            {
+                                "label": "Year",
+                                "value": "Yearly"
+                            }
+                        ],
+                        "defaultValue": "--None--",
+                        "name": "picklist"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "notime",
+                    "label": "No Time",
+                    "mandatory": false,
+                    "type": {
+                        "name": "boolean"
+                    },
+                    "nullable": false,
+                    "editable": true,
+                    "default": "0",
+                    "uitype": null
+                },
+                {
+                    "name": "cf_617",
+                    "label": "Telefono da chiamare per chiarimenti",
+                    "mandatory": false,
+                    "type": {
+                        "name": "phone"
+                    },
+                    "nullable": true,
+                    "editable": true,
+                    "uitype": null
+                },
+                {
+                    "name": "id",
+                    "label": "activityid",
+                    "mandatory": false,
+                    "type": {
+                        "name": "autogenerated"
+                    },
+                    "editable": false,
+                    "nullable": false,
+                    "default": "",
+                    "uitype": null
+                }
+            ],
+            "idPrefix": "1",
+            "isEntity": true,
+            "labelFields": "subject"
+        }
+    }
+}</code></p>
+
+<h3>
+<a name="syncmodulerecords" class="anchor" href="#syncmodulerecords"><span class="octicon octicon-link"></span></a>syncModuleRecords</h3>
+
+<p>Performs a sync of records for specified modules, returning the updated and deleted records since last sync. (Identified by syncToken parameter)</p>
+
+<p>IMPORTANT: syncModuleRecords does not display custom fields (apparently)</p>
+
+<p>Parameters:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>syncModuleRecords</td>
+  </tr>
+<tr>
+<td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+<tr>
+<td>module</td>
+    <td>Module</td>
+  </tr>
+<tr>
+<td>syncToken</td>
+    <td>[empty, or the token from previous sync]</td>
+  </tr>
+<tr>
+<td>mode</td>
+    <td>PRIVATE</td>
+  </tr>
+<tr>
+<td>page</td>
+    <td>integer</td>
+  </tr>
+</table><p>Allowed values for <code>module</code>:</p>
+
+<ul>
+<li>Calendar</li>
+</ul><p>Allowed values for <code>mode</code>:</p>
+
+<ul>
+<li><p>PRIVATE</p></li>
+<li><p>PUBLIC</p></li>
+</ul><p><code>Page</code> can be empty.</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "sync": {
+            "nextSyncToken": 1385311551,
+            "deleted": [],
+            "updated": [
+                {
+                    "blocks": [
+                        {
+                            "label": "Task Information",
+                            "fields": [
+                                {
+                                    "name": "subject",
+                                    "value": "Meeting with Lead",
+                                    "label": "Subject",
+                                    "uitype": "2"
+                                },
+                                {
+                                    "name": "reminder_time",
+                                    "value": "0",
+                                    "label": "Send Reminder",
+                                    "uitype": "30"
+                                },
+                                {
+                                    "name": "assigned_user_id",
+                                    "value": {
+                                        "value": "19x1",
+                                        "label": "Administrator"
+                                    },
+                                    "label": "Assigned To",
+                                    "uitype": "53",
+                                    "type": {
+                                        "defaultValue": {
+                                            "value": "19x1",
+                                            "label": "Administrator"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "date_start",
+                                    "value": "2014-01-13",
+                                    "label": "Start Date &amp;amp; Time",
+                                    "uitype": "6"
+                                },
+                                {
+                                    "name": "time_end",
+                                    "value": "10:45",
+                                    "label": "End Time",
+                                    "uitype": 252
+                                },
+                                {
+                                    "name": "time_start",
+                                    "value": "09:45",
+                                    "label": "Time Start",
+                                    "uitype": 252
+                                },
+                                {
+                                    "name": "due_date",
+                                    "value": "2014-01-13",
+                                    "label": "Due Date",
+                                    "uitype": "23"
+                                },
+                                {
+                                    "name": "recurringtype",
+                                    "value": "",
+                                    "label": "Recurrence",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "parent_id",
+                                    "value": {
+                                        "value": "2x37",
+                                        "label": "Davis Jennifer"
+                                    },
+                                    "label": "Related to",
+                                    "uitype": "66"
+                                },
+                                {
+                                    "name": "contact_id",
+                                    "value": {
+                                        "value": "",
+                                        "label": ""
+                                    },
+                                    "label": "Contact Name",
+                                    "uitype": "57"
+                                },
+                                {
+                                    "name": "eventstatus",
+                                    "value": "Planned",
+                                    "label": "Status",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "taskpriority",
+                                    "value": "High",
+                                    "label": "Priority",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "sendnotification",
+                                    "value": "",
+                                    "label": "Send Notification",
+                                    "uitype": "56"
+                                },
+                                {
+                                    "name": "createdtime",
+                                    "value": "2013-11-18 09:44:20",
+                                    "label": "Created Time",
+                                    "uitype": "70"
+                                },
+                                {
+                                    "name": "modifiedtime",
+                                    "value": "2013-11-18 09:44:20",
+                                    "label": "Modified Time",
+                                    "uitype": "70"
+                                },
+                                {
+                                    "name": "activitytype",
+                                    "value": "Meeting",
+                                    "label": "Activity Type",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "duration_hours",
+                                    "value": "1",
+                                    "label": "Duration",
+                                    "uitype": "63"
+                                },
+                                {
+                                    "name": "visibility",
+                                    "value": "Private",
+                                    "label": "Visibility",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "duration_minutes",
+                                    "value": "0",
+                                    "label": "Duration Minutes",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "location",
+                                    "value": "via dei mille 45, Brescia, Italia",
+                                    "label": "Location",
+                                    "uitype": "1"
+                                },
+                                {
+                                    "name": "notime",
+                                    "value": "0",
+                                    "label": "No Time",
+                                    "uitype": "56"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "",
+                            "fields": [
+                                {
+                                    "name": "description",
+                                    "value": "description of meeting with Lead",
+                                    "label": "Description",
+                                    "uitype": "19"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Custom Information",
+                            "fields": []
+                        }
+                    ],
+                    "id": "18x1207",
+                    "labelFields": [
+                        "subject"
+                    ]
+                },
+                {
+                    "blocks": [
+                        {
+                            "label": "Task Information",
+                            "fields": [
+                                {
+                                    "name": "subject",
+                                    "value": "Meeting with Lead",
+                                    "label": "Subject",
+                                    "uitype": "2"
+                                },
+                                {
+                                    "name": "reminder_time",
+                                    "value": "0",
+                                    "label": "Send Reminder",
+                                    "uitype": "30"
+                                },
+                                {
+                                    "name": "assigned_user_id",
+                                    "value": {
+                                        "value": "19x1",
+                                        "label": "Administrator"
+                                    },
+                                    "label": "Assigned To",
+                                    "uitype": "53",
+                                    "type": {
+                                        "defaultValue": {
+                                            "value": "19x1",
+                                            "label": "Administrator"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "date_start",
+                                    "value": "2014-01-12",
+                                    "label": "Start Date &amp;amp; Time",
+                                    "uitype": "6"
+                                },
+                                {
+                                    "name": "time_end",
+                                    "value": "10:45",
+                                    "label": "End Time",
+                                    "uitype": 252
+                                },
+                                {
+                                    "name": "time_start",
+                                    "value": "09:45",
+                                    "label": "Time Start",
+                                    "uitype": 252
+                                },
+                                {
+                                    "name": "due_date",
+                                    "value": "2014-01-12",
+                                    "label": "Due Date",
+                                    "uitype": "23"
+                                },
+                                {
+                                    "name": "recurringtype",
+                                    "value": "",
+                                    "label": "Recurrence",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "parent_id",
+                                    "value": {
+                                        "value": "2x37",
+                                        "label": "Davis Jennifer"
+                                    },
+                                    "label": "Related to",
+                                    "uitype": "66"
+                                },
+                                {
+                                    "name": "contact_id",
+                                    "value": {
+                                        "value": "",
+                                        "label": ""
+                                    },
+                                    "label": "Contact Name",
+                                    "uitype": "57"
+                                },
+                                {
+                                    "name": "eventstatus",
+                                    "value": "Planned",
+                                    "label": "Status",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "taskpriority",
+                                    "value": "High",
+                                    "label": "Priority",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "sendnotification",
+                                    "value": "",
+                                    "label": "Send Notification",
+                                    "uitype": "56"
+                                },
+                                {
+                                    "name": "createdtime",
+                                    "value": "2013-11-18 09:44:19",
+                                    "label": "Created Time",
+                                    "uitype": "70"
+                                },
+                                {
+                                    "name": "modifiedtime",
+                                    "value": "2013-11-18 09:44:19",
+                                    "label": "Modified Time",
+                                    "uitype": "70"
+                                },
+                                {
+                                    "name": "activitytype",
+                                    "value": "Meeting",
+                                    "label": "Activity Type",
+                                    "uitype": "15"
+                                },
+                                {
+                                    "name": "duration_hours",
+                                    "value": "1",
+                                    "label": "Duration",
+                                    "uitype": "63"
+                                },
+                                {
+                                    "name": "visibility",
+                                    "value": "Private",
+                                    "label": "Visibility",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "duration_minutes",
+                                    "value": "0",
+                                    "label": "Duration Minutes",
+                                    "uitype": "16"
+                                },
+                                {
+                                    "name": "location",
+                                    "value": "via dei mille 45, Brescia, Italia",
+                                    "label": "Location",
+                                    "uitype": "1"
+                                },
+                                {
+                                    "name": "notime",
+                                    "value": "0",
+                                    "label": "No Time",
+                                    "uitype": "56"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "",
+                            "fields": [
+                                {
+                                    "name": "description",
+                                    "value": "description of meeting with Lead",
+                                    "label": "Description",
+                                    "uitype": "19"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Custom Information",
+                            "fields": []
+                        }
+                    ],
+                    "id": "18x1206",
+                    "labelFields": [
+                        "subject"
+                    ]
+                }
+            ],
+            "nextPage": 0
+        }
+    }
+}</code></p>
+
+<h3>
+<a name="fetchrecord" class="anchor" href="#fetchrecord"><span class="octicon octicon-link"></span></a>fetchRecord</h3>
+
+<p>Fetches a single record. Fields are laid out in a simple key:value association, and all additional keys (such as uitype, label) are skipped. </p>
+
+<p>IMPORTANT: fetchRecord fetches Custom Fields correctly, but does not display a label for them.</p>
+
+<p>Parameters:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>fetchRecord</td>
+  </tr>
+<tr>
+<td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+<tr>
+<td>record</td>
+    <td>module_idXrecord_id</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Allowed values for <code>module</code>:</p>
+
+<ul>
+<li>Calendar</li>
+</ul><p>Record must be in the form module_idXrecord_id such as 1x1151</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "record": {
+            "subject": "new todo with very long title  that in iOS will be cut somewhere!",
+            "assigned_user_id": {
+                "value": "19x1",
+                "label": "Administrator"
+            },
+            "date_start": "2013-05-27",
+            "time_start": "15:40",
+            "time_end": "",
+            "due_date": "2013-05-27",
+            "parent_id": {
+                "value": "",
+                "label": ""
+            },
+            "contact_id": {
+                "value": "",
+                "label": ""
+            },
+            "taskstatus": "Not Started",
+            "eventstatus": "",
+            "taskpriority": "High",
+            "sendnotification": "0",
+            "createdtime": "2013-05-26 15:39:57",
+            "modifiedtime": "2013-05-26 15:39:57",
+            "activitytype": "Task",
+            "visibility": "",
+            "description": "desc",
+            "duration_hours": "",
+            "duration_minutes": "",
+            "location": "",
+            "reminder_time": "",
+            "recurringtype": "",
+            "notime": "0",
+            "cf_617": "",
+            "id": "1x1151"
+        }
+    }
+}</code></p>
+
+<h3>
+<a name="fetchrecordwithgrouping" class="anchor" href="#fetchrecordwithgrouping"><span class="octicon octicon-link"></span></a>fetchRecordWithGrouping</h3>
+
+<p>Fetches a single record and returns fields with the complete representation containing uitype, label (translated), value and name. </p>
+
+<p>IMPORTANT: fetchRecord fetches Custom Fields and it’s sent in the 3rd "block" of fields.</p>
+
+<p>Parameters:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>fetchRecordWithGrouping</td>
+  </tr>
+<tr>
+<td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+<tr>
+<td>record</td>
+    <td>module_idXrecord_id</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Allowed values for <code>module</code>:</p>
+
+<ul>
+<li>Calendar</li>
+</ul><p>Record must be in the form module_idXrecord_id such as 1x1151</p>
+
+<p><code>{
+    "success": true,
+    "result": {
+        "record": {
+            "blocks": [
+                {
+                    "label": "Task Information",
+                    "fields": [
+                        {
+                            "name": "subject",
+                            "value": "new todo with very long title  that in iOS will be cut somewhere!",
+                            "label": "Subject",
+                            "uitype": "2"
+                        },
+                        {
+                            "name": "reminder_time",
+                            "value": "",
+                            "label": "Send Reminder",
+                            "uitype": "30"
+                        },
+                        {
+                            "name": "assigned_user_id",
+                            "value": {
+                                "value": "19x1",
+                                "label": "Administrator"
+                            },
+                            "label": "Assigned To",
+                            "uitype": "53",
+                            "type": {
+                                "defaultValue": {
+                                    "value": "19x1",
+                                    "label": "Administrator"
+                                }
+                            }
+                        },
+                        {
+                            "name": "date_start",
+                            "value": "2013-05-27",
+                            "label": "Start Date &amp;amp; Time",
+                            "uitype": "6"
+                        },
+                        {
+                            "name": "time_end",
+                            "value": "",
+                            "label": "End Time",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "time_start",
+                            "value": "15:40",
+                            "label": "Time Start",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "due_date",
+                            "value": "2013-05-27",
+                            "label": "Due Date",
+                            "uitype": "23"
+                        },
+                        {
+                            "name": "recurringtype",
+                            "value": "",
+                            "label": "Recurrence",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "parent_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Related to",
+                            "uitype": "66"
+                        },
+                        {
+                            "name": "taskstatus",
+                            "value": "Not Started",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "contact_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Contact Name",
+                            "uitype": "57"
+                        },
+                        {
+                            "name": "eventstatus",
+                            "value": "",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "taskpriority",
+                            "value": "High",
+                            "label": "Priority",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "sendnotification",
+                            "value": "0",
+                            "label": "Send Notification",
+                            "uitype": "56"
+                        },
+                        {
+                            "name": "createdtime",
+                            "value": "2013-05-26 15:39:57",
+                            "label": "Created Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "modifiedtime",
+                            "value": "2013-05-26 15:39:57",
+                            "label": "Modified Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "activitytype",
+                            "value": "Task",
+                            "label": "Activity Type",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "duration_hours",
+                            "value": "",
+                            "label": "Duration",
+                            "uitype": "63"
+                        },
+                        {
+                            "name": "visibility",
+                            "value": "",
+                            "label": "Visibility",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "duration_minutes",
+                            "value": "",
+                            "label": "Duration Minutes",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "location",
+                            "value": "",
+                            "label": "Location",
+                            "uitype": "1"
+                        },
+                        {
+                            "name": "notime",
+                            "value": "0",
+                            "label": "No Time",
+                            "uitype": "56"
+                        }
+                    ]
+                },
+                {
+                    "label": "",
+                    "fields": [
+                        {
+                            "name": "description",
+                            "value": "desc",
+                            "label": "Description",
+                            "uitype": "19"
+                        }
+                    ]
+                },
+                {
+                    "label": "Custom Information",
+                    "fields": [
+                        {
+                            "name": "cf_617",
+                            "value": "",
+                            "label": "Telefono da chiamare per chiarimenti",
+                            "uitype": "11"
+                        }
+                    ]
+                }
+            ],
+            "id": "1x1151"
+        }
+    }
+}</code></p>
+
+<h3>
+<a name="saverecord" class="anchor" href="#saverecord"><span class="octicon octicon-link"></span></a>saveRecord</h3>
+
+<p>Updates or creates a record, depending whether the record id is set or not. </p>
+
+<p>Parameters:</p>
+
+<table>
+<tr>
+<td>Name</td>
+    <td>Value</td>
+  </tr>
+<tr>
+<td>_operation</td>
+    <td>saveRecord</td>
+  </tr>
+<tr>
+<td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+<tr>
+<td>module</td>
+    <td>Module</td>
+  </tr>
+<tr>
+<td>record</td>
+    <td>module_idXrecord_id</td>
+  </tr>
+<tr>
+<td>values</td>
+    <td>json string</td>
+  </tr>
+<tr>
+<td></td>
+    <td></td>
+  </tr>
+</table><p>Allowed values for <code>module</code>:</p>
+
+<ul>
+<li>Calendar</li>
+</ul><p>Example of JSON String to set in the <code>values</code> parameter: </p>
+
+<p><code>{"date_start":"2014-01-18", "due_date": "2014-01-18", "start_time":"14:44","activitytype":"Call","location":"Overhoeksplein 2, Amsterdam","subject":"Call Smith", "assigned_user_id" : "19x1","taskstatus":"Planned","visibility":"Private"}</code></p>
+
+<p>Note the absence of "id" because we want to create new record</p>
+
+<p>For setting the assigned user, The id must be in the form of moduleid x entityid </p>
+
+<p>Record must be in the form module_idXrecord_id such as 1x1151</p>
+
+<p>Example of successful response:  (basically returns the entire record created)</p>
+
+<p>`{
+    "success": true,
+    "result": {
+        "record": {
+            "blocks": [
+                {
+                    "label": "Task Information",
+                    "fields": [
+                        {
+                            "name": "subject",
+                            "value": "Call Smith",
+                            "label": "Subject",
+                            "uitype": "2"
+                        },
+                        {
+                            "name": "reminder_time",
+                            "value": "",
+                            "label": "Send Reminder",
+                            "uitype": "30"
+                        },
+                        {
+                            "name": "assigned_user_id",
+                            "value": {
+                                "value": "19x1",
+                                "label": "Administrator"
+                            },
+                            "label": "Assigned To",
+                            "uitype": "53",
+                            "type": {
+                                "defaultValue": {
+                                    "value": "19x1",
+                                    "label": "Administrator"
+                                }
+                            }
+                        },
+                        {
+                            "name": "date_start",
+                            "value": "2014-01-18",
+                            "label": "Start Date &amp; Time",
+                            "uitype": "6"
+                        },
+                        {
+                            "name": "time_end",
+                            "value": "",
+                            "label": "End Time",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "time_start",
+                            "value": "",
+                            "label": "Time Start",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "due_date",
+                            "value": "2014-01-18",
+                            "label": "Due Date",
+                            "uitype": "23"
+                        },
+                        {
+                            "name": "recurringtype",
+                            "value": "",
+                            "label": "Recurrence",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "parent_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Related to",
+                            "uitype": "66"
+                        },
+                        {
+                            "name": "taskstatus",
+                            "value": "",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "contact_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Contact Name",
+                            "uitype": "57"
+                        },
+                        {
+                            "name": "eventstatus",
+                            "value": "",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "taskpriority",
+                            "value": "",
+                            "label": "Priority",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "sendnotification",
+                            "value": "0",
+                            "label": "Send Notification",
+                            "uitype": "56"
+                        },
+                        {
+                            "name": "createdtime",
+                            "value": "2013-11-25 13:43:49",
+                            "label": "Created Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "modifiedtime",
+                            "value": "2013-11-25 13:43:49",
+                            "label": "Modified Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "activitytype",
+                            "value": "Call",
+                            "label": "Activity Type",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "duration_hours",
+                            "value": "0",
+                            "label": "Duration",
+                            "uitype": "63"
+                        },
+                        {
+                            "name": "visibility",
+                            "value": "Private",
+                            "label": "Visibility",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "duration_minutes",
+                            "value": "",
+                            "label": "Duration Minutes",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "location",
+                            "value": "",
+                            "label": "Location",
+                            "uitype": "1"
+                        },
+                        {
+                            "name": "notime",
+                            "value": "0",
+                            "label": "No Time",
+                            "uitype": "56"
+                        }
+                    ]
+                },
+                {
+                    "label": "",
+                    "fields": [
+                        {
+                            "name": "description",
+                            "value": "",
+                            "label": "Description",
+                            "uitype": "19"
+                        }
+                    ]
+                },
+                {
+                    "label": "Custom Information",
+                    "fields": [
+                        {
+                            "name": "cf_617",
+                            "value": "",
+                            "label": "Telefono da chiamare per chiarimenti",
+                            "uitype": "11"
+                        }
+                    ]
+                }
+            ],
+            "id": "1x1225"
+        }
+    }
+}</p>
+
+<pre><code>"success": true,
+"result": {
+    "record": {
+        "blocks": [
+            {
+                "label": "Task Information",
+                "fields": [
+                    {
+                        "name": "subject",
+                        "value": "Call Smith",
+                        "label": "Subject",
+                        "uitype": "2"
+                    },
+                    {
+                        "name": "reminder_time",
+                        "value": "",
+                        "label": "Send Reminder",
+                        "uitype": "30"
+                    },
+                    {
+                        "name": "assigned_user_id",
+                        "value": {
+                            "value": "19x1",
+                            "label": "Administrator"
+                        },
+                        "label": "Assigned To",
+                        "uitype": "53",
+                        "type": {
+                            "defaultValue": {
+                                "value": "19x1",
+                                "label": "Administrator"
+                            }
+                        }
+                    },
+                    {
+                        "name": "date_start",
+                        "value": "2014-01-18",
+                        "label": "Start Date &amp;amp; Time",
+                        "uitype": "6"
+                    },
+                    {
+                        "name": "time_end",
+                        "value": "",
+                        "label": "End Time",
+                        "uitype": 252
+                    },
+                    {
+                        "name": "time_start",
+                        "value": "",
+                        "label": "Time Start",
+                        "uitype": 252
+                    },
+                    {
+                        "name": "due_date",
+                        "value": "2014-01-18",
+                        "label": "Due Date",
+                        "uitype": "23"
+                    },
+                    {
+                        "name": "recurringtype",
+                        "value": "",
+                        "label": "Recurrence",
+                        "uitype": "16"
+                    },
+                    {
+                        "name": "parent_id",
+                        "value": {
+                            "value": "",
+                            "label": ""
+                        },
+                        "label": "Related to",
+                        "uitype": "66"
+                    },
+                    {
+                        "name": "taskstatus",
+                        "value": "",
+                        "label": "Status",
+                        "uitype": "15"
+                    },
+                    {
+                        "name": "contact_id",
+                        "value": {
+                            "value": "",
+                            "label": ""
+                        },
+                        "label": "Contact Name",
+                        "uitype": "57"
+                    },
+                    {
+                        "name": "eventstatus",
+                        "value": "",
+                        "label": "Status",
+                        "uitype": "15"
+                    },
+                    {
+                        "name": "taskpriority",
+                        "value": "",
+                        "label": "Priority",
+                        "uitype": "15"
+                    },
+                    {
+                        "name": "sendnotification",
+                        "value": "0",
+                        "label": "Send Notification",
+                        "uitype": "56"
+                    },
+                    {
+                        "name": "createdtime",
+                        "value": "2013-11-25 13:43:49",
+                        "label": "Created Time",
+                        "uitype": "70"
+                    },
+                    {
+                        "name": "modifiedtime",
+                        "value": "2013-11-25 13:43:49",
+                        "label": "Modified Time",
+                        "uitype": "70"
+                    },
+                    {
+                        "name": "activitytype",
+                        "value": "Call",
+                        "label": "Activity Type",
+                        "uitype": "15"
+                    },
+                    {
+                        "name": "duration_hours",
+                        "value": "0",
+                        "label": "Duration",
+                        "uitype": "63"
+                    },
+                    {
+                        "name": "visibility",
+                        "value": "Private",
+                        "label": "Visibility",
+                        "uitype": "16"
+                    },
+                    {
+                        "name": "duration_minutes",
+                        "value": "",
+                        "label": "Duration Minutes",
+                        "uitype": "16"
+                    },
+                    {
+                        "name": "location",
+                        "value": "",
+                        "label": "Location",
+                        "uitype": "1"
+                    },
+                    {
+                        "name": "notime",
+                        "value": "0",
+                        "label": "No Time",
+                        "uitype": "56"
+                    }
+                ]
+            },
+            {
+                "label": "",
+                "fields": [
+                    {
+                        "name": "description",
+                        "value": "",
+                        "label": "Description",
+                        "uitype": "19"
+                    }
+                ]
+            },
+            {
+                "label": "Custom Information",
+                "fields": [
+                    {
+                        "name": "cf_617",
+                        "value": "",
+                        "label": "Telefono da chiamare per chiarimenti",
+                        "uitype": "11"
+                    }
+                ]
+            }
+        ],
+        "id": "1x1225"
+    }
+}
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>}`</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<p>Example of error:</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p><code>{"success":false,"error":{"code":"MANDATORY_FIELDS_MISSING","message":"assigned_user_id does not have a value"}}</code></p>
       </section>
-
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Vtiger-mobile-client-ios maintained by <a href="https://github.com/gixWorks">gixWorks</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -83,6 +2021,7 @@ $ git checkout gh-pages
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
