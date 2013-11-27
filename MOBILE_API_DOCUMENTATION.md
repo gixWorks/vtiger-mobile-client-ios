@@ -1,7 +1,5 @@
 vTiger Mobile API 
 
-[[TOC]]
-
 # Endpoint
 
 [http://localhost:8888/vtigercrm520/modules/Mobile/api.php](http://localhost:8888/vtigercrm520/modules/Mobile/api.php)
@@ -106,9 +104,7 @@ Params:
 
 Response:
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "login": {
@@ -118,10 +114,7 @@ Response:
             "mobile_module_version": "1.2.1"
         }
     }
-}
-</td>
-  </tr>
-</table>
+}`
 
 
 ### loginAndFetchModules
@@ -156,9 +149,7 @@ Params:
 
 Response:
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "login": {
@@ -352,11 +343,7 @@ Response:
             }
         ]
     }
-}
-
-</td>
-  </tr>
-</table>
+}`
 
 
 ### Describe
@@ -405,9 +392,7 @@ Allowed values for `module`:
 
 Example of return result:
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "describe": {
@@ -842,11 +827,7 @@ Example of return result:
             "labelFields": "subject"
         }
     }
-}
-</td>
-  </tr>
-</table>
-
+}`
 
 ### syncModuleRecords
 
@@ -900,9 +881,7 @@ Allowed values for `mode`:
 
 `Page` can be empty.
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "sync": {
@@ -1251,12 +1230,7 @@ Allowed values for `mode`:
             "nextPage": 0
         }
     }
-}
-
-</td>
-  </tr>
-</table>
-
+}`
 
 ### fetchRecord
 
@@ -1300,9 +1274,7 @@ Allowed values for `module`:
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "record": {
@@ -1342,10 +1314,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
             "id": "1x1151"
         }
     }
-}
-</td>
-  </tr>
-</table>
+}`
 
 
 ### fetchRecordWithGrouping
@@ -1390,9 +1359,7 @@ Allowed values for `module`:
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "record": {
@@ -1575,11 +1542,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
             "id": "1x1151"
         }
     }
-}
-
-</td>
-  </tr>
-</table>
+}`
 
 
 ### saveRecord
@@ -1626,12 +1589,7 @@ Allowed values for `module`:
 
 Example of JSON String to set in the `values` parameter: 
 
-<table>
-  <tr>
-    <td>{"date_start":"2014-01-18", "due_date": "2014-01-18", "start_time":"14:44","activitytype":"Call","location":"Overhoeksplein 2, Amsterdam","subject":"Call Smith", "assigned_user_id" : "19x1","taskstatus":"Planned","visibility":"Private"}</td>
-  </tr>
-</table>
-
+`{"date_start":"2014-01-18", "due_date": "2014-01-18", "start_time":"14:44","activitytype":"Call","location":"Overhoeksplein 2, Amsterdam","subject":"Call Smith", "assigned_user_id" : "19x1","taskstatus":"Planned","visibility":"Private"}`
 
 Note the absence of "id" because we want to create new record
 
@@ -1641,9 +1599,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
 
 Example of successful response:  (basically returns the entire record created)
 
-<table>
-  <tr>
-    <td>{
+`{
     "success": true,
     "result": {
         "record": {
@@ -2010,21 +1966,9 @@ Example of successful response:  (basically returns the entire record created)
             "id": "1x1225"
         }
     }
-}
-</td>
-  </tr>
-</table>
+}`
 
 
 Example of error:
 
-<table>
-  <tr>
-    <td>
-{"success":false,"error":{"code":"MANDATORY_FIELDS_MISSING","message":"assigned_user_id does not have a value"}}
-
-</td>
-  </tr>
-</table>
-
-
+`{"success":false,"error":{"code":"MANDATORY_FIELDS_MISSING","message":"assigned_user_id does not have a value"}}`
