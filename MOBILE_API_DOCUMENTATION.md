@@ -113,7 +113,7 @@ Params:
 
 Response:
 
-    `{
+    {
     "success": true,
     "result": {
         "login": {
@@ -123,7 +123,7 @@ Response:
             "mobile_module_version": "1.2.1"
         }
     }
-    }`
+    }
 
 
 ### loginAndFetchModules
@@ -158,7 +158,7 @@ Params:
 
 Response:
 
-    `{
+    {
     "success": true,
     "result": {
         "login": {
@@ -352,7 +352,7 @@ Response:
             }
         ]
     }
-}`
+    }
 
 
 ### Describe
@@ -406,7 +406,7 @@ Allowed values for `module`:
 
 Example of return result:
 
-    `{
+    {
     "success": true,
     "result": {
         "describe": {
@@ -841,7 +841,7 @@ Example of return result:
             "labelFields": "subject"
         }
     }
-}`
+    }
 
 ### syncModuleRecords
 
@@ -899,7 +899,7 @@ Allowed values for `mode`:
 
 `Page` can be empty.
 
-    `{
+    {
     "success": true,
     "result": {
         "sync": {
@@ -1248,7 +1248,7 @@ Allowed values for `mode`:
             "nextPage": 0
         }
     }
-}`
+    }
 
 ### fetchRecord
 
@@ -1297,7 +1297,7 @@ Allowed values for `module`:
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
-    `{
+    {
     "success": true,
     "result": {
         "record": {
@@ -1337,7 +1337,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
             "id": "1x1151"
         }
     }
-}`
+    }
 
 
 ### fetchRecordWithGrouping
