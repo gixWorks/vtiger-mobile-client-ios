@@ -24,6 +24,15 @@ All operations are POST requests
 
     * Utils.php utilities file, not a proper request
 
+# How modules work
+Modules follow the following rules:
+* if I disable a field in the module settings (I set its “Visibility” checkbox to False), that field is not listed anymore in `Describe` call
+* fields for a record are organized in “Blocks” of fields. Each block is represented by an array and has a 
+* Calendar is listed a module, but it’s actually made of 3 modules: Task, Meeting and Call. 
+ * Task record IDs have the structure 1xID
+ * Meeting record IDs have the structure 18xID
+
+
 # Operations
 
 ## Dump of operations from php files
@@ -104,7 +113,7 @@ Params:
 
 Response:
 
-`{
+    `{
     "success": true,
     "result": {
         "login": {
@@ -114,7 +123,7 @@ Response:
             "mobile_module_version": "1.2.1"
         }
     }
-}`
+    }`
 
 
 ### loginAndFetchModules
@@ -149,7 +158,7 @@ Params:
 
 Response:
 
-`{
+    `{
     "success": true,
     "result": {
         "login": {
@@ -389,10 +398,15 @@ Parameters:
 Allowed values for `module`:
 
 * Calendar
+* Leads
+* Accounts
+* Contacts
+* HelpDesk
+* Potentials
 
 Example of return result:
 
-`{
+    `{
     "success": true,
     "result": {
         "describe": {
@@ -872,16 +886,20 @@ Parameters:
 Allowed values for `module`:
 
 * Calendar
+* Leads
+* Accounts
+* Contacts
+* HelpDesk
+* Potentials
 
 Allowed values for `mode`:
 
 * PRIVATE
-
 * PUBLIC
 
 `Page` can be empty.
 
-`{
+    `{
     "success": true,
     "result": {
         "sync": {
@@ -1271,10 +1289,15 @@ Parameters:
 Allowed values for `module`:
 
 * Calendar
+* Leads
+* Accounts
+* Contacts
+* HelpDesk
+* Potentials
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
-`{
+    `{
     "success": true,
     "result": {
         "record": {
@@ -1359,7 +1382,7 @@ Allowed values for `module`:
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
-`{
+    {
     "success": true,
     "result": {
         "record": {
@@ -1542,7 +1565,241 @@ Record must be in the form module_idXrecord_id such as 1x1151
             "id": "1x1151"
         }
     }
-}`
+    }
+
+### fetchRecordsWithGrouping
+
+Fetches an array of records and returns fields with the complete representation containing uitype, label (translated), value and name. Custom fields are fetched.
+
+IMPORTANT: fetchRecord fetches Custom Fields and it’s sent in the 3rd "block" of fields.
+
+Parameters:
+
+<table>
+  <tr>
+    <td>Name</td>
+    <td>Value</td>
+  </tr>
+  <tr>
+    <td>_operation</td>
+    <td>fetchRecordsWithGrouping</td>
+  </tr>
+  <tr>
+    <td>_session</td>
+    <td>session (from Login)</td>
+  </tr>
+  <tr>
+    <td>ids</td>
+    <td>["module_idXrecord_id","module_idXrecord_id"]</td>
+  </tr>
+  <tr>
+    <td>alertid</td>
+    <td>(optional)</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+
+Allowed values for `module`:
+
+* Calendar
+* Leads
+* Accounts
+* Contacts
+* HelpDesk
+* Potentials
+
+Records must be in the form module_idXrecord_id, such as 1x1151, and the `ids` parameter should be formatted as a JSON string (`["18x1164", "1x1151"]`).
+
+    {
+    "success": true,
+    "result": {
+        "records": [
+            {
+                "blocks": [
+                    {
+                        "label": "Task Information",
+                        "fields": [
+                            {
+                                "name": "subject",
+                                "value": "new todo with very long title  that in iOS will be cut somewhere!",
+                                "label": "Subject",
+                                "uitype": "2"
+                            },
+                            {
+                                "name": "reminder_time",
+                                "value": "",
+                                "label": "Send Reminder",
+                                "uitype": "30"
+                            },
+                            {
+                                "name": "assigned_user_id",
+                                "value": {
+                                    "value": "19x1",
+                                    "label": "Administrator"
+                                },
+                                "label": "Assigned To",
+                                "uitype": "53",
+                                "type": {
+                                    "defaultValue": {
+                                        "value": "19x1",
+                                        "label": "Administrator"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "date_start",
+                                "value": "2013-05-27",
+                                "label": "Start Date &amp; Time",
+                                "uitype": "6"
+                            },
+                            {
+                                "name": "time_end",
+                                "value": "",
+                                "label": "End Time",
+                                "uitype": 252
+                            },
+                            {
+                                "name": "time_start",
+                                "value": "15:40",
+                                "label": "Time Start",
+                                "uitype": 252
+                            },
+                            {
+                                "name": "due_date",
+                                "value": "2013-05-27",
+                                "label": "Due Date",
+                                "uitype": "23"
+                            },
+                            {
+                                "name": "recurringtype",
+                                "value": "",
+                                "label": "Recurrence",
+                                "uitype": "16"
+                            },
+                            {
+                                "name": "parent_id",
+                                "value": {
+                                    "value": "",
+                                    "label": ""
+                                },
+                                "label": "Related to",
+                                "uitype": "66"
+                            },
+                            {
+                                "name": "taskstatus",
+                                "value": "Not Started",
+                                "label": "Status",
+                                "uitype": "15"
+                            },
+                            {
+                                "name": "contact_id",
+                                "value": {
+                                    "value": "",
+                                    "label": ""
+                                },
+                                "label": "Contact Name",
+                                "uitype": "57"
+                            },
+                            {
+                                "name": "eventstatus",
+                                "value": "",
+                                "label": "Status",
+                                "uitype": "15"
+                            },
+                            {
+                                "name": "taskpriority",
+                                "value": "High",
+                                "label": "Priority",
+                                "uitype": "15"
+                            },
+                            {
+                                "name": "sendnotification",
+                                "value": "0",
+                                "label": "Send Notification",
+                                "uitype": "56"
+                            },
+                            {
+                                "name": "createdtime",
+                                "value": "2013-05-26 15:39:57",
+                                "label": "Created Time",
+                                "uitype": "70"
+                            },
+                            {
+                                "name": "modifiedtime",
+                                "value": "2013-05-26 15:39:57",
+                                "label": "Modified Time",
+                                "uitype": "70"
+                            },
+                            {
+                                "name": "activitytype",
+                                "value": "Task",
+                                "label": "Activity Type",
+                                "uitype": "15"
+                            },
+                            {
+                                "name": "duration_hours",
+                                "value": "",
+                                "label": "Duration",
+                                "uitype": "63"
+                            },
+                            {
+                                "name": "visibility",
+                                "value": "",
+                                "label": "Visibility",
+                                "uitype": "16"
+                            },
+                            {
+                                "name": "duration_minutes",
+                                "value": "",
+                                "label": "Duration Minutes",
+                                "uitype": "16"
+                            },
+                            {
+                                "name": "location",
+                                "value": "",
+                                "label": "Location",
+                                "uitype": "1"
+                            },
+                            {
+                                "name": "notime",
+                                "value": "0",
+                                "label": "No Time",
+                                "uitype": "56"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "",
+                        "fields": [
+                            {
+                                "name": "description",
+                                "value": "desc",
+                                "label": "Description",
+                                "uitype": "19"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Custom Information",
+                        "fields": [
+                            {
+                                "name": "cf_617",
+                                "value": "",
+                                "label": "Telefono da chiamare per chiarimenti",
+                                "uitype": "11"
+                            }
+                        ]
+                    }
+                ],
+                "id": "1x1151"
+            }
+        ]
+    }
+    }
 
 
 ### saveRecord
@@ -1599,7 +1856,191 @@ Record must be in the form module_idXrecord_id such as 1x1151
 
 Example of successful response:  (basically returns the entire record created)
 
-`{
+    {
+    "success": true,
+    "result": {
+        "record": {
+            "blocks": [
+                {
+                    "label": "Task Information",
+                    "fields": [
+                        {
+                            "name": "subject",
+                            "value": "Call Smith",
+                            "label": "Subject",
+                            "uitype": "2"
+                        },
+                        {
+                            "name": "reminder_time",
+                            "value": "",
+                            "label": "Send Reminder",
+                            "uitype": "30"
+                        },
+                        {
+                            "name": "assigned_user_id",
+                            "value": {
+                                "value": "19x1",
+                                "label": "Administrator"
+                            },
+                            "label": "Assigned To",
+                            "uitype": "53",
+                            "type": {
+                                "defaultValue": {
+                                    "value": "19x1",
+                                    "label": "Administrator"
+                                }
+                            }
+                        },
+                        {
+                            "name": "date_start",
+                            "value": "2014-01-18",
+                            "label": "Start Date &amp; Time",
+                            "uitype": "6"
+                        },
+                        {
+                            "name": "time_end",
+                            "value": "",
+                            "label": "End Time",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "time_start",
+                            "value": "",
+                            "label": "Time Start",
+                            "uitype": 252
+                        },
+                        {
+                            "name": "due_date",
+                            "value": "2014-01-18",
+                            "label": "Due Date",
+                            "uitype": "23"
+                        },
+                        {
+                            "name": "recurringtype",
+                            "value": "",
+                            "label": "Recurrence",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "parent_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Related to",
+                            "uitype": "66"
+                        },
+                        {
+                            "name": "taskstatus",
+                            "value": "",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "contact_id",
+                            "value": {
+                                "value": "",
+                                "label": ""
+                            },
+                            "label": "Contact Name",
+                            "uitype": "57"
+                        },
+                        {
+                            "name": "eventstatus",
+                            "value": "",
+                            "label": "Status",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "taskpriority",
+                            "value": "",
+                            "label": "Priority",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "sendnotification",
+                            "value": "0",
+                            "label": "Send Notification",
+                            "uitype": "56"
+                        },
+                        {
+                            "name": "createdtime",
+                            "value": "2013-11-25 13:43:49",
+                            "label": "Created Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "modifiedtime",
+                            "value": "2013-11-25 13:43:49",
+                            "label": "Modified Time",
+                            "uitype": "70"
+                        },
+                        {
+                            "name": "activitytype",
+                            "value": "Call",
+                            "label": "Activity Type",
+                            "uitype": "15"
+                        },
+                        {
+                            "name": "duration_hours",
+                            "value": "0",
+                            "label": "Duration",
+                            "uitype": "63"
+                        },
+                        {
+                            "name": "visibility",
+                            "value": "Private",
+                            "label": "Visibility",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "duration_minutes",
+                            "value": "",
+                            "label": "Duration Minutes",
+                            "uitype": "16"
+                        },
+                        {
+                            "name": "location",
+                            "value": "",
+                            "label": "Location",
+                            "uitype": "1"
+                        },
+                        {
+                            "name": "notime",
+                            "value": "0",
+                            "label": "No Time",
+                            "uitype": "56"
+                        }
+                    ]
+                },
+                {
+                    "label": "",
+                    "fields": [
+                        {
+                            "name": "description",
+                            "value": "",
+                            "label": "Description",
+                            "uitype": "19"
+                        }
+                    ]
+                },
+                {
+                    "label": "Custom Information",
+                    "fields": [
+                        {
+                            "name": "cf_617",
+                            "value": "",
+                            "label": "Telefono da chiamare per chiarimenti",
+                            "uitype": "11"
+                        }
+                    ]
+                }
+            ],
+            "id": "1x1225"
+        }
+     }
+     }
+     
     "success": true,
     "result": {
         "record": {
@@ -1782,191 +2223,7 @@ Example of successful response:  (basically returns the entire record created)
             "id": "1x1225"
         }
     }
-}
-
-    "success": true,
-    "result": {
-        "record": {
-            "blocks": [
-                {
-                    "label": "Task Information",
-                    "fields": [
-                        {
-                            "name": "subject",
-                            "value": "Call Smith",
-                            "label": "Subject",
-                            "uitype": "2"
-                        },
-                        {
-                            "name": "reminder_time",
-                            "value": "",
-                            "label": "Send Reminder",
-                            "uitype": "30"
-                        },
-                        {
-                            "name": "assigned_user_id",
-                            "value": {
-                                "value": "19x1",
-                                "label": "Administrator"
-                            },
-                            "label": "Assigned To",
-                            "uitype": "53",
-                            "type": {
-                                "defaultValue": {
-                                    "value": "19x1",
-                                    "label": "Administrator"
-                                }
-                            }
-                        },
-                        {
-                            "name": "date_start",
-                            "value": "2014-01-18",
-                            "label": "Start Date &amp; Time",
-                            "uitype": "6"
-                        },
-                        {
-                            "name": "time_end",
-                            "value": "",
-                            "label": "End Time",
-                            "uitype": 252
-                        },
-                        {
-                            "name": "time_start",
-                            "value": "",
-                            "label": "Time Start",
-                            "uitype": 252
-                        },
-                        {
-                            "name": "due_date",
-                            "value": "2014-01-18",
-                            "label": "Due Date",
-                            "uitype": "23"
-                        },
-                        {
-                            "name": "recurringtype",
-                            "value": "",
-                            "label": "Recurrence",
-                            "uitype": "16"
-                        },
-                        {
-                            "name": "parent_id",
-                            "value": {
-                                "value": "",
-                                "label": ""
-                            },
-                            "label": "Related to",
-                            "uitype": "66"
-                        },
-                        {
-                            "name": "taskstatus",
-                            "value": "",
-                            "label": "Status",
-                            "uitype": "15"
-                        },
-                        {
-                            "name": "contact_id",
-                            "value": {
-                                "value": "",
-                                "label": ""
-                            },
-                            "label": "Contact Name",
-                            "uitype": "57"
-                        },
-                        {
-                            "name": "eventstatus",
-                            "value": "",
-                            "label": "Status",
-                            "uitype": "15"
-                        },
-                        {
-                            "name": "taskpriority",
-                            "value": "",
-                            "label": "Priority",
-                            "uitype": "15"
-                        },
-                        {
-                            "name": "sendnotification",
-                            "value": "0",
-                            "label": "Send Notification",
-                            "uitype": "56"
-                        },
-                        {
-                            "name": "createdtime",
-                            "value": "2013-11-25 13:43:49",
-                            "label": "Created Time",
-                            "uitype": "70"
-                        },
-                        {
-                            "name": "modifiedtime",
-                            "value": "2013-11-25 13:43:49",
-                            "label": "Modified Time",
-                            "uitype": "70"
-                        },
-                        {
-                            "name": "activitytype",
-                            "value": "Call",
-                            "label": "Activity Type",
-                            "uitype": "15"
-                        },
-                        {
-                            "name": "duration_hours",
-                            "value": "0",
-                            "label": "Duration",
-                            "uitype": "63"
-                        },
-                        {
-                            "name": "visibility",
-                            "value": "Private",
-                            "label": "Visibility",
-                            "uitype": "16"
-                        },
-                        {
-                            "name": "duration_minutes",
-                            "value": "",
-                            "label": "Duration Minutes",
-                            "uitype": "16"
-                        },
-                        {
-                            "name": "location",
-                            "value": "",
-                            "label": "Location",
-                            "uitype": "1"
-                        },
-                        {
-                            "name": "notime",
-                            "value": "0",
-                            "label": "No Time",
-                            "uitype": "56"
-                        }
-                    ]
-                },
-                {
-                    "label": "",
-                    "fields": [
-                        {
-                            "name": "description",
-                            "value": "",
-                            "label": "Description",
-                            "uitype": "19"
-                        }
-                    ]
-                },
-                {
-                    "label": "Custom Information",
-                    "fields": [
-                        {
-                            "name": "cf_617",
-                            "value": "",
-                            "label": "Telefono da chiamare per chiarimenti",
-                            "uitype": "11"
-                        }
-                    ]
-                }
-            ],
-            "id": "1x1225"
-        }
     }
-}`
 
 
 Example of error:
