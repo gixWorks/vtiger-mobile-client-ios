@@ -1,10 +1,12 @@
 vTiger Mobile API 
 
+Please note: this documents refers to the Mobile API of vTiger CRM, not the webservice, which is available at `http://crm-base-url/webservice.php` and whose operations are described at the [official vTiger Wiki page](https://wiki.vtiger.com/index.php/Webservice_reference_manual), as well as on [published books](http://www.lulu.com/shop/joe-bordes-jpl-tsolucio/vtiger-crm-webservices-rest-reference-and-examples-for-vtiger-crm-540/ebook/product-20637757.html). 
+
 # Endpoint
 
 [http://localhost:8888/vtigercrm520/modules/Mobile/api.php](http://localhost:8888/vtigercrm520/modules/Mobile/api.php)
 
-All operations are POST requests
+All operations are POST requests.
 
 # File Structure
 
@@ -2229,3 +2231,19 @@ Example of successful response:  (basically returns the entire record created)
 Example of error:
 
 `{"success":false,"error":{"code":"MANDATORY_FIELDS_MISSING","message":"assigned_user_id does not have a value"}}`
+
+## Module-specific considerations
+
+### Contacts
+Contacts have a picture field available, but it can be accessed only through the web interface and its content (e.g. the file name) are not retrieved either by the webservice.php or any operation such as `syncModuleRecords`.
+When displaying the fields as grouped, a "block" contains the file information but the array is actually empty, even when a contact picture is uploaded.
+
+    {
+     "label": "Contact Image Information:",
+     "fields": []
+    }
+
+### Documents
+Documents should be designed to contain files, but the file data is not accessible through the webservice. In fact, even from the official vTiger Mobile application (for iOS), only the metadata of the document are accessible, but the filename and download URL are not accessible through the mobile API.
+
+
