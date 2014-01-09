@@ -65,19 +65,13 @@ Modules follow the following rules:
 
 `		'syncModuleRecords'       => array('file' => '/api/ws/SyncModuleRecords.php', 'class' => 'Mobile_WS_SyncModuleRecords'),`
 
-`		`
-
 `		'query'                   => array('file' => '/api/ws/Query.php', 'class' => 'Mobile_WS_Query'),`
 
 `		'queryWithGrouping'       => array('file' => '/api/ws/QueryWithGrouping.php', 'class' => 'Mobile_WS_QueryWithGrouping'),`
 
-`	`
-
 `		'relatedRecordsWithGrouping' => array('file' => '/api/ws/RelatedRecordsWithGrouping.php', 'class' => 'Mobile_WS_RelatedRecordsWithGrouping'),`
 
 `		'deleteRecords'              => array('file' => '/api/ws/DeleteRecords.php', 'class' => 'Mobile_WS_DeleteRecords'),`
-
-`	`
 
 `		'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),`
 
@@ -2245,5 +2239,13 @@ When displaying the fields as grouped, a "block" contains the file information b
 
 ### Documents
 Documents should be designed to contain files, but the file data is not accessible through the webservice. In fact, even from the official vTiger Mobile application (for iOS), only the metadata of the document are accessible, but the filename and download URL are not accessible through the mobile API.
+
+### HelpDesk (Trouble Tickets)
+Trouble Tickets have the possibility to have Comments associated to each, and when trtrieving the records there is even a `Comments` block containing an array. But the array is empty independently from the presence of comments.
+
+    {
+      "label": "COMMENTS",
+      "fields": []
+    }
 
 
