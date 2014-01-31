@@ -382,14 +382,15 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 {
     if (![[notification userInfo] objectForKey:@"error"]) {
         
-        NSDictionary *loginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:@"result"]];
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:@"result"]];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:loginResult];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSDictionary *userInfo = @{@"error" : [notification userInfo][@"error"][@"message"] };
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
     }
 }
 
@@ -407,7 +408,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
     }
 }
@@ -432,7 +433,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
     }
 }
@@ -446,7 +447,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
     }
 }
@@ -466,7 +467,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
     }
 }
@@ -480,7 +481,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
     }
 }

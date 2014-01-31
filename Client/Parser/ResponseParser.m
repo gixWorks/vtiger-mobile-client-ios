@@ -30,7 +30,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 + (NSDictionary*)parseLogin:(NSDictionary *)JSON
 {
   
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
+    /*
+     Structure of returned result is: @ { "@error" : @{@"message" : ... the message ...} }
+     */
     __block NSString *version;
     __block NSString *mobile_version;
     __block NSString *userid;
@@ -39,58 +42,65 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     mobile_version = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"mobile_module_version"] ;
     userid = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"userid"] ;
     
-    
-    if ([kMinimumRequiredVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
-        // actualVersion is lower than the requiredVersion
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"vTiger Version (%@) lower than minimum required (%@)", @"vTiger Version (%@) lower than minimum required (%@) "), version, kMinimumRequiredVersion];
-        NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil];
-        [result setObject:errorInfo forKey:kErrorKey];
-        return result;
-    }
-    else if(!mobile_version)
-    {
-        // actualVersion is lower than the requiredVersion
-        NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mobile Module Not Installed", @"Mobile Module Not Installed "), @"message", nil];
-        [result setObject:errorInfo forKey:kErrorKey];
-        return  result;
-    }
-    else {
-        //Everything is OK
-        //Get info about timezones for server and user
-        NSString *timezoneServer = [result objectForKey:@"crm_tz"];
-        if (timezoneServer == nil) {
-            timezoneServer = [[NSTimeZone defaultTimeZone] name];
+    @try {
+        if ([kMinimumRequiredVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
+            // actualVersion is lower than the requiredVersion
+            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"vTiger Version (%@) lower than minimum required (%@)", @"vTiger Version (%@) lower than minimum required (%@) "), version, kMinimumRequiredVersion];
+            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil];
+            [parseResult setObject:errorInfo forKey:kErrorKey];
+            return parseResult;
         }
-        [Service getActive].crm_timezone_server = timezoneServer;
-        
-        NSString *timezoneUser = [result objectForKey:@"user_tz"];
-        if (timezoneUser == nil) {
-            timezoneUser = [[NSTimeZone defaultTimeZone] name];
+        else if(!mobile_version)
+        {
+            // actualVersion is lower than the requiredVersion
+            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mobile Module Not Installed", @"Mobile Module Not Installed "), @"message", nil];
+            [parseResult setObject:errorInfo forKey:kErrorKey];
+            return  parseResult;
         }
-        [Service getActive].crm_timezone_user = timezoneUser;
-        
-        
-        //Check if we have some modules
-        //Loop through the modules in the returned JSON
-        NSArray *modules = [JSON valueForKeyPath:@"result.modules"];
-        if (modules != nil) {
-            [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSDictionary *field = (NSDictionary*)obj;
-                [Module modelObjectWithDictionary:field]; //Should already add to Context
+        else {
+            //Everything is OK
+            //Get info about timezones for server and user
+            NSString *timezoneServer = [parseResult objectForKey:@"crm_tz"];
+            if (timezoneServer == nil) {
+                timezoneServer = [[NSTimeZone defaultTimeZone] name];
+            }
+            [parseResult setObject:timezoneServer forKey:@"crm_tz"];
+            
+            NSString *timezoneUser = [parseResult objectForKey:@"user_tz"];
+            if (timezoneUser == nil) {
+                timezoneUser = [[NSTimeZone defaultTimeZone] name];
+            }
+            [parseResult setObject:timezoneUser forKey:@"user_tz"];
+            
+            
+            //Check if we have some modules
+            //Loop through the modules in the returned JSON
+            NSArray *modules = [JSON valueForKeyPath:@"result.modules"];
+            if (modules != nil) {
+                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSDictionary *field = (NSDictionary*)obj;
+                    [Module modelObjectWithDictionary:field]; //Should already add to Context
+                }];
+                
+            }
+            
+            //Finally I save
+            //Save the record in the datasource
+            __block NSError *saveError;
+            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                saveError = error;
             }];
             
+            
         }
-        
-        //Finally I save
-        //Save the record in the datasource
-        __block NSError *saveError;
-        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-            saveError = error;
-        }];
-        
 
     }
-    return result;
+    @catch (NSException *exception) {
+        NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        [parseResult setObject:[exception description] forKey:kErrorKey];
+    }
+    
+    return parseResult;
 }
 
 + (NSDictionary*)parseCalendarSync:(NSDictionary *)JSON
@@ -167,7 +177,6 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
     
     return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
-    
 }
 
 + (NSDictionary*)parseFetchRecord:(NSDictionary*)JSON
