@@ -7,6 +7,7 @@
 //
 
 #import "Ticket+Extra.h"
+#import "NetworkOperationManager.h"
 
 NSString* const kTicketFieldId = @"id";
 NSString* const kTicketFieldAssignedTo = @"assigned_user_id";

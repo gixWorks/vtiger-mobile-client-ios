@@ -8,6 +8,7 @@
 
 #import "ResponseParser.h"
 #import "Model.h"
+#import "NetworkOperationManager.h"
 
 //Module names constants
 NSString* const kVTModuleCalendar = @"Calendar";

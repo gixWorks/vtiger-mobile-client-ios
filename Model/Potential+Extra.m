@@ -8,6 +8,7 @@
 
 #import "Potential+Extra.h"
 #import "ResponseParser.h"
+#import "NetworkOperationManager.h"
 
 //Vtiger Fields
 NSString* const kPotentialsFieldId = @"id";

@@ -7,6 +7,7 @@
 //
 
 #import "Activity+Extra.h"
+#import "NetworkOperationManager.h"
 
 //Vtiger fields
 NSString* const kCalendarFieldsubject = @"subject";
