@@ -1,0 +1,51 @@
+# Xcode
+.DS_Store
+*/build/*
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+.idea/
+*.hmap
+
+# Mac OS X
+.DS_Store
+
+# Thumbnails
+._*
+
+#PSD assets files
+**.psd
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+.env
+secret
+
+#Pictures, useful in case covered by copyright
+#So that won't be pushed to github
+**Default*png
+**Icon*png
+**iTunes*png
+**AppIcon*png
+
+#patch files
+**.patch
+
+#xcode 5 xccheckout
+**.xccheckout
+
+#cocoapods
+Pods
+Podfile.lock
+
