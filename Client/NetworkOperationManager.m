@@ -61,7 +61,6 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:kClientHasFinishedFetchRecordWithGrouping object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientHasFinishedLoginAndFetchModules:) name:kClientHasFinishedLoginAndFetchModules object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordsWithGrouping:) name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
-        
     }
     return self;
 }
@@ -78,7 +77,6 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordWithGrouping object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedLoginAndFetchModules object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
-
 }
 
 //#pragma mark - Save and restore
@@ -231,7 +229,6 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLogin];
-    
 }
 
 - (void)loginAndSyncModules
@@ -241,7 +238,6 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
-    
 }
 
 - (void)loginSetup
@@ -372,7 +368,6 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordsWithGrouping,@"_operation", module, @"module", queueString, @"ids", session, @"_session", @"", @"alertid", nil];
         NSLog(@"%@ %@ Processing fetch queue for IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), queueString);
         [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
-
     }
 }
 
