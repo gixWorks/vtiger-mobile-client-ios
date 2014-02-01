@@ -63,6 +63,12 @@
     [SSKeychain setPassword:session forService:[self getServiceUrl] account:@"session"];
 }
 
++ (void)deleteAllCredentials
+{
+    [SSKeychain deletePasswordForService:[self getServiceUrl] account:@"session"];
+    [SSKeychain deletePasswordForService:[self getServiceUrl] account:[self getUsername]];
+}
+
 + (NSString *)createNewUUID {
     
     CFUUIDRef theUUID = CFUUIDCreate(NULL);

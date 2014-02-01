@@ -16,7 +16,6 @@
         service.crm_active = [NSNumber numberWithBool:NO];
     }
     self.crm_active = [NSNumber numberWithBool:YES];
-    [self.managedObjectContext MR_saveToPersistentStoreAndWait];
 }
 
 + (Service*)getActive

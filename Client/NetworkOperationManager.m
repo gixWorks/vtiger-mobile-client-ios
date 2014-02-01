@@ -228,7 +228,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *password = [CredentialsManager getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLogin];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
 }
 
 - (void)loginAndSyncModules
@@ -237,7 +237,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *password = [CredentialsManager getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
 
 - (void)loginSetup
@@ -245,19 +245,23 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     
 }
 
-- (void)loginWithUsername:(NSString*)username password:(NSString*)password url:(NSURL*)url
+- (void)loginWithUsername:(NSString*)username password:(NSString*)password
 {
     //Used when testing if username and password are correct during login
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLogin];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                kOperationLogin,@"_operation",
+                                username, @"username",
+                                password, @"password",
+                                nil];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
 }
 
-- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password url:(NSURL*)url
+- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password
 {
-    //Keep?
+    //TODO: Keep?
     [CredentialsManager savePassword:password];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
 
 - (void)syncCalendar
@@ -375,6 +379,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedLogin:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
+#endif
+    
     if (![[notification userInfo] objectForKey:@"error"]) {
         
         NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:@"result"]];
@@ -391,6 +399,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientHasFinishedLoginAndFetchModules:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //No error, so perform Core Data stuff here
         NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
@@ -410,6 +422,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedSync:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //parse the results
         NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
@@ -435,6 +451,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedDescribe:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //Everything ok, pass back to ViewController
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
@@ -450,6 +470,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedFetchRecord:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //No error, process
         //parse the results
@@ -469,6 +493,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedFetchRecordWithGrouping:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //Everything ok, process
         //TODO: NOT IMPLEMENTED IN PARSER YET
@@ -483,6 +511,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedFetchRecordsWithGrouping:(NSNotification*)notification
 {
+#if DEBUG
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+#endif
+
     if (![[notification userInfo] objectForKey:@"error"]) {
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
