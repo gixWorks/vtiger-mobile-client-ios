@@ -64,12 +64,21 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             if (timezoneServer == nil) {
                 timezoneServer = [[NSTimeZone defaultTimeZone] name];
             }
+            else{
+                NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneServer];
+                timezoneServer = [tz name];
+            }
             [parseResult setObject:timezoneServer forKey:@"crm_tz"];
             
             NSString *timezoneUser = [parseResult objectForKey:@"user_tz"];
             if (timezoneUser == nil) {
                 timezoneUser = [[NSTimeZone defaultTimeZone] name];
             }
+            else{
+                NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneUser];
+                timezoneUser = [tz name];
+            }
+
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
             
             
