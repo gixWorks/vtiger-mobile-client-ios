@@ -59,6 +59,9 @@ NSInteger const kErrorCodeLoginRequired = 1501;
  */
 - (void)loginAndExecuteSelector:(SEL)selector withObject:(NSDictionary*)selectorObject1 withObject:(id<NSObject>)selectorObject2
 {
+#if DEBUG
+    NSLog(@"%@ %@ obj1: %@ obj2: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), selectorObject1, selectorObject2);
+#endif
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsManager getPassword];
     __block NSString *session;

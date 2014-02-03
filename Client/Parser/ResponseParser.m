@@ -29,7 +29,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
 + (NSDictionary*)parseLogin:(NSDictionary *)JSON
 {
-  
+    
     NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
     /*
      Structure of returned result is: @ { "@error" : @{@"message" : ... the message ...} }
@@ -78,7 +78,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneUser];
                 timezoneUser = [tz name];
             }
-
+            
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
             
             
@@ -102,7 +102,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             
             
         }
-
+        
     }
     @catch (NSException *exception) {
         NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
@@ -145,17 +145,23 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         NSString *identifier = [entity objectForKey:@"id"];
         NSArray *blocks = [entity objectForKey:@"blocks"];
         NSMutableDictionary *entityFields = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *entityCustomFields = [[NSMutableDictionary alloc] init];
         [entityFields setObject:identifier forKey:@"id"];
         for (NSDictionary* block in blocks) {
             //This is the loop for each block of fields
             NSArray *fields = [block objectForKey:@"fields"];
             for (NSDictionary* field in fields) {
                 //C- Extract all the fields from the returned JSON
-                [entityFields setObject:[field objectForKey:@"value"] forKey:[field objectForKey:@"name"]];
+                NSString* fieldName = [field objectForKey:@"name"];
+                [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
+                if ([fieldName hasPrefix:@"cf_"]) {
+                    //it's a custom field
+                    [entityCustomFields setObject:field forKey:fieldName];
+                }
             }
         }
         //D - create the item, using the fields from the Dictionary. The item is already added to persistent storage.
-        [Activity modelObjectWithDictionary:    entityFields];
+        [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
     }   //end main loop
     
     //E- Parse through Deleted Records, which is just an Array of record IDs
@@ -183,7 +189,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         token.datetime = [NSDate date];
         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
     }
-
+    
     
     return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
 }
@@ -303,7 +309,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
 /**
  Returns the name of the Module based on the record passed
-
+ 
  @param method The record id to decode, in the format MODULExRECORD_ID e.g. 1x1223
  */
 + (NSString*)decodeRecordType:(NSString*)record

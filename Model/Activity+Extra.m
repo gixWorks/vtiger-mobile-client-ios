@@ -37,6 +37,19 @@ NSString* const kCalendarFielddescription = @"description";
 
 + (Activity *)modelObjectWithDictionary:(NSDictionary *)dict
 {
+    //Extract custom fields
+    NSMutableDictionary *cfields = [[NSMutableDictionary alloc] init];
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([key hasPrefix:@"cf_"]) {
+            //it's a custom field
+            [cfields setObject:@{key : obj} forKey:key];
+        }
+    }];
+    return [Activity modelObjectWithDictionary:dict customFields:cfields];
+}
+
++ (Activity *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary*)cfields
+{
     NSString *activity_id = [dict objectForKey:kCalendarFieldid];
     Activity *instance;
     
@@ -139,6 +152,13 @@ NSString* const kCalendarFielddescription = @"description";
                 instance.crm_contact_id = [contact_id objectForKey:@"value"];
                 instance.crm_contact_name = [contact_id objectForKey:@"label"];
                 [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_contact_id];
+            }
+            
+            //Custom fields
+            NSError *cfieldsError;
+            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            if (cfieldsError != nil) {
+                NSLog(@"Entity: %@ Error in custom fields: %@", instance.crm_id, [cfieldsError description]);
             }
             
             //Add the relationship with the current service
