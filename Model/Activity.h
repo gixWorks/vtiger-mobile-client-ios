@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * crm_contact_id;
 @property (nonatomic, retain) NSString * crm_contact_name;
 @property (nonatomic, retain) NSDate * crm_date_start;
+@property (nonatomic, retain) NSString * crm_description;
 @property (nonatomic, retain) NSDate * crm_due_date;
 @property (nonatomic, retain) NSNumber * crm_duration_hours;
 @property (nonatomic, retain) NSNumber * crm_duration_minutes;

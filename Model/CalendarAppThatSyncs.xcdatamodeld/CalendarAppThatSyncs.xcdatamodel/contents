@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Account" representedClassName="Account" syncable="YES">
         <attribute name="crm_account_no" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_accountname" optional="YES" attributeType="String" syncable="YES"/>
@@ -50,6 +50,7 @@
         <attribute name="crm_contact_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_contact_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_date_start" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_due_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="crm_duration_hours" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_duration_minutes" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>

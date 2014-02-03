@@ -16,6 +16,7 @@
 @dynamic crm_contact_id;
 @dynamic crm_contact_name;
 @dynamic crm_date_start;
+@dynamic crm_description;
 @dynamic crm_due_date;
 @dynamic crm_duration_hours;
 @dynamic crm_duration_minutes;
