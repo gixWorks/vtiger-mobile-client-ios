@@ -31,6 +31,7 @@ extern NSString* const kManagerHasFinishedFetchRecordWithGrouping;
 - (void)loginSetup;
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;
 - (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password;
+- (void)resyncCalendar;
 - (void)syncCalendar;
 - (void)syncCalendarFromPage:(NSNumber*)page;
 - (void)describeModule:(NSString*)module;

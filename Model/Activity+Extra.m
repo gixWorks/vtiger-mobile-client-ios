@@ -40,7 +40,6 @@ NSString* const kCalendarFielddescription = @"description";
     NSString *activity_id = [dict objectForKey:kCalendarFieldid];
     Activity *instance;
     
-    
     //I first try to count the entities (should take less time) and load the entity only if strictly necessary (if count > 0). The Count operation should be less intensive than the Fetch, so I use it for checking the existence
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@", activity_id];
     NSUInteger count = [Activity MR_countOfEntitiesWithPredicate:predicate];
@@ -55,18 +54,17 @@ NSString* const kCalendarFielddescription = @"description";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if([dict isKindOfClass:[NSDictionary class]]) {
-        
-        //Setup the number formatter
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-       
-        //Setup the date formatters
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"yyyy-MM-dd"];
-        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-        [timeFormat setDateFormat:@"HH:mm:ss"];
-
         @try {
+            //Setup the number formatter
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            
+            //Setup the date formatters
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd"];
+            NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+            [timeFormat setDateFormat:@"HH:mm:ss"];
+            
             //This is a stupid fix because sometimes we get start time with seconds 14:30:00 sometimes not 14:30
             NSString *start_time_string = [dict objectForKey:kCalendarFieldtime_start];
             if ([[start_time_string componentsSeparatedByString:@":"] count] < 3) {
@@ -77,13 +75,14 @@ NSString* const kCalendarFielddescription = @"description";
             NSDate *start_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddate_start]];
             NSDate *start_time = [timeFormat dateFromString:start_time_string];
             NSDate *due_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddue_date]];
-        
-
+            
             //Properties defined by CRM
             instance.crm_subject = [dict objectForKey:kCalendarFieldsubject];
             instance.crm_time_start = start_time;
             instance.crm_date_start = start_date;
             instance.crm_id = [dict objectForKey:kCalendarFieldid];
+            instance.crm_assigned_user_id = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"value"];
+            instance.crm_assigned_user_name = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"label"];
             instance.crm_activitytype = [dict objectForKey:kCalendarFieldactivitytype];
             instance.crm_notime = [dict objectForKey:kCalendarFieldnotime];
             instance.crm_sendnotification = [dict objectForKey:kCalendarFieldsendnotification];
@@ -94,12 +93,11 @@ NSString* const kCalendarFielddescription = @"description";
             instance.crm_due_date =  due_date;
             instance.crm_duration_hours =  [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_hours]];
             instance.crm_duration_minutes = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_minutes]];
-
             if ([instance.crm_activitytype isEqualToString:@"Task"]) {
                 instance.crm_status = [dict objectForKey:kCalendarFieldtaskstatus];
             }
             else{
-            instance.crm_status = [dict objectForKey:kCalendarFieldeventstatus];
+                instance.crm_status = [dict objectForKey:kCalendarFieldeventstatus];
             }
             
             //Properties defined by me
@@ -118,50 +116,41 @@ NSString* const kCalendarFielddescription = @"description";
             else{
                 start_time_comp = [gregorian components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:instance.crm_time_start];
             }
-            
             [comps setYear:[start_date_comp year]];
             [comps setMonth:[start_date_comp month]];
             [comps setDay:[start_date_comp day]];
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
             
-            
             instance.my_datetime_start = [gregorian dateFromComponents:comps];
-            NSTimeInterval duration = [instance.crm_duration_hours integerValue] * 60.0 * 60.0 + [instance.crm_duration_minutes integerValue] * 60.0;
+            NSTimeInterval duration = ( [instance.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [instance.crm_duration_minutes integerValue] * 60.0 );
             instance.my_datetime_end = [instance.my_datetime_start dateByAddingTimeInterval:duration];
             
+            //Related records
             NSDictionary *parent_record = [dict objectForKey:kCalendarFieldparent_id];
             if ([[parent_record objectForKey:@"value"] length] > 0) {
                 instance.crm_parent_id = [parent_record objectForKey:@"value"];
                 instance.crm_parent_name = [parent_record objectForKey:@"label"];
                 instance.crm_parent_type = [ResponseParser decodeRecordType:instance.crm_parent_id];
                 [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
-    //            [[NetworkOperationManager sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
             }
             NSDictionary *contact_id = [dict objectForKey:kCalendarFieldcontact_id];
             if ([[contact_id objectForKey:@"value"] length] > 0) {
                 instance.crm_contact_id = [contact_id objectForKey:@"value"];
                 instance.crm_contact_name = [contact_id objectForKey:@"label"];
                 [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_contact_id];
-    //            [[NetworkOperationManager sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
             }
             
-
             //Add the relationship with the current service
             instance.service = [Service getActive];
-        
-            
         }
         @catch (NSException *exception) {
             //clean this object from the context
             [[NSManagedObjectContext MR_defaultContext] deleteObject:instance];
             //log the exception
             NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
-            
         }
-        
     }
-    
     return instance;
 }
 

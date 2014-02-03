@@ -266,24 +266,35 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)syncCalendar
 {
-    [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
-}
-
-- (void)syncCalendarFromPage:(NSNumber*)page
-{
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
-    NSString *token = syncToken.token;
-    NSString *session = [CredentialsManager getSession];
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = 15 * 60;
     if (syncToken.datetime == nil || [syncToken.datetime timeIntervalSinceNow] > interval) {
+        [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         NSLog(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-        [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
     }
     else{
         NSLog(@"%@ %@ sync time < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
+}
+
+- (void)resyncCalendar
+{
+    NSString *session = [CredentialsManager getSession];
+    //Build parameters ignoring the synctoken
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
+    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+}
+
+- (void)syncCalendarFromPage:(NSNumber*)page
+{
+    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
+    NSString *token = syncToken.token;
+    NSString *session = [CredentialsManager getSession];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
+    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+
 }
 
 - (void)describeModule:(NSString*)module
