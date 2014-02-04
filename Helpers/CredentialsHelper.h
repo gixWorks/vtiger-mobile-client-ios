@@ -15,7 +15,8 @@
 
 + (NSString*)getPassword;
 + (NSString*)getSession;
-+ (void)deleteAllCredentials;
++ (void)clearCredentials;
++ (void)clearSession;
 
 + (void)savePassword:(NSString*)password;
 + (void)saveSession:(NSString*)session;

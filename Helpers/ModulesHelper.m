@@ -30,4 +30,15 @@
     return nil;
 }
 
++ (NSString*)localizedSingularModuleNameForRecord:(NSString*)record
+{
+    NSString *m = [[record componentsSeparatedByString:@"x"] objectAtIndex:0];
+    Module *module = [Module MR_findFirstByAttribute:@"crm_id" withValue:m];
+    if (module != nil) {
+        return module.crm_singular;
+    }
+    return nil;
+}
+
+
 @end

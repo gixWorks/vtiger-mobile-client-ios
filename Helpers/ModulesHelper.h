@@ -27,4 +27,12 @@
 */
 + (NSString*)localizedModuleNameForRecord:(NSString*)record;
 
+/**
+ Returns the singular name of the module localized in the current language (e.g. for Leads will return Lead)
+ 
+ @param record The record id to decode, in the format MODULExRECORD_ID e.g. 1x1223
+ @return the localized name of the module
+ */
++ (NSString*)localizedSingularModuleNameForRecord:(NSString*)record;
+
 @end

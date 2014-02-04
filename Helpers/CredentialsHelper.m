@@ -63,7 +63,7 @@
     [SSKeychain setPassword:session forService:[self getServiceUrl] account:@"session"];
 }
 
-+ (void)deleteAllCredentials
++ (void)clearCredentials
 {
     [SSKeychain deletePasswordForService:[self getServiceUrl] account:@"session"];
     [SSKeychain deletePasswordForService:[self getServiceUrl] account:[self getUsername]];
