@@ -65,7 +65,7 @@ NSString* const kTicketFieldTitle = @"title";
         if ([[parent_record objectForKey:@"value"] length] > 0) {
             instance.crm_parent_id = [parent_record objectForKey:@"value"];
             instance.crm_parent_name = [parent_record objectForKey:@"label"];
-            instance.crm_parent_type = [ModulesHelper decodeRecordType:instance.crm_parent_id];
+            instance.crm_parent_type = [ModulesHelper decodeModuleForRecordId:instance.crm_parent_id];
             [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
         }
         

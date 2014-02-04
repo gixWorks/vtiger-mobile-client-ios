@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ModulesHelper : NSObject
+//Module constants
+extern NSString* const kVTModuleCalendar;
+extern NSString* const kVTModuleLeads;
+extern NSString* const kVTModuleAccounts;
+extern NSString* const kVTModuleContacts;
+extern NSString* const kVTModulePotentials;
+extern NSString* const kVTModuleHelpDesk;
+extern NSString* const kVTModuleProducts;
 
+@interface ModulesHelper : NSObject
 
 /**
  Returns the name of the Module based on the record passed
@@ -17,7 +25,7 @@
  @param record The record id to decode, in the format MODULExRECORD_ID e.g. 1x1223
  @return the name of the module
  */
-+ (NSString*)decodeRecordType:(NSString*)record;
++ (NSString*)decodeModuleForRecordId:(NSString*)record;
 
 /**
  Returns the name of the module localized in the current language

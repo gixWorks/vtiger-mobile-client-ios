@@ -14,6 +14,8 @@
 
 @implementation CredentialsHelper
 
+#pragma mark - Getting data
+
 + (NSString*)getDeviceID
 {
     // Get device UDID
@@ -53,6 +55,8 @@
     return [SSKeychain passwordForService:[self getServiceUrl] account:@"session"];
 }
 
+#pragma mark - Saving data
+
 + (void)savePassword:(NSString*)password
 {
     [SSKeychain setPassword:password forService:[self getServiceUrl] account:[self getUsername]];
@@ -63,11 +67,25 @@
     [SSKeychain setPassword:session forService:[self getServiceUrl] account:@"session"];
 }
 
-+ (void)clearCredentials
+#pragma mark - Clearing data
+
++ (void)clearSession
 {
     [SSKeychain deletePasswordForService:[self getServiceUrl] account:@"session"];
+}
+
++ (void)cleaUsername
+{
     [SSKeychain deletePasswordForService:[self getServiceUrl] account:[self getUsername]];
 }
+
++ (void)clearCredentials
+{
+    [self clearSession];
+    [self cleaUsername];
+}
+
+#pragma mark - UUID
 
 + (NSString *)createNewUUID {
     

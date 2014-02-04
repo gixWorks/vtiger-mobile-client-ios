@@ -11,15 +11,6 @@
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
 
-//Module names constants
-NSString* const kVTModuleCalendar = @"Calendar";
-NSString* const kVTModuleAccounts = @"Accounts";
-NSString* const kVTModuleContacts = @"Contacts";
-NSString* const kVTModuleLeads = @"Leads";
-NSString* const kVTModulePotentials = @"Potentials";
-NSString* const kVTModuleHelpDesk = @"HelpDesk";
-NSString* const kVTModuleProducts = @"Products";
-
 //Error Key
 NSString* const kErrorKey = @"error";
 
@@ -163,6 +154,8 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         }
         //D - create the item, using the fields from the Dictionary. The item is already added to persistent storage.
         [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+        
+        //TODO: schedule notification ?
     }   //end main loop
     
     //E- Parse through Deleted Records, which is just an Array of record IDs
@@ -208,7 +201,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     //Record already contains the field in Key-Value format
     
     //To create the new entity, we need to decode the type
-    NSString *module = [ModulesHelper decodeRecordType:[record objectForKey:@"id"]];
+    NSString *module = [ModulesHelper decodeModuleForRecordId:[record objectForKey:@"id"]];
     if ([module isEqualToString:kVTModuleCalendar]) {
         returnedRecord = [Activity modelObjectWithDictionary:record];
     }

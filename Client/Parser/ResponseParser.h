@@ -8,14 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-//Module constants
-extern NSString* const kVTModuleCalendar;
-extern NSString* const kVTModuleLeads;
-extern NSString* const kVTModuleAccounts;
-extern NSString* const kVTModuleContacts;
-extern NSString* const kVTModulePotentials;
-extern NSString* const kVTModuleHelpDesk;
-
 @interface ResponseParser : NSObject
 
 + (NSDictionary*)parseLogin:(NSDictionary*)JSON;

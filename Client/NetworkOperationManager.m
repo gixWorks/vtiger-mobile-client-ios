@@ -359,7 +359,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)addRecordToFetchQueue:(NSString*)record_id
 {
-    NSString *module = [ModulesHelper decodeRecordType:record_id];
+    NSString *module = [ModulesHelper decodeModuleForRecordId:record_id];
     NSMutableArray *queue = [_recordsToFetch objectForKey:module];
     if (queue == nil) {
         queue = [[NSMutableArray alloc] init];
