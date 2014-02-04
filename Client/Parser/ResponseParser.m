@@ -9,6 +9,7 @@
 #import "ResponseParser.h"
 #import "Model.h"
 #import "NetworkOperationManager.h"
+#import "ModulesHelper.h"
 
 //Module names constants
 NSString* const kVTModuleCalendar = @"Calendar";
@@ -207,7 +208,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     //Record already contains the field in Key-Value format
     
     //To create the new entity, we need to decode the type
-    NSString *module = [self decodeRecordType:[record objectForKey:@"id"]];
+    NSString *module = [ModulesHelper decodeRecordType:[record objectForKey:@"id"]];
     if ([module isEqualToString:kVTModuleCalendar]) {
         returnedRecord = [Activity modelObjectWithDictionary:record];
     }
@@ -302,25 +303,5 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     //TODO: I could just send the notification here of finished parsing directly to ViewController
     return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
 }
-
-
-
-#pragma mark - Utility Methods
-
-/**
- Returns the name of the Module based on the record passed
- 
- @param method The record id to decode, in the format MODULExRECORD_ID e.g. 1x1223
- */
-+ (NSString*)decodeRecordType:(NSString*)record
-{
-    NSString *m = [[record componentsSeparatedByString:@"x"] objectAtIndex:0];
-    Module *module = [Module MR_findFirstByAttribute:@"crm_id" withValue:m];
-    if (module != nil) {
-        return module.crm_name;
-    }
-    return nil;
-}
-
 
 @end

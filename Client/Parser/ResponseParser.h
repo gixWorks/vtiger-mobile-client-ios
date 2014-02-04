@@ -23,7 +23,5 @@ extern NSString* const kVTModuleHelpDesk;
 + (NSDictionary*)parseFetchRecord:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordsWithGrouping:(NSDictionary*)JSON forModule:(NSString*)module;
 
-//Utilities
-+ (NSString*)decodeRecordType:(NSString*)record;
 
 @end

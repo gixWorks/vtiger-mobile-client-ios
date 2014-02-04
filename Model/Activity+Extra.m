@@ -8,6 +8,7 @@
 
 #import "Activity+Extra.h"
 #import "NetworkOperationManager.h"
+#import "ModulesHelper.h"
 
 //Vtiger fields
 NSString* const kCalendarFieldsubject = @"subject";
@@ -144,7 +145,7 @@ NSString* const kCalendarFielddescription = @"description";
             if ([[parent_record objectForKey:@"value"] length] > 0) {
                 instance.crm_parent_id = [parent_record objectForKey:@"value"];
                 instance.crm_parent_name = [parent_record objectForKey:@"label"];
-                instance.crm_parent_type = [ResponseParser decodeRecordType:instance.crm_parent_id];
+                instance.crm_parent_type = [ModulesHelper decodeRecordType:instance.crm_parent_id];
                 [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
             }
             NSDictionary *contact_id = [dict objectForKey:kCalendarFieldcontact_id];

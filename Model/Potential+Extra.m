@@ -9,6 +9,7 @@
 #import "Potential+Extra.h"
 #import "ResponseParser.h"
 #import "NetworkOperationManager.h"
+#import "ModulesHelper.h"
 
 //Vtiger Fields
 NSString* const kPotentialsFieldId = @"id";
@@ -81,7 +82,7 @@ NSString* const kPotentialsFieldSalesStage = @"sales_stage";
         if ([[related_record objectForKey:@"value"] length] > 0) {
             instance.crm_related_to_id = [related_record objectForKey:@"value"];
             instance.crm_related_to_name = [related_record objectForKey:@"label"];
-            instance.crm_related_to_type = [ResponseParser decodeRecordType:instance.crm_related_to_id];
+            instance.crm_related_to_type = [ModulesHelper decodeRecordType:instance.crm_related_to_id];
             [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_related_to_id];
         }
         instance.crm_sales_stage = [dict objectForKey:kPotentialsFieldSalesStage];

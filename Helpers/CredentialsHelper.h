@@ -1,5 +1,5 @@
 //
-//  CredentialsManager.h
+//  CredentialsHelper.h
 //  CalendarAppThatSyncs
 //
 //  Created by Giovanni on 11/18/13.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSKeychain.h"
 
-@interface CredentialsManager : NSObject
+@interface CredentialsHelper : NSObject
 
 + (NSString*)getDeviceID;
 

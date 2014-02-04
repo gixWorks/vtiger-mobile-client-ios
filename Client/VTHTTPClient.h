@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AFNetworking.h"
-#import "CredentialsManager.h"
+#import <AFNetworking/AFNetworking.h>
+@class CredentialsHelper;
 
 //These constants are accessed from the NetworkOperationManager 
 extern NSString* const kClientHasFinishedLogin;

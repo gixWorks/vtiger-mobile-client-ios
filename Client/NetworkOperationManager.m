@@ -7,6 +7,12 @@
 //
 
 #import "NetworkOperationManager.h"
+#import "VTHTTPClient.h"
+#import "CredentialsHelper.h"
+#import "ResponseParser.h"
+#import "URLCheckerClient.h"
+#import "NSURL+GWAdditions.h"
+#import "ModulesHelper.h"
 
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
@@ -226,7 +232,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)login
 {
     NSString *username = [Service getActiveServiceUsername];
-    NSString *password = [CredentialsManager getPassword];
+    NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
@@ -235,7 +241,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)loginAndSyncModules
 {
     NSString *username = [Service getActiveServiceUsername];
-    NSString *password = [CredentialsManager getPassword];
+    NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     NSLog(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
@@ -260,7 +266,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password
 {
     //TODO: Keep?
-    [CredentialsManager savePassword:password];
+    [CredentialsHelper savePassword:password];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
@@ -281,7 +287,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)resyncCalendar
 {
-    NSString *session = [CredentialsManager getSession];
+    NSString *session = [CredentialsHelper getSession];
     //Build parameters ignoring the synctoken
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
@@ -292,7 +298,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token;
-    NSString *session = [CredentialsManager getSession];
+    NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
 
@@ -300,7 +306,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)describeModule:(NSString*)module
 {
-    NSString *session = [CredentialsManager getSession];
+    NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDescribe,@"_operation", session, @"_session", module, @"module",  nil];
 
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
@@ -308,7 +314,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)fetchRecord:(NSString*)record
 {
-    NSString *session = [CredentialsManager getSession];
+    NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecord,@"_operation", session, @"_session", record, @"record",  nil];
     NSLog(@"%@ %@ Starting FetchRecord: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
@@ -316,7 +322,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)fetchRecordWithGrouping:(NSString*)record
 {
-    NSString *session = [CredentialsManager getSession];
+    NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
     NSLog(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordWithGrouping];
@@ -353,7 +359,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)addRecordToFetchQueue:(NSString*)record_id
 {
-    NSString *module = [ResponseParser decodeRecordType:record_id];
+    NSString *module = [ModulesHelper decodeRecordType:record_id];
     NSMutableArray *queue = [_recordsToFetch objectForKey:module];
     if (queue == nil) {
         queue = [[NSMutableArray alloc] init];
@@ -376,7 +382,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         if (![queue count] > 0) {
             break;
         }
-        NSString *session = [CredentialsManager getSession];
+        NSString *session = [CredentialsHelper getSession];
        
         NSError *jsonError;
         NSString *queueString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:queue options:0 error:&jsonError] encoding:NSUTF8StringEncoding] ;

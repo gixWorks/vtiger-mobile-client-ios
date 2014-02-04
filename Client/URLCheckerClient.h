@@ -7,12 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@protocol URLCheckerClientDelegate <NSObject>
-
-- (void)urlCheckerDidFinishWithError:(NSString*)error url:(NSURL*)testedUrl;
-
-@end
+#import "URLCheckerClientDelegate.h"
 
 @interface URLCheckerClient : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 

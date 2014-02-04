@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VTHTTPClient.h"
-#import "CredentialsManager.h"
-#import "ResponseParser.h"
-#import "URLCheckerClient.h"
-#import "NSURL+GWAdditions.h"
+#import "URLCheckerClientDelegate.h"
+
+@class URLCheckerClient;
+@class NetworkOperationManager;
 
 extern NSString* const kManagerHasFinishedCheckURL;
 extern NSString* const kManagerHasFinishedLogin;

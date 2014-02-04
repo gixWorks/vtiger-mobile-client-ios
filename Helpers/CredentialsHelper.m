@@ -6,13 +6,13 @@
 //
 //
 
-#import "CredentialsManager.h"
+#import "CredentialsHelper.h"
 #import "Secret.h"
 
 #define kNSUserDefaultsServiceUrl @"ServiceURL"
 #define kNSUserDefaultsUsername @"username"
 
-@implementation CredentialsManager
+@implementation CredentialsHelper
 
 + (NSString*)getDeviceID
 {

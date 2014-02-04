@@ -7,7 +7,7 @@
 //
 
 #import "VTHTTPClient.h"
-
+#import "CredentialsHelper.h"
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
@@ -43,7 +43,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 
 - (void)updateSession:(NSString *)session
 {
-    [CredentialsManager saveSession:session];
+    [CredentialsHelper saveSession:session];
     NSTimeInterval interval = 30.0*60.0; //Minutes * seconds
     [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginAndExecuteSelector:withObject:withObject:) userInfo:nil repeats:NO];
 }
@@ -63,7 +63,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     NSLog(@"%@ %@ obj1: %@ obj2: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), selectorObject1, selectorObject2);
 #endif
     NSString *username = [Service getActiveServiceUsername];
-    NSString *password = [CredentialsManager getPassword];
+    NSString *password = [CredentialsHelper getPassword];
     __block NSString *session;
     
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
@@ -128,7 +128,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if DEBUG
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
-    if ([CredentialsManager getSession] == nil) {
+    if ([CredentialsHelper getSession] == nil) {
         [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
         return;
     }
