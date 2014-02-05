@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
+#import "GWNotificationsHelper.h"
 
 //Error Key
 NSString* const kErrorKey = @"error";
@@ -143,22 +144,28 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 //C- Extract all the fields from the returned JSON
                 NSString* fieldName = [field objectForKey:@"name"];
                 [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
-                //Ca- Parse Custom Fields
+                //C1- Parse Custom Fields
                 if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
                     [entityCustomFields setObject:field forKey:fieldName];
                 }
             }
         }
         //D - create the item, using the fields from the Dictionary. The item is already added to persistent storage.
-        [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+        Activity *a = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         
-        //TODO: schedule notification ?
+        //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [GWNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
+            [GWNotificationsHelper scheduleNotificationWithItem:a interval:15];
+        });
+        
     }   //end main loop
     
     //E- Parse through Deleted Records, which is just an Array of record IDs
     for (NSString* identifier in deletedRecords) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
         [Activity MR_deleteAllMatchingPredicate:predicate];
+        [GWNotificationsHelper unscheduleNotificationForRecordId:identifier];
     }
     
     //F- Save to Core Data (or whatever) the array of items
@@ -269,7 +276,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 //C- Extract all the fields from the returned JSON
                 NSString* fieldName = [field objectForKey:@"name"];
                 [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
-                //Ca- Parse Custom Fields
+                //C1- Parse Custom Fields
                 if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
                     [entityCustomFields setObject:field forKey:fieldName];
                 }
