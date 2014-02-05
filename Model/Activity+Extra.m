@@ -81,19 +81,33 @@ NSString* const kCalendarFielddescription = @"description";
             
             //This is a stupid fix because sometimes we get start time with seconds 14:30:00 sometimes not 14:30
             NSString *start_time_string = [dict objectForKey:kCalendarFieldtime_start];
-            if ([[start_time_string componentsSeparatedByString:@":"] count] < 3) {
+            if ([[start_time_string componentsSeparatedByString:@":"] count] < 3 && [start_time_string length] > 1) {
                 start_time_string = [start_time_string stringByAppendingString:@":00"];
+            }
+            NSString *end_time_string = [dict objectForKey:kCalendarFieldtime_end];
+            if ([[end_time_string componentsSeparatedByString:@":"] count] < 3 && [end_time_string length] > 1) {
+                end_time_string = [end_time_string stringByAppendingString:@":00"];
             }
             
             //Format some variables
             NSDate *start_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddate_start]];
             NSDate *start_time = [timeFormat dateFromString:start_time_string];
+            NSDate *end_time;
             NSDate *due_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddue_date]];
+            NSNumber *duration_minutes = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_minutes]];
+            NSNumber *duration_hours = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_hours]];
+            if ([end_time_string length] > 0) {
+                end_time = [timeFormat dateFromString:end_time_string];
+            }
+            else{
+                end_time = [start_time dateByAddingTimeInterval:[duration_hours floatValue]*60*60 + [duration_minutes floatValue]*60];
+            }
             
             //Properties defined by CRM
             instance.crm_subject = [dict objectForKey:kCalendarFieldsubject];
             instance.crm_time_start = start_time;
             instance.crm_date_start = start_date;
+//            instance.crm_time_end = end_time;
             instance.crm_id = [dict objectForKey:kCalendarFieldid];
             instance.crm_assigned_user_id = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"value"];
             instance.crm_assigned_user_name = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"label"];
@@ -105,8 +119,8 @@ NSString* const kCalendarFielddescription = @"description";
             instance.crm_priority = [dict objectForKey:kCalendarFieldtaskpriority];
             instance.crm_recurringtype = [dict objectForKey:kCalendarFieldrecurringtype];
             instance.crm_due_date =  due_date;
-            instance.crm_duration_hours =  [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_hours]];
-            instance.crm_duration_minutes = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldduration_minutes]];
+            instance.crm_duration_hours = duration_hours;
+            instance.crm_duration_minutes = duration_minutes;
             if ([instance.crm_activitytype isEqualToString:@"Task"]) {
                 instance.crm_status = [dict objectForKey:kCalendarFieldtaskstatus];
             }
