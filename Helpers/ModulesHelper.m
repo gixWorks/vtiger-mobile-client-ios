@@ -26,6 +26,9 @@ NSString* const kVTModuleProducts = @"Products";
     if (module != nil) {
         return module.crm_name;
     }
+    else if([m isEqualToString:@"18"]){ //18 is still Calendar module but Vtiger does not list it when fetching modules
+        return  kVTModuleCalendar;
+    }
     return nil;
 }
 
