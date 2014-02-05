@@ -386,9 +386,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
        
         NSError *jsonError;
         NSString *queueString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:queue options:0 error:&jsonError] encoding:NSUTF8StringEncoding] ;
+        //queueString should be in the form: ["18x1164", "1x1151"]
         
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordsWithGrouping,@"_operation", module, @"module", queueString, @"ids", session, @"_session", @"", @"alertid", nil];
-        NSLog(@"%@ %@ Processing fetch queue for IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), queueString);
+        NSLog(@"%@ %@ Processing fetch queue for module :%@ IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, queueString);
         [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
     }
 }
@@ -454,7 +455,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
         }
         
-        //Sync is finished, time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
+        //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
         [self processFetchQueue];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:result];

@@ -157,6 +157,7 @@
         <attribute name="lead_rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_salutationtype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_yahooid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="leads" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="ModifiedRecord" syncable="YES">

@@ -12,11 +12,10 @@ NSString* const kLeadFieldid = @"id";
 
 @implementation Lead (Extra)
 
-+ (Lead *)modelObjectWithDictionary:(NSDictionary *)dict
++ (Lead *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields
 {
     NSString *record_id = [dict objectForKey:kLeadFieldid];
     Lead *instance;
-    
     
     //I first try to count the entities (should take less time) and load the entity only if strictly necessary (if count > 0). The Count operation should be less intensive than the Fetch, so I use it for checking the existence
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lead_leadid = %@", record_id];
@@ -43,7 +42,6 @@ NSString* const kLeadFieldid = @"id";
         NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
         [timeFormat setDateFormat:@"HH:mm:ss"];
 
-        
         //Properties defined by CRM
         instance.lead_leadid = [dict objectForKey:kLeadFieldid];
         instance.lead_lastname = [dict objectForKey:@"lastname"];
@@ -66,6 +64,13 @@ NSString* const kLeadFieldid = @"id";
         instance.lead_rating = [dict objectForKey:@"rating"];
         instance.lead_salutationtype = [dict objectForKey:@"salutationtype"];
         instance.lead_yahooid = [dict objectForKey:@"yahooid"];
+        
+        //Custom fields
+        NSError *cfieldsError;
+        instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+        if (cfieldsError != nil) {
+            NSLog(@"Entity: %@ Error in custom fields: %@", instance.lead_leadid, [cfieldsError description]);
+        }
         
         //Add the relationship with the current service
         instance.service = [Service getActive];

@@ -12,7 +12,6 @@
 
 /*** Init Methods ***/
 
-+ (Activity *)modelObjectWithDictionary:(NSDictionary *)dict;
-
++ (Lead *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields;
 
 @end

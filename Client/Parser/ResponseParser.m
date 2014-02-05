@@ -21,7 +21,6 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
 + (NSDictionary*)parseLogin:(NSDictionary *)JSON
 {
-    
     NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
     /*
      Structure of returned result is: @ { "@error" : @{@"message" : ... the message ...} }
@@ -33,7 +32,6 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     version = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"vtiger_version"] ;
     mobile_version = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"mobile_module_version"] ;
     userid = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"userid"] ;
-    
     @try {
         if ([kMinimumRequiredVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
             // actualVersion is lower than the requiredVersion
@@ -100,7 +98,6 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
         [parseResult setObject:[exception description] forKey:kErrorKey];
     }
-    
     return parseResult;
 }
 
@@ -118,11 +115,11 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     NSArray *deletedRecords = [sync objectForKey:@"deleted"];
     NSArray *updatedRecords = [sync objectForKey:@"updated"];
     NSInteger nextPage = [[sync objectForKey:@"nextPage"] integerValue];
-    
-    NSLog(@"%@ %@ Deleted Records: %ld Updated Records: %ld", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (unsigned long)[deletedRecords count], (unsigned long)[updatedRecords count]);
-    
+#if DEBUG
+    NSLog(@"%@ Deleted Records: %ld Updated Records: %ld", NSStringFromSelector(_cmd), (unsigned long)[deletedRecords count], (unsigned long)[updatedRecords count]);
+#endif
     if (success != YES) {
-        NSDictionary *error = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sync was not successful", @"Synchronization was not successful"), @"message", nil];
+        NSDictionary *error = [JSON objectForKey:@"error"];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -146,8 +143,8 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 //C- Extract all the fields from the returned JSON
                 NSString* fieldName = [field objectForKey:@"name"];
                 [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
-                if ([fieldName hasPrefix:@"cf_"]) {
-                    //it's a custom field
+                //Ca- Parse Custom Fields
+                if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
                     [entityCustomFields setObject:field forKey:fieldName];
                 }
             }
@@ -193,7 +190,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     NSManagedObject *returnedRecord = nil;
     BOOL success = [[JSON objectForKey:@"success"] boolValue];
     if (success != YES) {
-        NSDictionary *error = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Login was not successful", @"Login was not successful"), @"message", nil];
+        NSDictionary *error = [JSON objectForKey:@"error"];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -202,6 +199,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     
     //To create the new entity, we need to decode the type
     NSString *module = [ModulesHelper decodeModuleForRecordId:[record objectForKey:@"id"]];
+#if DEBUG
+    NSLog(@"%@ parsing %@ record %@", NSStringFromSelector(_cmd), module, [record objectForKey:@"id"]);
+#endif
     if ([module isEqualToString:kVTModuleCalendar]) {
         returnedRecord = [Activity modelObjectWithDictionary:record];
     }
@@ -212,7 +212,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         returnedRecord = [Contact modelObjectWithDictionary:record];
     }
     else if([module isEqualToString:kVTModuleLeads]){
-        returnedRecord = [Lead modelObjectWithDictionary:record];
+        returnedRecord = [Lead modelObjectWithDictionary:record customFields:nil];
     }
     else if([module isEqualToString:kVTModulePotentials]){
         returnedRecord = [Potential modelObjectWithDictionary:record];
@@ -242,9 +242,12 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 {
     BOOL success = [[JSON objectForKey:@"success"] boolValue];
     NSArray *records = [JSON valueForKeyPath:@"result.records"];
+#if DEBUG
+    NSLog(@"%@ parsing %d records for module %@", NSStringFromSelector(_cmd), [records count], module);
+#endif
     
     if (success != YES) {
-        NSDictionary *error = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sync was not successful", @"Synchronization was not successful"), @"message", nil];
+        NSDictionary *error = [JSON objectForKey:@"error"];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -252,20 +255,29 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     for (NSDictionary *entity in records) { //Main loop, we are going through each entitiy
         //A- Prepare the main elements of each record: the identifier and the blocks
         NSString *identifier = [entity objectForKey:@"id"];
+#if DEBUG
+        NSLog(@"%@ parsing %@ record: %@", NSStringFromSelector(_cmd), module, identifier);
+#endif
         NSArray *blocks = [entity objectForKey:@"blocks"];
         //B- prepare a dictionary to contain the values that will be stored in the Entity properties
         NSMutableDictionary *entityFields = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *entityCustomFields = [[NSMutableDictionary alloc] init];
         [entityFields setObject:identifier forKey:@"id"];
         for (NSDictionary *block in blocks) {
             NSArray *fields = [block objectForKey:@"fields"];
             for (NSDictionary *field in fields) {
                 //C- Extract all the fields from the returned JSON
-                [entityFields setObject:[field objectForKey:@"value"] forKey:[field objectForKey:@"name"]];
+                NSString* fieldName = [field objectForKey:@"name"];
+                [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
+                //Ca- Parse Custom Fields
+                if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
+                    [entityCustomFields setObject:field forKey:fieldName];
+                }
             }
         }
         //D - create the items starting from the dictionary
         if ([module isEqualToString:kVTModuleCalendar]) {
-            [Activity modelObjectWithDictionary:entityFields];
+            [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         if ([module isEqualToString:kVTModuleAccounts]) {
             [Account modelObjectWithDictionary:entityFields];
@@ -274,7 +286,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             [Contact modelObjectWithDictionary:entityFields];
         }
         if ([module isEqualToString:kVTModuleLeads]) {
-            [Lead modelObjectWithDictionary:entityFields];
+            [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         if ([module isEqualToString:kVTModulePotentials]) {
             [Potential modelObjectWithDictionary:entityFields];
