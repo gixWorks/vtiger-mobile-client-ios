@@ -18,8 +18,15 @@ NSString* const kClientHasFinishedFetchRecord = @"kClientHasFinishedFetchRecord"
 NSString* const kClientHasFinishedFetchRecordWithGrouping = @"kClientHasFinishedFetchRecordWithGrouping";
 NSString* const kClientHasFinishedFetchRecordsWithGrouping =  @"kClientHasFinishedFetchRecordsWithGrouping";
 
+//Notification keys constants
+NSString* const kClientNotificationResponseBodyKey = @"responseBody";
+NSString* const kClientNotificationErrorKey = @"error";
+NSString* const kClientNotificationParametersKey = @"parameters";
+
 NSInteger const kErrorCodeAuthenticationFailed = 1210;
 NSInteger const kErrorCodeLoginRequired = 1501;
+
+static NSInteger kRefreshIntervalMinutes = 30;
 
 @implementation VTHTTPClient
 
@@ -44,7 +51,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 - (void)updateSession:(NSString *)session
 {
     [CredentialsHelper saveSession:session];
-    NSTimeInterval interval = 30.0*60.0; //Minutes * seconds
+    NSTimeInterval interval = kRefreshIntervalMinutes*60.0; //Minutes * seconds
     [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginAndExecuteSelector:withObject:withObject:) userInfo:nil repeats:NO];
 }
 
@@ -84,7 +91,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         else{
             
             session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
-            
+            //Writes the new session
             [self updateSession:session];
 
             NSDictionary *result;
@@ -103,14 +110,14 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #pragma clang diagnostic pop
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, @"result", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
             
         }
         
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], @"error", nil]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
     [self.operationQueue addOperation:operation];
 }
@@ -156,7 +163,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                 [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
             }
             else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, @"error", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
             }
         }
         else{
@@ -164,12 +171,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             if([NSJSONSerialization isValidJSONObject:JSON]){
                 result = JSON;
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, @"result", parameters, @"parameters", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
         }
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], @"error", nil]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
     [self.operationQueue addOperation:operation];
 }
@@ -208,7 +215,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                 [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
             }
             else{
-                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, @"error", nil]];
+                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
             }
         }
         else{
@@ -216,12 +223,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             if([NSJSONSerialization isValidJSONObject:JSON]){
                 result = JSON;
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, @"result", parameters, @"parameters", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
         }
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], @"error", nil]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
     [self.operationQueue addOperation:operation];
 }

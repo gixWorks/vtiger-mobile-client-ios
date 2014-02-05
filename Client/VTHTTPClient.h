@@ -19,6 +19,11 @@ extern NSString* const kClientHasFinishedFetchRecord;
 extern NSString* const kClientHasFinishedFetchRecordWithGrouping;
 extern NSString* const kClientHasFinishedFetchRecordsWithGrouping;
 
+//The notifications keys
+extern NSString* const kClientNotificationResponseBodyKey;
+extern NSString* const kClientNotificationErrorKey;
+extern NSString* const kClientNotificationParametersKey;
+
 @interface VTHTTPClient : AFHTTPClient
 
 + (VTHTTPClient*)sharedInstance;

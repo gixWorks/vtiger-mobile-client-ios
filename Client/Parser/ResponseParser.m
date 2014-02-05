@@ -205,9 +205,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     //Record already contains the field in Key-Value format
     
     //To create the new entity, we need to decode the type
-    NSString *module = [ModulesHelper decodeModuleForRecordId:[record objectForKey:@"id"]];
+    NSString *identifier = [record objectForKey:@"id"];
+    NSString *module = [ModulesHelper decodeModuleForRecordId:identifier];
 #if DEBUG
-    NSLog(@"%@ parsing %@ record %@", NSStringFromSelector(_cmd), module, [record objectForKey:@"id"]);
+    NSLog(@"%@ parsing %@ record %@", NSStringFromSelector(_cmd), module, identifier);
 #endif
     if ([module isEqualToString:kVTModuleCalendar]) {
         returnedRecord = [Activity modelObjectWithDictionary:record];
@@ -231,7 +232,79 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         returnedRecord = [Product modelObjectWithDictionary:record];
     }
     else{
-        NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:returnedRecord, @"record", @"%@ %@ No Module Handler found", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kErrorKey, nil];
+        NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
+        return  userInfo;
+    }
+    
+    //Save the record in the datasource
+    __block NSError *saveError;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+        saveError = error;
+    }];
+    
+    NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:returnedRecord, @"record", saveError, kErrorKey, nil];
+    return userInfo;
+}
+
++ (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON
+{
+    NSManagedObject *returnedRecord = nil;
+    BOOL success = [[JSON objectForKey:@"success"] boolValue];
+    if (success != YES) {
+        NSDictionary *error = [JSON objectForKey:@"error"];
+        return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
+    }
+    
+    NSDictionary *record = [JSON valueForKeyPath:@"result.record"];
+    //Record contains the fields in Blocks
+    //A- Prepare the main elements of each record: the identifier and the blocks
+    NSString *identifier = [record objectForKey:@"id"];
+    NSArray *blocks = [record objectForKey:@"blocks"];
+#if DEBUG
+    NSLog(@"%@ parsing record %@", NSStringFromSelector(_cmd), identifier);
+#endif
+    //B- prepare a dictionary to contain the values that will be stored in the Entity properties
+    NSMutableDictionary *entityFields = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *entityCustomFields = [[NSMutableDictionary alloc] init];
+    [entityFields setObject:identifier forKey:@"id"];
+    for (NSDictionary *block in blocks) {
+        NSArray *fields = [block objectForKey:@"fields"];
+        for (NSDictionary *field in fields) {
+            //C- Extract all the fields from the returned JSON
+            NSString* fieldName = [field objectForKey:@"name"];
+            [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
+            //C1- Parse Custom Fields
+            if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
+                [entityCustomFields setObject:field forKey:fieldName];
+            }
+        }
+    }
+    
+    //To create the new entity, we need to decode the type
+    NSString *module = [ModulesHelper decodeModuleForRecordId:identifier];
+    if ([module isEqualToString:kVTModuleCalendar]) {
+        returnedRecord = [Activity modelObjectWithDictionary:record customFields:entityCustomFields];
+    }
+    else if([module isEqualToString:kVTModuleAccounts]){
+        returnedRecord = [Account modelObjectWithDictionary:record];
+    }
+    else if([module isEqualToString:kVTModuleContacts]){
+        returnedRecord = [Contact modelObjectWithDictionary:record];
+    }
+    else if([module isEqualToString:kVTModuleLeads]){
+        returnedRecord = [Lead modelObjectWithDictionary:record customFields:entityCustomFields];
+    }
+    else if([module isEqualToString:kVTModulePotentials]){
+        returnedRecord = [Potential modelObjectWithDictionary:record];
+    }
+    else if([module isEqualToString:kVTModuleHelpDesk]){
+        returnedRecord = [Ticket modelObjectWithDictionary:record];
+    }
+    else if([module isEqualToString:kVTModuleProducts]){
+        returnedRecord = [Product modelObjectWithDictionary:record];
+    }
+    else{
+        NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
         return  userInfo;
     }
     
@@ -286,23 +359,27 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         if ([module isEqualToString:kVTModuleCalendar]) {
             [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
-        if ([module isEqualToString:kVTModuleAccounts]) {
+        else if ([module isEqualToString:kVTModuleAccounts]) {
             [Account modelObjectWithDictionary:entityFields];
         }
-        if ([module isEqualToString:kVTModuleContacts]) {
+        else if ([module isEqualToString:kVTModuleContacts]) {
             [Contact modelObjectWithDictionary:entityFields];
         }
-        if ([module isEqualToString:kVTModuleLeads]) {
+        else if ([module isEqualToString:kVTModuleLeads]) {
             [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
-        if ([module isEqualToString:kVTModulePotentials]) {
+        else if ([module isEqualToString:kVTModulePotentials]) {
             [Potential modelObjectWithDictionary:entityFields];
         }
-        if ([module isEqualToString:kVTModuleHelpDesk]) {
+        else if ([module isEqualToString:kVTModuleHelpDesk]) {
             [Ticket modelObjectWithDictionary:entityFields];
         }
-        if ([module isEqualToString:kVTModuleProducts]) {
+        else if ([module isEqualToString:kVTModuleProducts]) {
             [Product modelObjectWithDictionary:entityFields];
+        }
+        else{
+            NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
+            return  userInfo;
         }
     }
     

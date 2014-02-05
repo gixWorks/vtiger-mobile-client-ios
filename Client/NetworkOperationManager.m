@@ -333,7 +333,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    NSString *notificationName = [record stringByAppendingString:@"fetch"];
 //    [[NSNotificationCenter defaultCenter] addObserverForName:notificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
 //    
-//        NSDictionary *JSON = [[note userInfo] objectForKey:@"result"];
+//        NSDictionary *JSON = [[note userInfo] objectForKey:kClientNotificationResponseBodyKey];
 //        //parse the record and get the fetched record
 //        //associate with associatedRecord
 //        id <NSObject> object = [[ResponseParser parseFetchRecord:JSON] objectForKey:@"record"];
@@ -402,16 +402,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
 #endif
     
-    if (![[notification userInfo] objectForKey:@"error"]) {
-        
-        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:@"result"]];
-        
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
     }
     else{
         //There was an error in the HTTPClient
         NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
-        NSDictionary *userInfo = @{@"error" : [notification userInfo][@"error"][@"message"] };
+        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
     }
 }
@@ -422,19 +420,19 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
 #endif
 
-    if (![[notification userInfo] objectForKey:@"error"]) {
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //No error, so perform Core Data stuff here
-        NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
-        NSDictionary *result = [ResponseParser parseLogin:JSON];
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseLogin:JSON];
 
-        if ([result objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[result objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:@"error"] != nil){
+            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:result];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
     }
 }
@@ -444,26 +442,21 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 #if DEBUG
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
-
-    if (![[notification userInfo] objectForKey:@"error"]) {
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //parse the results
-        NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
-        NSDictionary *result = [ResponseParser parseCalendarSync:JSON];
-        if ([result objectForKey:@"error"] != nil)
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
+        if ([parseResult objectForKey:@"error"] != nil)
         {
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[result objectForKey:@"error"] description]);
-
+            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
-        
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
         [self processFetchQueue];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:result];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
     }
 }
@@ -473,15 +466,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 #if DEBUG
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
-
-    if (![[notification userInfo] objectForKey:@"error"]) {
-        //Everything ok, pass back to ViewController
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        //TODO: parse the module description and store it to database.
+        //For now I am just posting notification to viewcontroller
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
-        
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
     }
 }
@@ -493,19 +485,17 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
 
-    if (![[notification userInfo] objectForKey:@"error"]) {
-        //No error, process
-        //parse the results
-        NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
-
-        NSDictionary *result = [ResponseParser parseFetchRecord:JSON];
-        if ([result objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[result objectForKey:@"error"] description]);
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseFetchRecord:JSON];
+        if ([parseResult objectForKey:@"error"] != nil){
+            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:parseResult];
         }
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
     }
 }
@@ -515,15 +505,18 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 #if DEBUG
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
-
-    if (![[notification userInfo] objectForKey:@"error"]) {
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
-        //TODO: NOT IMPLEMENTED IN PARSER YET
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseFetchRecordWithGrouping:JSON];
+        if ([parseResult objectForKey:@"error"] != nil){
+            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
     }
 }
@@ -534,20 +527,20 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
 
-    if (![[notification userInfo] objectForKey:@"error"]) {
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
-        NSDictionary *JSON = [[notification userInfo] objectForKey:@"result"];
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSString *module = [[[notification userInfo] objectForKey:@"parameters"] objectForKey:@"module"];
-        NSDictionary *result = [ResponseParser parseFetchRecordsWithGrouping:JSON forModule:module];
+        NSDictionary *parseResult = [ResponseParser parseFetchRecordsWithGrouping:JSON forModule:module];
         
-        if ([result objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Error in module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, [[result objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:@"error"] != nil){
+            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:nil];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSLog(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
     }
 }

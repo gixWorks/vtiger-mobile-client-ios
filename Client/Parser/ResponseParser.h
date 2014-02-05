@@ -13,6 +13,7 @@
 + (NSDictionary*)parseLogin:(NSDictionary*)JSON;
 + (NSDictionary*)parseCalendarSync:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecord:(NSDictionary*)JSON;
++ (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordsWithGrouping:(NSDictionary*)JSON forModule:(NSString*)module;
 
 

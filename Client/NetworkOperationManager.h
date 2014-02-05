@@ -18,6 +18,7 @@ extern NSString* const kManagerHasFinishedSyncCalendar;
 extern NSString* const kManagerHasFinishedDefine;
 extern NSString* const kManagerHasFinishedFetchRecord;
 extern NSString* const kManagerHasFinishedFetchRecordWithGrouping;
+extern NSString* const kManagerHasFinishedFetchRecordsWithGrouping;
 
 @interface NetworkOperationManager : NSObject <URLCheckerClientDelegate>
 
@@ -35,7 +36,7 @@ extern NSString* const kManagerHasFinishedFetchRecordWithGrouping;
 - (void)syncCalendarFromPage:(NSNumber*)page;
 - (void)describeModule:(NSString*)module;
 - (void)fetchRecord:(NSString*)record;
-//- (void)fetchRecordWithGrouping:(NSString*)record;
+- (void)fetchRecordWithGrouping:(NSString*)record;
 - (void)addRecordToFetchQueue:(NSString*)record_id;
 //- (void)fetchRecord:(NSString*)record andAssociateToRecord:(id<NSObject>)associatedRecord;
 
