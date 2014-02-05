@@ -86,6 +86,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             
             //Finally I save
             //Save the record in the datasource
+#if DEBUG
+            NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
             __block NSError *saveError;
             [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
                 saveError = error;
@@ -169,6 +172,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }
     
     //F- Save to Core Data (or whatever) the array of items
+#if DEBUG
+    NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
     __block NSError *saveError;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         saveError = error;
@@ -237,6 +243,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }
     
     //Save the record in the datasource
+#if DEBUG
+    NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
     __block NSError *saveError;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         saveError = error;
@@ -283,25 +292,25 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     //To create the new entity, we need to decode the type
     NSString *module = [ModulesHelper decodeModuleForRecordId:identifier];
     if ([module isEqualToString:kVTModuleCalendar]) {
-        returnedRecord = [Activity modelObjectWithDictionary:record customFields:entityCustomFields];
+        returnedRecord = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
     }
     else if([module isEqualToString:kVTModuleAccounts]){
-        returnedRecord = [Account modelObjectWithDictionary:record];
+        returnedRecord = [Account modelObjectWithDictionary:entityFields];
     }
     else if([module isEqualToString:kVTModuleContacts]){
-        returnedRecord = [Contact modelObjectWithDictionary:record];
+        returnedRecord = [Contact modelObjectWithDictionary:entityFields];
     }
     else if([module isEqualToString:kVTModuleLeads]){
-        returnedRecord = [Lead modelObjectWithDictionary:record customFields:entityCustomFields];
+        returnedRecord = [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
     }
     else if([module isEqualToString:kVTModulePotentials]){
-        returnedRecord = [Potential modelObjectWithDictionary:record];
+        returnedRecord = [Potential modelObjectWithDictionary:entityFields];
     }
     else if([module isEqualToString:kVTModuleHelpDesk]){
-        returnedRecord = [Ticket modelObjectWithDictionary:record];
+        returnedRecord = [Ticket modelObjectWithDictionary:entityFields];
     }
     else if([module isEqualToString:kVTModuleProducts]){
-        returnedRecord = [Product modelObjectWithDictionary:record];
+        returnedRecord = [Product modelObjectWithDictionary:entityFields];
     }
     else{
         NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
@@ -310,6 +319,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     
     //Save the record in the datasource
     __block NSError *saveError;
+#if DEBUG
+    NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         saveError = error;
     }];
@@ -384,6 +396,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }
     
     //E- Save to Core Data (or whatever) the array of items
+#if DEBUG
+    NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
     __block NSError *saveError;
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         saveError = error;
