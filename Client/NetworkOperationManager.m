@@ -61,7 +61,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     self = [super init];
     if (self) {
         
-        _recordsToFetch = [[NSMutableDictionary alloc] init];
+        _recordsToFetch = [[NSMutableDictionary alloc] init]; //or load from disk if "save" file is there
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedLogin:) name:kClientHasFinishedLogin object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSync:) name:kClientHasFinishedSyncCalendar object:nil];
@@ -102,7 +102,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    [encoder finishEncoding];
 //    
 //    BOOL result = [data writeToFile:filePath atomically:YES];
-//    
+//    [self addSkipBackupAttributeToItemAtURL:filePath]; //convert filePath to URL first
 //    return result;
 //}
 //
@@ -125,6 +125,22 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    
 //}
 
+/** Avoid to backup to iCloud
+ @param URL the file URL
+ @return the success of the operation
+ */
+- (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL
+{
+    assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
+    
+    NSError *error = nil;
+    BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+    }
+    return success;
+}
 
 #pragma mark - Actions
 

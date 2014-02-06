@@ -123,7 +123,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     NSLog(@"%@ Deleted Records: %ld Updated Records: %ld", NSStringFromSelector(_cmd), (unsigned long)[deletedRecords count], (unsigned long)[updatedRecords count]);
 #endif
     if (success != YES) {
-        NSDictionary *error = [JSON objectForKey:@"error"];
+        NSDictionary *error = [JSON objectForKey:kErrorKey];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -203,7 +203,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     NSManagedObject *returnedRecord = nil;
     BOOL success = [[JSON objectForKey:@"success"] boolValue];
     if (success != YES) {
-        NSDictionary *error = [JSON objectForKey:@"error"];
+        NSDictionary *error = [JSON objectForKey:kErrorKey];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -251,7 +251,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         saveError = error;
     }];
     
-    NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:returnedRecord, @"record", saveError, kErrorKey, nil];
+    NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"record", saveError, kErrorKey, nil];
     return userInfo;
 }
 
@@ -260,7 +260,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     NSManagedObject *returnedRecord = nil;
     BOOL success = [[JSON objectForKey:@"success"] boolValue];
     if (success != YES) {
-        NSDictionary *error = [JSON objectForKey:@"error"];
+        NSDictionary *error = [JSON objectForKey:kErrorKey];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
     
@@ -326,7 +326,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         saveError = error;
     }];
     
-    NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:returnedRecord, @"record", saveError, kErrorKey, nil];
+    NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"record", saveError, kErrorKey, nil];
     return userInfo;
 }
 
@@ -339,14 +339,15 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 #endif
     
     if (success != YES) {
-        NSDictionary *error = [JSON objectForKey:@"error"];
+        NSDictionary *error = [JSON objectForKey:kErrorKey];
         return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
     }
-    
+    NSMutableArray *identifiers = [[NSMutableArray alloc] init];
     //Go through the records
     for (NSDictionary *entity in records) { //Main loop, we are going through each entitiy
         //A- Prepare the main elements of each record: the identifier and the blocks
         NSString *identifier = [entity objectForKey:@"id"];
+        [identifiers addObject:identifier];
 #if DEBUG
         NSLog(@"%@ parsing %@ record: %@", NSStringFromSelector(_cmd), module, identifier);
 #endif
@@ -405,7 +406,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }];
     
     //TODO: I could just send the notification here of finished parsing directly to ViewController
-    return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:identifiers,@"record",saveError,kErrorKey, nil];
 }
 
 @end
