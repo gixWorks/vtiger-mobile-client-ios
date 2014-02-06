@@ -23,6 +23,9 @@ NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecor
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
 
+//Notification suffix for building notifications to the HTTP client
+NSString* const kNotificationSuffixHTTP = @"HTTP";
+
 //Operation constants
 NSString* const kOperationLogin = @"login";
 NSString* const kOperationLoginAndFetchModules = @"loginAndFetchModules";
@@ -320,12 +323,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
 }
 
-- (void)fetchRecordWithGrouping:(NSString*)record
+- (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName
 {
+    NSString *httpNotificationName = [NSString stringWithFormat:@"%@-%@", notificationName, kNotificationSuffixHTTP];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:httpNotificationName object:nil];
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
     NSLog(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordWithGrouping];
+    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
 //- (void)fetchRecord:(NSString*)record andAssociateToRecord:(id<NSObject>)associatedRecord
@@ -502,6 +507,9 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedFetchRecordWithGrouping:(NSNotification*)notification
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
+    //Notification name should be in the form fetchRecordWithGrouping1x123-http , so we discard the "http" part and we take the first part, which is the notification name that the ViewController is watching
+    NSString *notificationName = [[notification.name componentsSeparatedByString:@"-"] objectAtIndex:0];
 #if DEBUG
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
@@ -512,12 +520,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         if ([parseResult objectForKey:@"error"] != nil){
             NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:parseResult];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
         NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
     }
 }
 
@@ -536,12 +544,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         if ([parseResult objectForKey:@"error"] != nil){
             NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:nil];
     }
     else{
         //There was an error in the HTTPClient
         NSLog(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordWithGrouping object:self userInfo:[notification userInfo]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
     }
 }
 

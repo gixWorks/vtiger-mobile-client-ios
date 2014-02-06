@@ -36,7 +36,7 @@ extern NSString* const kManagerHasFinishedFetchRecordsWithGrouping;
 - (void)syncCalendarFromPage:(NSNumber*)page;
 - (void)describeModule:(NSString*)module;
 - (void)fetchRecord:(NSString*)record;
-- (void)fetchRecordWithGrouping:(NSString*)record;
+- (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName;
 - (void)addRecordToFetchQueue:(NSString*)record_id;
 //- (void)fetchRecord:(NSString*)record andAssociateToRecord:(id<NSObject>)associatedRecord;
 
