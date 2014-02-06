@@ -10,7 +10,7 @@
 #import "Model.h"
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
-#import "GWNotificationsHelper.h"
+#import "GWLocalNotificationsHelper.h"
 
 //Error Key
 NSString* const kErrorKey = @"error";
@@ -158,8 +158,8 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         
         //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [GWNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
-            [GWNotificationsHelper scheduleNotificationWithItem:a interval:15];
+            [GWLocalNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
+            [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:15];
         });
         
     }   //end main loop
@@ -168,7 +168,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     for (NSString* identifier in deletedRecords) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
         [Activity MR_deleteAllMatchingPredicate:predicate];
-        [GWNotificationsHelper unscheduleNotificationForRecordId:identifier];
+        [GWLocalNotificationsHelper unscheduleNotificationForRecordId:identifier];
     }
     
     //F- Save to Core Data (or whatever) the array of items

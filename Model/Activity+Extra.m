@@ -9,6 +9,7 @@
 #import "Activity+Extra.h"
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
+#import "GWPreferencesHelper.h"
 
 //Vtiger fields
 NSString* const kCalendarFieldsubject = @"subject";
@@ -153,6 +154,16 @@ NSString* const kCalendarFielddescription = @"description";
             instance.my_datetime_start = [gregorian dateFromComponents:comps];
             NSTimeInterval duration = ( [instance.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [instance.crm_duration_minutes integerValue] * 60.0 );
             instance.my_datetime_end = [instance.my_datetime_start dateByAddingTimeInterval:duration];
+            
+            //Now that we have end date, we check if we should actually sync it
+            NSDate *syncBackTo = [GWPreferencesHelper getDateToSyncBackTo];
+            if ([instance.my_datetime_end compare:syncBackTo] == NSOrderedAscending) {
+                //Means we should not sync this item
+#if DEBUG
+                NSLog(@"%@ Skipping item %@ as it happens earlier than the date to sync back to: %@", NSStringFromSelector(_cmd), instance.crm_id, syncBackTo);
+#endif
+                return nil;
+            }
             
             //Related records
             NSDictionary *parent_record = [dict objectForKey:kCalendarFieldparent_id];
