@@ -23,6 +23,8 @@ NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecor
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
 
+NSString* const kManagerHasStartedSyncCalendar = @"kManagerHasStartedSyncCalendar";
+
 //Notification suffix for building notifications to the HTTP client
 NSString* const kNotificationSuffixHTTP = @"HTTP";
 
@@ -297,6 +299,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSTimeInterval interval = 15 * 60;
     if (syncToken.datetime == nil || [syncToken.datetime timeIntervalSinceNow] > interval) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         NSLog(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
     else{
@@ -309,6 +312,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *session = [CredentialsHelper getSession];
     //Build parameters ignoring the synctoken
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
 }
 
