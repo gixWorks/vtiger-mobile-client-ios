@@ -24,6 +24,7 @@
 @dynamic crm_crmondemand;
 @dynamic crm_url;
 @dynamic crm_username;
+@dynamic crm_userid;
 @dynamic crm_active;
 @dynamic crm_servicename;
 @dynamic crm_timezone_user;

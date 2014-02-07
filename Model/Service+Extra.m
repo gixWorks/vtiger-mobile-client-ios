@@ -33,10 +33,11 @@
     return [[Service getActive] crm_url];
 }
 
-+ (Service*)createAndSetActiveWithUsername:(NSString*)username url:(NSString*)url crmOnDemand:(BOOL)onDemand
++ (Service*)createAndSetActiveWithUsername:(NSString*)username userid:(NSString*)userid url:(NSString*)url crmOnDemand:(BOOL)onDemand
 {
     Service *service = [Service MR_createEntity];
     service.crm_url = url;
+    service.crm_userid = userid;
     service.crm_username = username;
     service.crm_crmondemand = [NSNumber numberWithBool:onDemand];
     [service setActive];

@@ -14,6 +14,6 @@
 + (Service*)getActive;
 + (NSString*)getActiveServiceUsername;
 + (NSString*)getActiveServiceUrl;
-+ (Service*)createAndSetActiveWithUsername:(NSString*)username url:(NSString*)url crmOnDemand:(BOOL)onDemand;
++ (Service*)createAndSetActiveWithUsername:(NSString*)username userid:(NSString*)userid url:(NSString*)url crmOnDemand:(BOOL)onDemand;
 
 @end

@@ -50,8 +50,15 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         }
         else {
             //Everything is OK
+            
+            if ([userid length] < 1) {
+                @throw [NSException exceptionWithName:@"userid cannot be nil!" reason:@"userid cannot be nil!" userInfo:nil];   
+            }
+            [parseResult setObject:userid forKey:@"userid"];
+
+            
             //Get info about timezones for server and user
-            NSString *timezoneServer = [parseResult objectForKey:@"crm_tz"];
+            NSString *timezoneServer = [JSON valueForKeyPath:@"result.crm_tz"];
             if (timezoneServer == nil) {
                 timezoneServer = [[NSTimeZone defaultTimeZone] name];
             }
@@ -61,7 +68,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             }
             [parseResult setObject:timezoneServer forKey:@"crm_tz"];
             
-            NSString *timezoneUser = [parseResult objectForKey:@"user_tz"];
+            NSString *timezoneUser = [JSON valueForKeyPath:@"result.user_tz"];
             if (timezoneUser == nil) {
                 timezoneUser = [[NSTimeZone defaultTimeZone] name];
             }
@@ -69,7 +76,6 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneUser];
                 timezoneUser = [tz name];
             }
-            
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
             
             
@@ -93,10 +99,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
                 saveError = error;
             }];
-            
-            
         }
-        
     }
     @catch (NSException *exception) {
         NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);

@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSNumber * crm_crmondemand;
 @property (nonatomic, retain) NSString * crm_url;
 @property (nonatomic, retain) NSString * crm_username;
+@property (nonatomic, retain) NSString * crm_userid;
 @property (nonatomic, retain) NSNumber * crm_active;
 @property (nonatomic, retain) NSString * crm_servicename;
 @property (nonatomic, retain) NSString * crm_timezone_user;

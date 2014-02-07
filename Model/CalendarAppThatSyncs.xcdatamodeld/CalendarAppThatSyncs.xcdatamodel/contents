@@ -13,7 +13,7 @@
         <attribute name="crm_emailoptout" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="crm_employees" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_fax" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_industry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_memberof_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_memberof_name" optional="YES" attributeType="String" syncable="YES"/>
@@ -92,7 +92,7 @@
         <attribute name="crm_fax" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_firstname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_homephone" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_lastname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_leadsource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_mobile" optional="YES" attributeType="String" syncable="YES"/>
@@ -136,9 +136,9 @@
         <relationship name="field" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Field" inverseName="picklist_values" inverseEntity="Field" syncable="YES"/>
     </entity>
     <entity name="Lead" representedClassName="Lead" syncable="YES">
-        <attribute name="lead_assigned_user_id" attributeType="String" syncable="YES"/>
+        <attribute name="lead_assigned_user_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_assigned_user_name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lead_company" attributeType="String" syncable="YES"/>
+        <attribute name="lead_company" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_company_annualrevenue" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="lead_company_industry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_company_noofemployees" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -147,9 +147,9 @@
         <attribute name="lead_email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_fax" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_firstname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lead_lastname" attributeType="String" syncable="YES"/>
+        <attribute name="lead_lastname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_lead_no" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lead_leadid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lead_leadid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="lead_leadsource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_leadstatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_mobile" optional="YES" attributeType="String" syncable="YES"/>
@@ -166,7 +166,7 @@
         <attribute name="crm_timestamp" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="Module" representedClassName="Module" syncable="YES">
-        <attribute name="crm_id" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_isEntity" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="crm_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_name" attributeType="String" syncable="YES"/>
@@ -181,7 +181,7 @@
         <attribute name="crm_campaign_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_campaign_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_closingdate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_leadsource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_nextstep" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_opportunity_type" optional="YES" attributeType="String" syncable="YES"/>
@@ -198,7 +198,7 @@
         <attribute name="crm_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_discontinued" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="crm_glacct" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="crm_id" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_manufacturer" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_mfr_part_no" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_product_no" optional="YES" attributeType="String" syncable="YES"/>
@@ -224,7 +224,8 @@
         <attribute name="crm_timezone_server" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_timezone_user" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_url" attributeType="String" syncable="YES"/>
-        <attribute name="crm_username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_userid" optional="YES" attributeType="String" minValueString="1" syncable="YES"/>
+        <attribute name="crm_username" attributeType="String" minValueString="1" syncable="YES"/>
         <relationship name="accounts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Account" inverseName="service" inverseEntity="Account" syncable="YES"/>
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Activity" inverseName="service" inverseEntity="Activity" syncable="YES"/>
         <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Contact" inverseName="service" inverseEntity="Contact" syncable="YES"/>
@@ -238,11 +239,11 @@
     </entity>
     <entity name="Sync" representedClassName="Sync" syncable="YES">
         <attribute name="syncdate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="syncmodule" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="syncmodule" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="syncrecordsdeleted" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="syncrecordsupdated" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="syncsuccess" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="synctoken" attributeType="String" syncable="YES"/>
+        <attribute name="synctoken" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="service" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="syncs" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="SyncToken" representedClassName="SyncToken" syncable="YES">
@@ -256,7 +257,7 @@
         <attribute name="crm_assigned_user_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_days" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_hours" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_parent_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_parent_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_parent_type" optional="YES" attributeType="String" syncable="YES"/>

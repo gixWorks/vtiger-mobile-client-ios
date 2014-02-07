@@ -13,7 +13,7 @@
 /**
  Creates a new Service with the specified parameters
  */
-+ (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand;
++ (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand;
 
 /**
  Creates a new Service without saving it. Used during the setup process

@@ -23,13 +23,13 @@
  @param userTimeZone time zone specified by user
  @param onDemand indicates if it's a "Cloud installation" (if YES) or a "on premise installation" (if NO)
  */
-+ (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand
++ (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand
 {
     //Delete all services eventually there
     [MagicalRecord GW_cleanAndResetupDB];
     
     //Create new service
-    Service *s = [Service createAndSetActiveWithUsername:username url:[url absoluteString] crmOnDemand:onDemand];
+    Service *s = [Service createAndSetActiveWithUsername:username userid:userid url:[url absoluteString] crmOnDemand:onDemand];
     //Save the password in keychain
     [CredentialsHelper savePassword:password];
     
@@ -51,7 +51,7 @@
  */
 + (void)createNewServiceWithoutSavingWithServerURL:(NSURL *)url username:(NSString*)username onDemand:(BOOL)onDemand
 {
-    [Service createAndSetActiveWithUsername:username url:[url absoluteString] crmOnDemand:onDemand];
+    [Service createAndSetActiveWithUsername:username userid:@"" url:[url absoluteString] crmOnDemand:onDemand];
 }
 
 @end

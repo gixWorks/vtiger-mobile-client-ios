@@ -67,19 +67,17 @@ NSString* const kLeadFieldid = @"id";
         
         //Custom fields
         NSError *cfieldsError;
-        instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
-        if (cfieldsError != nil) {
-            NSLog(@"Entity: %@ Error in custom fields: %@", instance.lead_leadid, [cfieldsError description]);
+        if(cfields != nil) {
+            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            if (cfieldsError != nil) {
+                NSLog(@"Entity: %@ Error in custom fields: %@", instance.lead_leadid, [cfieldsError description]);
+            }
         }
         
         //Add the relationship with the current service
         instance.service = [Service getActive];
-        
-        
     }
-    
     return instance;
 }
-
 
 @end
