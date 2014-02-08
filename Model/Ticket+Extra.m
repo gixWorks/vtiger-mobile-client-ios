@@ -9,6 +9,7 @@
 #import "Ticket+Extra.h"
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
+#import "CRMFieldConstants.h"
 
 NSString* const kTicketFieldId = @"id";
 NSString* const kTicketFieldAssignedTo = @"assigned_user_id";
@@ -38,6 +39,16 @@ NSString* const kTicketFieldTitle = @"title";
     
     if (count > 0) {
         instance = [Lead MR_findFirstByAttribute:@"crm_id" withValue:record_id];
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        if ([time_modified compare:instance.crm_time_created] == NSOrderedSame) {
+#if DEBUG
+            NSLog(@"%@ %@ skipping %@ as modified_time is the same", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+#endif
+            //It's the same instance
+            return instance;
+        }
     }
     else{
         instance = [Lead MR_createEntity];
@@ -46,6 +57,13 @@ NSString* const kTicketFieldTitle = @"title";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if([dict isKindOfClass:[NSDictionary class]]) {
+        
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
+        instance.crm_time_modified = time_modified;
+        instance.crm_time_created = time_created;
         
         //Properties defined by CRM
         instance.crm_id = [dict objectForKey:kTicketFieldId];

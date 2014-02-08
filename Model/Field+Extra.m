@@ -7,6 +7,7 @@
 //
 
 #import "Field+Extra.h"
+#import "CRMFieldConstants.h"
 
 @implementation Field (Extra)
 

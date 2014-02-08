@@ -10,6 +10,7 @@
 #import "ResponseParser.h"
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
+#import "CRMFieldConstants.h"
 
 //Vtiger Fields
 NSString* const kPotentialsFieldId = @"id";
@@ -43,6 +44,7 @@ NSString* const kPotentialsFieldSalesStage = @"sales_stage";
     
     if (count > 0) {
         instance = [Potential MR_findFirstByAttribute:@"crm_id" withValue:record_id];
+
     }
     else{
         instance = [Potential MR_createEntity];
@@ -54,16 +56,19 @@ NSString* const kPotentialsFieldSalesStage = @"sales_stage";
         
         //Setup the number formatter
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-//        [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
-        
-//        NSNumberFormatter *decimalFormatter = [[NSNumberFormatter alloc] init];
-//        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        
+       
         //Setup the date formatters
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd"];
         NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
         [timeFormat setDateFormat:@"HH:mm:ss"];
+
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
+        instance.crm_time_modified = time_modified;
+        instance.crm_time_created = time_created;
         
         instance.crm_amount = [NSDecimalNumber decimalNumberWithString:[dict objectForKey:kPotentialsFieldAmount]];
         instance.crm_assigned_user_id = [[dict objectForKey:kPotentialsFieldAssignedUserId] objectForKey:@"value"];

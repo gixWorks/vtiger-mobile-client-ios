@@ -7,6 +7,7 @@
 //
 
 #import "Service+Extra.h"
+#import "CRMFieldConstants.h"
 
 @implementation Service (Extra)
 

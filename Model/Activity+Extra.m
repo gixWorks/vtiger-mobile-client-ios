@@ -10,6 +10,7 @@
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
 #import "GWPreferencesHelper.h"
+#import "CRMFieldConstants.h"
 
 //Vtiger fields
 NSString* const kCalendarFieldsubject = @"subject";
@@ -52,15 +53,25 @@ NSString* const kCalendarFielddescription = @"description";
 
 + (Activity *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary*)cfields
 {
-    NSString *activity_id = [dict objectForKey:kCalendarFieldid];
+    NSString *record_id = [dict objectForKey:kCalendarFieldid];
     Activity *instance;
     
     //I first try to count the entities (should take less time) and load the entity only if strictly necessary (if count > 0). The Count operation should be less intensive than the Fetch, so I use it for checking the existence
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@", activity_id];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@", record_id];
     NSUInteger count = [Activity MR_countOfEntitiesWithPredicate:predicate];
     
     if (count > 0) {
-        instance = [Activity MR_findFirstByAttribute:@"crm_id" withValue:activity_id];
+        instance = [Activity MR_findFirstByAttribute:@"crm_id" withValue:record_id];
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        if ([time_modified compare:instance.crm_time_created] == NSOrderedSame) {
+#if DEBUG
+            NSLog(@"%@ %@ skipping %@ as modified_time is the same", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+#endif
+            //It's the same instance
+            return instance;
+        }
     }
     else{
         instance = [Activity MR_createEntity];
@@ -89,6 +100,13 @@ NSString* const kCalendarFielddescription = @"description";
             if ([[end_time_string componentsSeparatedByString:@":"] count] < 3 && [end_time_string length] > 1) {
                 end_time_string = [end_time_string stringByAppendingString:@":00"];
             }
+            
+            NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+            [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+            NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
+            instance.crm_time_modified = time_modified;
+            instance.crm_time_created = time_created;
             
             //Format some variables
             NSDate *start_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddate_start]];

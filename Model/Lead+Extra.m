@@ -7,6 +7,7 @@
 //
 
 #import "Lead+Extra.h"
+#import "CRMFieldConstants.h"
 
 NSString* const kLeadFieldid = @"id";
 
@@ -23,6 +24,16 @@ NSString* const kLeadFieldid = @"id";
     
     if (count > 0) {
         instance = [Lead MR_findFirstByAttribute:@"lead_leadid" withValue:record_id];
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        if ([time_modified compare:instance.crm_time_created] == NSOrderedSame) {
+#if DEBUG
+            NSLog(@"%@ %@ skipping %@ as modified_time is the same", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+#endif
+            //It's the same instance
+            return instance;
+        }
     }
     else{
         instance = [Lead MR_createEntity];
@@ -41,6 +52,13 @@ NSString* const kLeadFieldid = @"id";
         [dateFormat setDateFormat:@"yyyy-MM-dd"];
         NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
         [timeFormat setDateFormat:@"HH:mm:ss"];
+        
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
+        instance.crm_time_modified = time_modified;
+        instance.crm_time_created = time_created;
 
         //Properties defined by CRM
         instance.lead_leadid = [dict objectForKey:kLeadFieldid];

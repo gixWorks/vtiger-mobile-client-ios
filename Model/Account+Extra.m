@@ -7,6 +7,7 @@
 //
 
 #import "Account+Extra.h"
+#import "CRMFieldConstants.h"
 
 NSString* const kAccountFieldaccountname = @"accountname";
 NSString* const kAccountFieldaccount_no = @"account_no";
@@ -46,6 +47,16 @@ NSString* const kAccountFieldid  = @"id";
     
     if (count > 0) {
         instance = [Account MR_findFirstByAttribute:@"crm_id" withValue:record_id];
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        if ([time_modified compare:instance.crm_time_created] == NSOrderedSame) {
+#if DEBUG
+            NSLog(@"%@ %@ skipping %@ as modified_time is the same", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+#endif
+            //It's the same instance
+            return instance;
+        }
     }
     else{
         instance = [Account MR_createEntity];
@@ -65,6 +76,12 @@ NSString* const kAccountFieldid  = @"id";
         [dateFormat setDateFormat:@"yyyy-MM-dd"];
         NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
         [timeFormat setDateFormat:@"HH:mm:ss"];
+        NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
+        NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
+        instance.crm_time_modified = time_modified;
+        instance.crm_time_created = time_created;
         
         instance.crm_memberof_id = [[dict objectForKey:kAccountFieldaccount_id] objectForKey:@"value"];
         instance.crm_memberof_name = [[dict objectForKey:kAccountFieldaccount_id] objectForKey:@"name"];
@@ -103,6 +120,5 @@ NSString* const kAccountFieldid  = @"id";
     
     return instance;
 }
-
 
 @end
