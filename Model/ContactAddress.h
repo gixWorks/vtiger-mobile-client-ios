@@ -25,6 +25,8 @@
 @property (nonatomic, retain) NSString * crm_otherzip;
 @property (nonatomic, retain) NSString * crm_mailingcountry;
 @property (nonatomic, retain) NSString * crm_othercountry;
+@property (nonatomic, retain) NSDate * crm_time_created;
+@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) Contact *contact;
 
 @end

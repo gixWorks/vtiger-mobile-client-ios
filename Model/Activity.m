@@ -39,6 +39,8 @@
 @dynamic my_datetime_start;
 @dynamic crm_assigned_user_id;
 @dynamic crm_assigned_user_name;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic service;
 
 @end

@@ -14,7 +14,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 
 - (void)startTestingReachability
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:1];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     [request setHTTPMethod: @"HEAD"];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];

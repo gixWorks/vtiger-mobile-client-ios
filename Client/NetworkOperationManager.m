@@ -18,7 +18,7 @@
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
 NSString* const kManagerHasFinishedLogin = @"kManagerHasFinishedLogin";
 NSString* const kManagerHasFinishedSyncCalendar = @"kManagerHasFinishedSyncCalendar";
-NSString* const kManagerHasFinishedDefine = @"kManagerHasFinishedDefine";
+NSString* const kManagerHasFinishedDescribe = @"kManagerHasFinishedDescribe";
 NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecord";
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
@@ -492,14 +492,18 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 #endif
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
-        //TODO: parse the module description and store it to database.
-        //For now I am just posting notification to viewcontroller
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseDescribe:JSON];
+        if ([parseResult objectForKey:@"error"] != nil)
+        {
+            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDescribe object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
         NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDefine object:self userInfo:[notification userInfo]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDescribe object:self userInfo:[notification userInfo]];
     }
 }
 

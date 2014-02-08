@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import <MagicalRecord/CoreData+MagicalRecord.h>
 
 @class Account, Activity, Contact, Lead, Module, Potential, Product, Sync, SyncToken, Ticket;
 

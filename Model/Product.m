@@ -32,6 +32,8 @@
 @dynamic crm_description;
 @dynamic crm_id;
 @dynamic crm_support_end_date;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic service;
 
 @end

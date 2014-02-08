@@ -37,6 +37,8 @@
 @dynamic crm_tickersymbol;
 @dynamic crm_website;
 @dynamic crm_memberof_name;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic address;
 @dynamic service;
 

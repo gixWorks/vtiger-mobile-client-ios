@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import <MagicalRecord/CoreData+MagicalRecord.h>
 
 @class Service;
 
@@ -33,6 +33,8 @@
 @property (nonatomic, retain) NSString * crm_description;
 @property (nonatomic, retain) NSString * crm_id;
 @property (nonatomic, retain) NSDate * crm_support_end_date;
+@property (nonatomic, retain) NSDate * crm_time_created;
+@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) Service *service;
 
 @end

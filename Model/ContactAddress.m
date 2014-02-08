@@ -24,6 +24,8 @@
 @dynamic crm_otherzip;
 @dynamic crm_mailingcountry;
 @dynamic crm_othercountry;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic contact;
 
 @end

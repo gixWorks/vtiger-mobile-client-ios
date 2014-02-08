@@ -39,6 +39,8 @@
 @dynamic crm_assigned_user_name;
 @dynamic crm_description;
 @dynamic crm_contact_image;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic service;
 @dynamic address;
 

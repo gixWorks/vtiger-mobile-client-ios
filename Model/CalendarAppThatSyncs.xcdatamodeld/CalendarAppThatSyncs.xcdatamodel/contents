@@ -24,6 +24,8 @@
         <attribute name="crm_rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_siccode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_tickersymbol" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_website" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="AccountAddress" inverseName="account" inverseEntity="AccountAddress" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="accounts" inverseEntity="Service" syncable="YES"/>
@@ -66,6 +68,8 @@
         <attribute name="crm_sendnotification" optional="YES" attributeType="String" maxValueString="3" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_subject" attributeType="String" maxValueString="100" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_start" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="crm_visibility" optional="YES" attributeType="String" maxValueString="50" defaultValueString="all" syncable="YES"/>
         <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -101,6 +105,8 @@
         <attribute name="crm_reports_to_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_reports_to_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_salutationtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_yahooid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ContactAddress" inverseName="contact" inverseEntity="ContactAddress" syncable="YES"/>
@@ -136,6 +142,8 @@
         <relationship name="field" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Field" inverseName="picklist_values" inverseEntity="Field" syncable="YES"/>
     </entity>
     <entity name="Lead" representedClassName="Lead" syncable="YES">
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="lead_assigned_user_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_assigned_user_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_company" optional="YES" attributeType="String" syncable="YES"/>
@@ -192,6 +200,8 @@
         <attribute name="crm_related_to_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_related_to_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_sales_stage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="potentials" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="Product" representedClassName="Product" syncable="YES">
@@ -211,6 +221,8 @@
         <attribute name="crm_serial_no" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_support_end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="crm_support_start_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_vendor_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_vendor_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_vendor_part_no" optional="YES" attributeType="String" syncable="YES"/>
@@ -269,6 +281,8 @@
         <attribute name="crm_ticketseverity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_ticketstatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_tickettitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="tickets" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="User" syncable="YES"/>

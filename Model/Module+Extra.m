@@ -7,18 +7,19 @@
 //
 
 #import "Module+Extra.h"
+#import "Field+Extra.h"
 
-NSString* const kModuleFieldid = @"id";
-NSString* const kModuleFieldname = @"name";
-NSString* const kModuleFieldisEntity = @"isEntity";
-NSString* const kModuleFieldlabel = @"label";
-NSString* const kModuleFieldsingular = @"singular";
+NSString* const kModule_id = @"id";
+NSString* const kModule_name = @"name";
+NSString* const kModule_isEntity = @"isEntity";
+NSString* const kModule_label = @"label";
+NSString* const kModule_singular = @"singular";
 
 @implementation Module (Extra)
 
 + (Module *)modelObjectWithDictionary:(NSDictionary *)dict
 {
-    NSString *record_id = [dict objectForKey:kModuleFieldid];
+    NSString *record_id = [dict objectForKey:kModule_id];
     Module *instance;
     //I first try to count the entities (should take less time) and load the entity only if strictly necessary (if count > 0). The Count operation should be less intensive than the Fetch, so I use it for checking the existence
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@", record_id];
@@ -34,12 +35,24 @@ NSString* const kModuleFieldsingular = @"singular";
     
     if([dict isKindOfClass:[NSDictionary class]]) {
         
-        instance.crm_name = [dict objectForKey:kModuleFieldname];
-        instance.crm_id = [dict objectForKey:kModuleFieldid];
-        instance.crm_isEntity = [[dict objectForKey:kModuleFieldlabel] boolValue];
-        instance.crm_label = [dict objectForKey:kModuleFieldlabel];
-        instance.crm_singular = [dict objectForKey:kModuleFieldsingular];
+        instance.crm_name = [dict objectForKey:kModule_name];
+        instance.crm_id = [dict objectForKey:kModule_id];
+        instance.crm_isEntity = [[dict objectForKey:kModule_label] boolValue];
+        instance.crm_label = [dict objectForKey:kModule_label];
+        instance.crm_singular = [dict objectForKey:kModule_singular];
         instance.service = [Service getActive];
+    }
+    return instance;
+}
+
++ (Module *)modelObjectWithFieldsWithDictionary:(NSDictionary *)dict
+{
+    Module *instance = [Module modelObjectWithDictionary:dict];
+    if (instance != nil && [dict isKindOfClass:[NSDictionary class]]) {
+        for (NSDictionary *f in [dict objectForKey:@"fields"]) {
+            Field *field = [Field modelObjectWithDictionary:f];
+            field.module = instance;
+        }
     }
     return instance;
 }

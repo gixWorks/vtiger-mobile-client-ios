@@ -28,6 +28,8 @@
 @dynamic crm_days;
 @dynamic crm_ticketcategory;
 @dynamic crm_ticket_no;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic service;
 
 @end

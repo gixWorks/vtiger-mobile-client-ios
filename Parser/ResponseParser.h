@@ -15,6 +15,6 @@
 + (NSDictionary*)parseFetchRecord:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordsWithGrouping:(NSDictionary*)JSON forModule:(NSString*)module;
-
++ (NSDictionary*)parseDescribe:(NSDictionary*)JSON;
 
 @end

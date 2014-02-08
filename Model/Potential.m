@@ -29,6 +29,8 @@
 @dynamic crm_related_to_name;
 @dynamic crm_related_to_type;
 @dynamic crm_sales_stage;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic service;
 
 @end

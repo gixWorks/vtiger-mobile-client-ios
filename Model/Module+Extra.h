@@ -7,11 +7,11 @@
 //
 
 #import "Module.h"
-#import <CoreData+MagicalRecord.h>
 
 @interface Module (Extra)
 
 + (Module *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (Module *)modelObjectWithFieldsWithDictionary:(NSDictionary *)dict;
 
 - (NSDictionary*)crmRepresentation;
 

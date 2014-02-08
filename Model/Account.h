@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import <MagicalRecord/CoreData+MagicalRecord.h>
 
 @class AccountAddress, Service;
 
@@ -37,6 +37,8 @@
 @property (nonatomic, retain) NSString * crm_tickersymbol;
 @property (nonatomic, retain) NSString * crm_website;
 @property (nonatomic, retain) NSString * crm_memberof_name;
+@property (nonatomic, retain) NSDate * crm_time_created;
+@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) AccountAddress *address;
 @property (nonatomic, retain) Service *service;
 

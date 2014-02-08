@@ -407,9 +407,22 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
         saveError = error;
     }];
-    
-    //TODO: I could just send the notification here of finished parsing directly to ViewController
     return [NSDictionary dictionaryWithObjectsAndKeys:identifiers,@"record",saveError,kErrorKey, nil];
+}
+
++ (NSDictionary*)parseDescribe:(NSDictionary*)JSON
+{
+    BOOL success = [[JSON objectForKey:@"success"] boolValue];
+    if (success != YES) {
+        return @{@"error" : @"Operation was not successful"};
+    }
+    NSDictionary *moduleDescription = [JSON valueForKeyPath:@"result.describe"];
+    
+    
+    
+    
+    
+    return nil;
 }
 
 @end
