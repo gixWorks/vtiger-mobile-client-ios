@@ -114,6 +114,25 @@
 
 //Leads
 //NSString* const kLeadFieldid = @"id";
+//NSString* const kLeadFieldLastName = @"lastname";
+//NSString* const kLeadFieldFirstName = @"firstname";
+//NSString* const kLeadFieldCompany = @"company";
+//NSString* const kLeadFieldassigned_user_id = @"assigned_user_id";
+//NSString* const kLeadFieldcompany_annualrevenue = @"company_annualrevenue";
+//NSString* const kLeadFieldcompany_industry = @"company_industry";
+//NSString* const kLeadFieldcompany_noofempoloyees = @"company_noofemployees";
+//NSString* const kLeadFieldcompany_website = @"company_website";
+//NSString* const kLeadFielddesignation = @"designation";
+//NSString* const kLeadFieldemail = @"email";
+//NSString* const kLeadFieldfax = @"fax";
+//NSString* const kLeadFieldleadno = @"lead_no";
+//NSString* const kLeadFieldleadsource = @"leadsource";
+//NSString* const kLeadFieldleadstatus = @"leadstatus";
+//NSString* const kLeadFieldmobile = @"mobile";
+//NSString* const kLeadFieldphone = @"phone";
+//NSString* const kLeadFieldrating = @"rating";
+//NSString* const kLeadFieldsalutationType = @"salutationtype";
+//NSString* const kLeadFieldyahooid = @"yahooid";
 
 //Modules
 //NSString* const kModule_id = @"id";

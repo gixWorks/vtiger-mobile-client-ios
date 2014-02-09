@@ -115,6 +115,25 @@
 
 //Leads
 #define kLeadFieldid  @"id"
+#define kLeadFieldLastName  @"lastname"
+#define kLeadFieldFirstName  @"firstname"
+#define kLeadFieldCompany  @"company"
+#define kLeadFieldassigned_user_id  @"assigned_user_id"
+#define kLeadFieldcompany_annualrevenue  @"company_annualrevenue"
+#define kLeadFieldcompany_industry  @"company_industry"
+#define kLeadFieldcompany_noofempoloyees  @"company_noofemployees"
+#define kLeadFieldcompany_website  @"company_website"
+#define kLeadFielddesignation  @"designation"
+#define kLeadFieldemail  @"email"
+#define kLeadFieldfax  @"fax"
+#define kLeadFieldleadno  @"lead_no"
+#define kLeadFieldleadsource  @"leadsource"
+#define kLeadFieldleadstatus  @"leadstatus"
+#define kLeadFieldmobile  @"mobile"
+#define kLeadFieldphone  @"phone"
+#define kLeadFieldrating  @"rating"
+#define kLeadFieldsalutationType  @"salutationtype"
+#define kLeadFieldyahooid  @"yahooid"
 
 //Modules
 #define kModule_id  @"id"

@@ -14,4 +14,21 @@
 
 + (Lead *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields;
 
+/*** Representation Methods ***/
+
+/**
+ *  Represents the entity in a format that is easy to display in a table
+ *
+ *  @return the entity structured for a table, with labels and fields
+ */
+- (NSDictionary*)tableRepresentation;
+
+/*** JSON Methods ***/
+/**
+ *  Proxy for JSON
+ *
+ *  @return a NSDictionary to be encodable in JSON format
+ */
+- (NSDictionary*)proxyForJson;
+
 @end

@@ -60,26 +60,26 @@
 
         //Properties defined by CRM
         instance.lead_leadid = [dict objectForKey:kLeadFieldid];
-        instance.lead_lastname = [dict objectForKey:@"lastname"];
-        instance.lead_firstname = [dict objectForKey:@"firstname"];
-        instance.lead_company = [dict objectForKey:@"company"];
-        instance.lead_assigned_user_id = [dict valueForKey:@"assigned_user_id.value"];
-        instance.lead_assigned_user_name = [dict valueForKey:@"assigned_user_id.name"];
-        instance.lead_company_annualrevenue =  [numberFormatter numberFromString:[dict objectForKey:@"company_annualrevenue"]];
-        instance.lead_company_industry = [dict objectForKey:@"company_industry"];
-        instance.lead_company_noofemployees = [numberFormatter numberFromString:[dict objectForKey:@"company_industry"]];
-        instance.lead_company_website = [dict objectForKey:@"company_website"];
-        instance.lead_designation = [dict objectForKey:@"designation"];
-        instance.lead_email = [dict objectForKey:@"email"];
-        instance.lead_fax = [dict objectForKey:@"fax"];
-        instance.lead_lead_no = [dict objectForKey:@"lead_no"];
-        instance.lead_leadsource = [dict objectForKey:@"leadsource"];
-        instance.lead_leadstatus = [dict objectForKey:@"leadstatus"];
-        instance.lead_mobile = [dict objectForKey:@"mobile"];
-        instance.lead_phone= [dict objectForKey:@"phone"];
-        instance.lead_rating = [dict objectForKey:@"rating"];
-        instance.lead_salutationtype = [dict objectForKey:@"salutationtype"];
-        instance.lead_yahooid = [dict objectForKey:@"yahooid"];
+        instance.lead_lastname = [dict objectForKey:kLeadFieldLastName];
+        instance.lead_firstname = [dict objectForKey:kLeadFieldFirstName];
+        instance.lead_company = [dict objectForKey:kLeadFieldCompany];
+        instance.lead_assigned_user_id = [[dict objectForKey:kLeadFieldassigned_user_id] valueForKey:@"value"];
+        instance.lead_assigned_user_name = [[dict objectForKey:kLeadFieldassigned_user_id] valueForKey:@"name"];
+        instance.lead_company_annualrevenue =  [numberFormatter numberFromString:[dict objectForKey:kLeadFieldcompany_annualrevenue]];
+        instance.lead_company_industry = [dict objectForKey:kLeadFieldcompany_industry];
+        instance.lead_company_noofemployees = [numberFormatter numberFromString:[dict objectForKey:kLeadFieldcompany_noofempoloyees]];
+        instance.lead_company_website = [dict objectForKey:kLeadFieldcompany_website];
+        instance.lead_designation = [dict objectForKey:kLeadFielddesignation];
+        instance.lead_email = [dict objectForKey:kLeadFieldemail];
+        instance.lead_fax = [dict objectForKey:kLeadFieldfax];
+        instance.lead_lead_no = [dict objectForKey:kLeadFieldleadno];
+        instance.lead_leadsource = [dict objectForKey:kLeadFieldleadsource];
+        instance.lead_leadstatus = [dict objectForKey:kLeadFieldleadstatus];
+        instance.lead_mobile = [dict objectForKey:kLeadFieldmobile];
+        instance.lead_phone= [dict objectForKey:kLeadFieldphone];
+        instance.lead_rating = [dict objectForKey:kLeadFieldrating];
+        instance.lead_salutationtype = [dict objectForKey:kLeadFieldrating];
+        instance.lead_yahooid = [dict objectForKey:kLeadFieldyahooid];
         
         //Custom fields
         NSError *cfieldsError;
@@ -94,6 +94,14 @@
         instance.service = [Service getActive];
     }
     return instance;
+}
+
+- (NSDictionary *)tableRepresentation
+{
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            self.lead_leadid, kLeadFieldid,
+            
+            nil];
 }
 
 @end
