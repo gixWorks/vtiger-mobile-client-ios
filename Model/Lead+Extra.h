@@ -23,6 +23,13 @@
  */
 - (NSDictionary*)tableRepresentation;
 
+/**
+ *  Returns the entity in a dictionary representation
+ *
+ *  @return a NSDicrionary with constants as keys and entity values as values
+ */
+- (NSDictionary*)dictionaryRepresentation;
+
 /*** JSON Methods ***/
 /**
  *  Proxy for JSON

@@ -98,10 +98,81 @@
 
 - (NSDictionary *)tableRepresentation
 {
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            self.lead_leadid, kLeadFieldid,
-            
-            nil];
+    __block NSMutableDictionary *fields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   self.lead_leadid, kLeadFieldid,
+                                   [NSDictionary dictionaryWithObjectsAndKeys:
+                                    self.lead_assigned_user_id, @"value",
+                                    self.lead_assigned_user_name, @"name",
+                                    nil], kLeadFieldassigned_user_id,
+                                   self.lead_company, kLeadFieldCompany,
+                                   self.lead_company_annualrevenue, kLeadFieldcompany_annualrevenue,
+                                   self.lead_company_industry, kLeadFieldcompany_industry,
+                                   self.lead_company_noofemployees, kLeadFieldcompany_noofempoloyees,
+                                   self.lead_company_website, kLeadFieldcompany_website,
+                                   self.lead_designation, kLeadFielddesignation,
+                                   self.lead_email, kLeadFieldemail,
+                                   self.lead_fax, kLeadFieldfax,
+                                   self.lead_firstname, kLeadFieldFirstName,
+                                   self.lead_lastname, kLeadFieldLastName,
+                                   self.lead_lead_no, kLeadFieldleadno,
+                                   self.lead_leadid, kLeadFieldid,
+                                   self.lead_leadsource, kLeadFieldleadsource,
+                                   self.lead_leadstatus, kLeadFieldleadstatus,
+                                   self.lead_mobile, kLeadFieldmobile,
+                                   self.lead_phone, kLeadFieldphone,
+                                   self.lead_rating, kLeadFieldrating,
+                                   self.lead_salutationtype, kLeadFieldsalutationType,
+                                   self.lead_yahooid, kLeadFieldyahooid,
+                                   nil];
+    if (self.my_custom_fields != nil) {
+        NSDictionary *cf = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+        [cf enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [fields setObject:obj forKey:key];
+        }];
+    }
+    return [NSDictionary dictionaryWithDictionary:fields];
+}
+
+- (NSDictionary*)dictionaryRepresentation
+{
+    __block NSMutableDictionary *fields = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                           self.lead_leadid, kLeadFieldid,
+                                           [NSDictionary dictionaryWithObjectsAndKeys:
+                                            self.lead_assigned_user_id, @"value",
+                                            self.lead_assigned_user_name, @"name",
+                                            nil], kLeadFieldassigned_user_id,
+                                           self.lead_company, kLeadFieldCompany,
+                                           self.lead_company_annualrevenue, kLeadFieldcompany_annualrevenue,
+                                           self.lead_company_industry, kLeadFieldcompany_industry,
+                                           self.lead_company_noofemployees, kLeadFieldcompany_noofempoloyees,
+                                           self.lead_company_website, kLeadFieldcompany_website,
+                                           self.lead_designation, kLeadFielddesignation,
+                                           self.lead_email, kLeadFieldemail,
+                                           self.lead_fax, kLeadFieldfax,
+                                           self.lead_firstname, kLeadFieldFirstName,
+                                           self.lead_lastname, kLeadFieldLastName,
+                                           self.lead_lead_no, kLeadFieldleadno,
+                                           self.lead_leadid, kLeadFieldid,
+                                           self.lead_leadsource, kLeadFieldleadsource,
+                                           self.lead_leadstatus, kLeadFieldleadstatus,
+                                           self.lead_mobile, kLeadFieldmobile,
+                                           self.lead_phone, kLeadFieldphone,
+                                           self.lead_rating, kLeadFieldrating,
+                                           self.lead_salutationtype, kLeadFieldsalutationType,
+                                           self.lead_yahooid, kLeadFieldyahooid,
+                                           nil];
+    if (self.my_custom_fields != nil) {
+        NSDictionary *cf = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+        [cf enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [fields setObject:obj forKey:key];
+        }];
+    }
+    return [NSDictionary dictionaryWithDictionary:fields];
+}
+
+- (NSDictionary *)proxyForJson
+{
+    return [self dictionaryRepresentation];
 }
 
 @end
