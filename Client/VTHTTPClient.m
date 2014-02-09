@@ -29,6 +29,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 
 static NSInteger kRefreshIntervalMinutes = 30;
 
+@interface VTHTTPClient ()
+
+@property (nonatomic, strong) NSTimer *sessionTimer;
+
+@end
+
 @implementation VTHTTPClient
 
 +(VTHTTPClient *)sharedInstance {
@@ -53,7 +59,9 @@ static NSInteger kRefreshIntervalMinutes = 30;
 {
     [CredentialsHelper saveSession:session];
     NSTimeInterval interval = kRefreshIntervalMinutes*60.0; //Minutes * seconds
-    [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginAndExecuteSelector:withObject:withObject:) userInfo:nil repeats:NO];
+    [_sessionTimer invalidate];
+    _sessionTimer = nil;
+    _sessionTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginAndExecuteSelector:withObject:withObject:) userInfo:nil repeats:NO];
 }
 
 #pragma mark - Network methods
