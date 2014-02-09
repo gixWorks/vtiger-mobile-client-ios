@@ -64,13 +64,13 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  */
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;
 
-/**
- *  Performs the login operation with specified username and password and retrieves list of modules. Used when setting up the app
- *
- *  @param username the user's username
- *  @param password the user's password
- */
-- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password;
+///**
+// *  Performs the login operation with specified username and password and retrieves list of modules. Used when setting up the app
+// *
+// *  @param username the user's username
+// *  @param password the user's password
+// */
+//- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password;
 
 /**
  *  Performs the syncModule operation for the Calendar module ignoring the existence of sync tokens, thus syncinc from beginning of records

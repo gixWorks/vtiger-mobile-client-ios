@@ -11,6 +11,7 @@
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
+NSString* const kClientHasFinishedLoginWithoutSave = @"kClientHasFinishedLoginWithoutSave";
 NSString* const kClientHasFinishedLoginAndFetchModules = @"kClientHasFinishedLoginAndFetchModules";
 NSString* const kClientHasFinishedSyncCalendar = @"kClientHasFinishedSyncCalendar";
 NSString* const kClientHasFinishedDescribe = @"kClientHasFinishedDescribe";

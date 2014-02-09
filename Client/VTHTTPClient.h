@@ -12,6 +12,7 @@
 
 //These constants are accessed from the NetworkOperationManager 
 extern NSString* const kClientHasFinishedLogin;
+extern NSString* const kClientHasFinishedLoginWithoutSave;
 extern NSString* const kClientHasFinishedLoginAndFetchModules;
 extern NSString* const kClientHasFinishedSyncCalendar;
 extern NSString* const kClientHasFinishedDescribe;

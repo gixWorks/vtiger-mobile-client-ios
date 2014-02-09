@@ -11,11 +11,13 @@
 
 @implementation CRMField (Extra)
 
-+ (CRMField *)modelObjectWithDictionary:(NSDictionary*)dict
++ (CRMField *)modelObjectWithDictionary:(NSDictionary*)dict module:(Module*)module
 {
     NSString *fieldName = [dict objectForKey:@"name"];
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"name = %@",fieldName];
-    
+#if DEBUG
+    NSLog(@"%@ %@ field: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), fieldName);
+#endif
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND module = %@",fieldName, module];
     
     CRMField *instance = [CRMField MR_findFirstWithPredicate:p];
     if (instance == nil) {
@@ -25,7 +27,7 @@
     instance.crm_name = [dict objectForKey:kCRMFieldName];
     instance.crm_label = [dict objectForKey:kCRMFieldlabel];
     instance.crm_mandatory = [dict objectForKey:kCRMFieldmandatory];
-    if ([[dict objectForKey:kCRMFieldtype] isEqualToString:@"picklistValues"]) {
+    if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklistValues"]) {
         NSError *jsonError;
         instance.crm_options = [NSJSONSerialization dataWithJSONObject:[dict objectForKey:kCRMFieldtype] options:0 error:&jsonError];
         if (jsonError!=nil) {

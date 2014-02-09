@@ -10,6 +10,6 @@
 
 @interface CRMField (Extra)
 
-+ (CRMField *)modelObjectWithDictionary:(NSDictionary*)dict;
++ (CRMField *)modelObjectWithDictionary:(NSDictionary*)dict module:(Module*)module;
 
 @end

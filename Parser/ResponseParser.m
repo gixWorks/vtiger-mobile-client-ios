@@ -20,7 +20,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
 @implementation ResponseParser
 
-+ (NSDictionary*)parseLogin:(NSDictionary *)JSON
++ (NSDictionary*)parseLogin:(NSDictionary *)JSON saveToDB:(BOOL)save
 {
     NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
     /*
@@ -83,22 +83,23 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             //Loop through the modules in the returned JSON
             NSArray *modules = [JSON valueForKeyPath:@"result.modules"];
             if (modules != nil) {
-                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSDictionary *field = (NSDictionary*)obj;
-                    [Module modelObjectWithDictionary:field]; //Should already add to Context
-                }];
-                
+                for (NSDictionary *module in modules) {
+                    [Module modelObjectWithDictionary:module]; //it's already added to context
+                }
+//                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                    NSDictionary *field = (NSDictionary*)obj;
+//                    [Module modelObjectWithDictionary:field]; //Should already add to Context
+//                }];                
             }
             
-            //Finally I save
-            //Save the record in the datasource
+            if(save == YES){
+                //Finally I save
+                //Save the record in the datasource
 #if DEBUG
             NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
 #endif
-            __block NSError *saveError;
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-                saveError = error;
-            }];
+                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+            }
         }
     }
     @catch (NSException *exception) {
@@ -432,17 +433,17 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 + (NSDictionary*)parseDescribe:(NSDictionary*)JSON
 {
     @try {
-        
         BOOL success = [[JSON objectForKey:@"success"] boolValue];
         if (success != YES) {
             return @{kErrorKey : [[JSON objectForKey:@"error"] objectForKey:@"message"]};
         }
         NSDictionary *moduleDescription = [JSON valueForKeyPath:@"result.describe"];
         NSString *moduleName = [moduleDescription objectForKey:@"name"];
-        Module *m = [Module modelObjectWithDictionary:moduleDescription];
         
-        if (m == nil) {
-            NSLog(@"%@ %@ failed to create module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);
+        Module *m = [Module MR_findFirstByAttribute:@"service" withValue:[Service getActive]];
+        BOOL result = [m setDescriptionWithDictionary:moduleDescription];
+        if (result == NO) {
+            NSLog(@"%@ %@ failed to create fields for module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);
         }
 #if DEBUG
         NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));

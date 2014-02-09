@@ -67,6 +67,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         _recordsToFetch = [[NSMutableDictionary alloc] init]; //or load from disk if "save" file is there
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedLogin:) name:kClientHasFinishedLogin object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedLoginWithoutSave:) name:kClientHasFinishedLoginWithoutSave object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSync:) name:kClientHasFinishedSyncCalendar object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedDescribe:) name:kClientHasFinishedDescribe object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecord:) name:kClientHasFinishedFetchRecord object:nil];
@@ -287,16 +288,16 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
                                 username, @"username",
                                 password, @"password",
                                 nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
-- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password
-{
-    //TODO: Keep?
-    [CredentialsHelper savePassword:password];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
-}
+//- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password
+//{
+//    //TODO: Keep?
+//    [CredentialsHelper savePassword:password];
+//    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
+//    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
+//}
 
 - (void)syncCalendar
 {
@@ -434,7 +435,27 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 #endif
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
-        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey]];
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
+    }
+    else{
+        //There was an error in the HTTPClient
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+    }
+}
+
+- (void)handleClientFinishedLoginWithoutSave:(NSNotification*)notification
+{
+#if DEBUG
+    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
+#endif
+    
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
     }
     else{
@@ -452,14 +473,21 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 #endif
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
-        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey]];
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey] saveToDB:YES];
         if ([parseLoginResult objectForKey:@"error"] == nil) {
             //login result was parsed, which means that modules have been created
-            NSArray *modules = [Module MR_findByAttribute:@"service" withValue:[Service getActive]];
+#if DEBUG
+            NSLog(@"Finding all modules for service: %@", [Service getActive]);
+#endif
+            NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
+            NSInteger count = [Module MR_countOfEntitiesWithPredicate:p];
+            NSLog(@"%d modules found", count);
+            NSArray *modules = [Module MR_findAllWithPredicate:p inContext:[NSManagedObjectContext MR_defaultContext]];
             for (Module *module in modules) {
                 [self describeModule:module.crm_name];
             }
         }
+        //TODO: find a way to notify the end of all the Describe operations
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:parseLoginResult];
     }
     else{
@@ -479,7 +507,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //No error, so perform Core Data stuff here
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
-        NSDictionary *parseResult = [ResponseParser parseLogin:JSON];
+        NSDictionary *parseResult = [ResponseParser parseLogin:JSON saveToDB:YES];
 
         if ([parseResult objectForKey:@"error"] != nil){
             NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);

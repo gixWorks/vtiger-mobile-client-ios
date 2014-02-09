@@ -10,7 +10,7 @@
 
 @interface ResponseParser : NSObject
 
-+ (NSDictionary*)parseLogin:(NSDictionary*)JSON;
++ (NSDictionary*)parseLogin:(NSDictionary *)JSON saveToDB:(BOOL)save;
 + (NSDictionary*)parseCalendarSync:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecord:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON;
