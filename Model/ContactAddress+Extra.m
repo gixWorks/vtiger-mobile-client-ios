@@ -7,20 +7,7 @@
 //
 
 #import "ContactAddress+Extra.h"
-
-NSString* const kContactAddressFieldMailingCity = @"mailingcity";
-NSString* const kContactAddressFieldMailingCountry = @"mailingcountry";
-NSString* const kContactAddressFieldMailingPobox = @"mailingpobox";
-NSString* const kContactAddressFieldMailingState = @"mailingstate";
-NSString* const kContactAddressFieldMailingStreet = @"mailingstreet";
-NSString* const kContactAddressFieldMailingZip = @"mailingzip";
-NSString* const kContactAddressFieldOtherCity = @"othercity";
-NSString* const kContactAddressFieldOtherCountry = @"othercountry";
-NSString* const kContactAddressFieldOtherPobox = @"otherpobox";
-NSString* const kContactAddressFieldOtherState = @"otherstate";
-NSString* const kContactAddressFieldOtherStreet = @"otherstreet";
-NSString* const kContactAddressFieldOtherZip = @"otherzip";
-
+#import "CRMFieldConstants.h"
 
 @implementation ContactAddress (Extra)
 

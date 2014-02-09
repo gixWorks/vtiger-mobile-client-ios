@@ -9,30 +9,6 @@
 #import "Contact+Extra.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kContactFieldId = @"id";
-NSString* const kContactFieldFirstName = @"firstname";
-NSString* const kContactFieldLastName = @"lastname";
-NSString* const kContactFieldSalutation = @"salutationtype";
-NSString* const kContactFieldContactNo = @"contact_no";
-NSString* const kContactFieldPhone = @"phone";
-NSString* const kContactFieldAccount = @"account_id";
-NSString* const kContactFieldMobile = @"mobile";
-NSString* const kContactFieldLeadSource = @"leadsource";
-NSString* const kContactFieldHomePhone = @"homephone";
-NSString* const kContactFieldTitle = @"title";
-NSString* const kContactFieldOtherPhone = @"otherphone";
-NSString* const kContactFieldDepartment = @"department";
-NSString* const kContactFieldFax = @"fax";
-NSString* const kContactFieldEmail = @"email";
-NSString* const kContactFieldBirthday = @"birthday";
-NSString* const kContactFieldAssistant = @"assistant";
-NSString* const kContactFieldAssistantPhone = @"assistantPhone";
-NSString* const kContactFieldReportsTo = @"contact_id";
-NSString* const kContactFieldYahooId = @"yahooid";
-NSString* const kContactFieldAssignedTo = @"assigned_user_id";
-NSString* const kContactFieldDescription = @"description";
-
-
 @implementation Contact (Extra)
 
 + (Contact *)modelObjectWithDictionary:(NSDictionary *)dict

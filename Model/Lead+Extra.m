@@ -9,8 +9,6 @@
 #import "Lead+Extra.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kLeadFieldid = @"id";
-
 @implementation Lead (Extra)
 
 + (Lead *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields

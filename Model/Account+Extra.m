@@ -9,30 +9,6 @@
 #import "Account+Extra.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kAccountFieldaccountname = @"accountname";
-NSString* const kAccountFieldaccount_no = @"account_no";
-NSString* const kAccountFieldphone = @"phone";
-NSString* const kAccountFieldwebsite = @"website";
-NSString* const kAccountFieldfax = @"fax";
-NSString* const kAccountFieldticketsymbol  = @"tickersymbol";
-NSString* const kAccountFieldotherphone  = @"otherphone";
-NSString* const kAccountFieldaccount_id  = @"account_id"; //Member Of [another account]
-NSString* const kAccountFieldindustry = @"industry";
-NSString* const kAccountFieldemail1  = @"email1";
-NSString* const kAccountFieldemployees  = @"employees";
-NSString* const kAccountFieldemail2  = @"email2";
-NSString* const kAccountFieldownership  = @"ownership";
-NSString* const kAccountFieldratingrating  = @"rating";
-NSString* const kAccountFieldsiccode  = @"siccode";
-NSString* const kAccountFieldaccounttype  = @"accounttype";
-NSString* const kAccountFieldannual_revenue  = @"annual_revenue";
-NSString* const kAccountFieldemailoptout  = @"emailoptout";
-NSString* const kAccountFieldnotify_owner  = @"notify_owner";
-NSString* const kAccountFieldassigned_user_id  = @"assigned_user_id";
-//address fields in address
-NSString* const kAccountFielddescription  = @"description";
-NSString* const kAccountFieldid  = @"id";
-
 @implementation Account (Extra)
 
 + (Account *)modelObjectWithDictionary:(NSDictionary *)dict

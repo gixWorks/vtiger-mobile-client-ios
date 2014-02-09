@@ -7,19 +7,7 @@
 //
 
 #import "AccountAddress+Extra.h"
-
-NSString* const kAccountFieldbill_street  = @"bill_street";
-NSString* const kAccountFieldship_street  = @"ship_street";
-NSString* const kAccountFieldbill_city  = @"bill_city";
-NSString* const kAccountFieldship_city  = @"ship_city";
-NSString* const kAccountFieldbill_state  = @"bill_state";
-NSString* const kAccountFieldship_state  = @"ship_state";
-NSString* const kAccountFieldbill_code  = @"bill_code";
-NSString* const kAccountFieldship_code  = @"ship_code";
-NSString* const kAccountFieldbill_country  = @"bill_country";
-NSString* const kAccountFieldship_country  = @"ship_country";
-NSString* const kAccountFieldbill_pobox  = @"bill_pobox";
-NSString* const kAccountFieldship_pobox  = @"ship_pobox";
+#import "CRMFieldConstants.h"
 
 @implementation AccountAddress (Extra)
 

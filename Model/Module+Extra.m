@@ -10,12 +10,6 @@
 #import "Field+Extra.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kModule_id = @"id";
-NSString* const kModule_name = @"name";
-NSString* const kModule_isEntity = @"isEntity";
-NSString* const kModule_label = @"label";
-NSString* const kModule_singular = @"singular";
-
 @implementation Module (Extra)
 
 + (Module *)modelObjectWithDictionary:(NSDictionary *)dict

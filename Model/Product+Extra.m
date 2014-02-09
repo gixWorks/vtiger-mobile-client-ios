@@ -9,27 +9,6 @@
 #import "Product+Extra.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kProductFieldId = @"id";
-NSString* const kProductFieldProductName = @"productname";
-NSString* const kProductFieldProductNo = @"product_no";
-NSString* const kProductFieldDescription = @"description";
-NSString* const kProductFieldDiscontinued = @"discontinued";
-NSString* const kProductFieldProductCode = @"productcode";
-NSString* const kProductFieldSalesStartDate = @"sales_start_date";
-NSString* const kProductFieldSalesEndDate = @"sales_end_date";
-NSString* const kProductFieldSupportStartDate = @"start_date";
-NSString* const kProductFieldSupportEndDate = @"expiry_date";
-NSString* const kProductFieldManufacturer = @"manufacturer";
-NSString* const kProductFieldProductCategory = @"productcategory";
-NSString* const kProductFieldVendor = @"vendor_id";
-NSString* const kProductFieldWebsite = @"website";
-NSString* const kProductFieldVendorPartNo = @"vendor_part_no";
-NSString* const kProductFieldMfrPartNo = @"mfr_part_no";
-NSString* const kProductFieldProductSheet = @"productsheet";
-NSString* const kProductFieldSerialNo = @"serial_no";
-NSString* const kProductFieldGlacct = @"glacct"; //GL = General Ledger
-
-
 @implementation Product (Extra)
 
 + (Product *)modelObjectWithDictionary:(NSDictionary *)dict

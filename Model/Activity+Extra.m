@@ -12,30 +12,6 @@
 #import "GWPreferencesHelper.h"
 #import "CRMFieldConstants.h"
 
-//Vtiger fields
-NSString* const kCalendarFieldsubject = @"subject";
-NSString* const kCalendarFieldid = @"id";
-NSString* const kCalendarFielddate_start = @"date_start";
-NSString* const kCalendarFieldactivitytype = @"activitytype";
-NSString* const kCalendarFieldtime_start = @"time_start";
-NSString* const kCalendarFieldnotime = @"notime";
-NSString* const kCalendarFieldsendnotification = @"sendnotification";
-NSString* const kCalendarFieldvisibility = @"visibility";
-NSString* const kCalendarFieldeventstatus = @"eventstatus";
-NSString* const kCalendarFieldtaskstatus = @"taskstatus";
-NSString* const kCalendarFieldreminder_time = @"reminder_time";
-NSString* const kCalendarFieldassigned_user_id = @"assigned_user_id";
-NSString* const kCalendarFieldtime_end = @"time_end";
-NSString* const kCalendarFielddue_date = @"due_date";
-NSString* const kCalendarFieldrecurringtype = @"recurringtype";
-NSString* const kCalendarFieldparent_id = @"parent_id";  //Related to
-NSString* const kCalendarFieldcontact_id = @"contact_id"; //Contact name
-NSString* const kCalendarFieldtaskpriority = @"taskpriority";
-NSString* const kCalendarFieldduration_hours = @"duration_hours";
-NSString* const kCalendarFieldduration_minutes = @"duration_minutes";
-NSString* const kCalendarFieldlocation = @"location";
-NSString* const kCalendarFielddescription = @"description";
-
 @implementation Activity (Extra)
 
 + (Activity *)modelObjectWithDictionary:(NSDictionary *)dict

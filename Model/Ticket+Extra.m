@@ -11,20 +11,6 @@
 #import "ModulesHelper.h"
 #import "CRMFieldConstants.h"
 
-NSString* const kTicketFieldId = @"id";
-NSString* const kTicketFieldAssignedTo = @"assigned_user_id";
-NSString* const kTicketFieldProductId = @"product_id";
-NSString* const kTicketFieldPriority = @"ticketpriorities";
-NSString* const kTicketFieldStatus = @"ticketstatus";
-NSString* const kTicketFieldSeverity = @"ticketseverities";
-NSString* const kTicketFieldHours = @"hours";
-NSString* const kTicketFieldDays = @"days";
-NSString* const kTicketFieldCategory = @"ticketcategories";
-NSString* const kTicketFieldTicketNo = @"ticket_no";
-NSString* const kTicketFieldParentId = @"parent_id";
-NSString* const kTicketFieldProduct = @"product_id";
-NSString* const kTicketFieldTitle = @"title";
-
 @implementation Ticket (Extra)
 
 + (Ticket *)modelObjectWithDictionary:(NSDictionary *)dict

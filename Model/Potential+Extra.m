@@ -12,24 +12,6 @@
 #import "ModulesHelper.h"
 #import "CRMFieldConstants.h"
 
-//Vtiger Fields
-NSString* const kPotentialsFieldId = @"id";
-NSString* const kPotentialsFieldAmount = @"amount";
-NSString* const kPotentialsFieldAssignedUserId = @"assigned_user_id";
-NSString* const kPotentialsFieldAssignedUserName = @"assigned_user_name";
-NSString* const kPotentialsFieldCampaignId = @"campaignid";
-//NSString* const kPotentialsFieldCampaignName = @"campaign_name";
-NSString* const kPotentialsFieldClosingDate = @"closing_date";
-NSString* const kPotentialsFieldLeadSource = @"lead_source";
-NSString* const kPotentialsFieldNextStep = @"next_step";
-NSString* const kPotentialsFieldOpportunityType = @"opportunity_type";
-NSString* const kPotentialsFieldPotentialNo = @"potential_no";
-NSString* const kPotentialsFieldPotentialName = @"potentialname";
-NSString* const kPotentialsFieldProbability = @"probability";
-NSString* const kPotentialsFieldRelatedTo = @"related_to";
-NSString* const kPotentialsFieldSalesStage = @"sales_stage";
-
-
 @implementation Potential (Extra)
 
 + (Potential *)modelObjectWithDictionary:(NSDictionary *)dict
