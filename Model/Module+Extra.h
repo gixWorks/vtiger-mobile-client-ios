@@ -10,9 +10,12 @@
 
 @interface Module (Extra)
 
+/*** Init methods ***/
+
 + (Module *)modelObjectWithDictionary:(NSDictionary *)dict;
 + (Module *)modelObjectWithFieldsWithDictionary:(NSDictionary *)dict;
 
-- (NSDictionary*)crmRepresentation;
+/*** Representation methods ***/
+- (NSDictionary*)dictionaryRepresentation;
 
 @end

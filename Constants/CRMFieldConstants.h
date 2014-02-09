@@ -195,6 +195,17 @@
 #define kTicketFieldProduct  @"product_id"
 #define kTicketFieldTitle  @"title"
 
+//Fields
+#define kCRMFieldName @"name"
+#define kCRMFieldlabel @"label"
+#define kCRMFieldmandatory @"mandatory"
+#define kCRMFieldtype @"type"
+#define kCRMFieldtypenullable @"nullable"
+#define kCRMFieldeditable @"editable"
+#define kCRMFielduitype @"uitype"
+#define kCRMFieldlen @"len"
+#define kCRMFieldoptions @"options"
+
 @interface CRMFieldConstants : NSObject
 
 @end

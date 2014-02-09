@@ -7,7 +7,7 @@
 //
 
 #import "Module+Extra.h"
-#import "Field+Extra.h"
+#import "CRMField+Extra.h"
 #import "CRMFieldConstants.h"
 
 @implementation Module (Extra)
@@ -45,14 +45,14 @@
     Module *instance = [Module modelObjectWithDictionary:dict];
     if (instance != nil && [dict isKindOfClass:[NSDictionary class]]) {
         for (NSDictionary *f in [dict objectForKey:@"fields"]) {
-            Field *field = [Field modelObjectWithDictionary:f];
+            CRMField *field = [CRMField modelObjectWithDictionary:f];
             field.module = instance;
         }
     }
     return instance;
 }
 
-- (NSDictionary *)crmRepresentation
+- (NSDictionary *)dictionaryRepresentation
 {
     //TODO: represent as dictionary rebuilding the CRM fields from the Core Data entities
     return nil;
