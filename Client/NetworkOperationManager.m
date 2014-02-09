@@ -17,6 +17,7 @@
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
 NSString* const kManagerHasFinishedLogin = @"kManagerHasFinishedLogin";
+NSString* const kManagerHasFinishedSetupLogin = @"kManagerHasFinishedSetupLogin";
 NSString* const kManagerHasFinishedSyncCalendar = @"kManagerHasFinishedSyncCalendar";
 NSString* const kManagerHasFinishedDescribe = @"kManagerHasFinishedDescribe";
 NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecord";
@@ -270,7 +271,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)loginSetup
 {
-    
+    NSString *username = [Service getActiveServiceUsername];
+    NSString *password = [CredentialsHelper getPassword];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
+    NSLog(@"%@ %@ Starting %@ operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kOperationLoginAndFetchModules   );
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSetupLogin:) name:@"finishedLoginSetup" object:nil];
+    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
 }
 
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password
@@ -436,6 +442,31 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+    }
+}
+
+- (void)handleSetupLogin:(NSNotification*)notification
+{
+#if DEBUG
+    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
+#endif
+    
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey]];
+        if ([parseLoginResult objectForKey:@"error"] == nil) {
+            //login result was parsed, which means that modules have been created
+            NSArray *modules = [Module MR_findByAttribute:@"service" withValue:[Service getActive]];
+            for (Module *module in modules) {
+                [self describeModule:module.crm_name];
+            }
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:parseLoginResult];
+    }
+    else{
+        //There was an error in the HTTPClient
+        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
 }
 

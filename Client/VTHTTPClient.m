@@ -13,7 +13,7 @@
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
 NSString* const kClientHasFinishedLoginAndFetchModules = @"kClientHasFinishedLoginAndFetchModules";
 NSString* const kClientHasFinishedSyncCalendar = @"kClientHasFinishedSyncCalendar";
-NSString* const kClientHasFinishedDescribe = @"kClientHasFinishedDefine";
+NSString* const kClientHasFinishedDescribe = @"kClientHasFinishedDescribe";
 NSString* const kClientHasFinishedFetchRecord = @"kClientHasFinishedFetchRecord";
 NSString* const kClientHasFinishedFetchRecordWithGrouping = @"kClientHasFinishedFetchRecordWithGrouping";
 NSString* const kClientHasFinishedFetchRecordsWithGrouping =  @"kClientHasFinishedFetchRecordsWithGrouping";
@@ -93,7 +93,7 @@ static NSInteger kRefreshIntervalMinutes = 30;
             session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
             //Writes the new session
             [self updateSession:session];
-
+            
             NSDictionary *result;
             if([NSJSONSerialization isValidJSONObject:JSON]){
                 result = JSON;
@@ -103,7 +103,7 @@ static NSInteger kRefreshIntervalMinutes = 30;
                 //Update the session in the parameters
                 NSMutableDictionary *updatedParams = [selectorObject1 mutableCopy];
                 [updatedParams setObject:session forKey:@"_session"];
-
+                
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [self performSelector:selector withObject:updatedParams withObject:selectorObject2];
@@ -142,38 +142,42 @@ static NSInteger kRefreshIntervalMinutes = 30;
     
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"" parameters:parameters];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSDictionary *operationError = [JSON objectForKey:@"error"];
-        if(operationError)
-        {
-            NSLog(@"%@ Error: %@", [[self class] description], operationError);
-            //means that there was an error
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-            NSNumber *errorNumber;
-            if ([[operationError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
-                errorNumber = [numberFormatter numberFromString:[operationError objectForKey:@"code"]];
+        @try {
+            NSDictionary *operationError = [JSON objectForKey:@"error"];
+            if(operationError)
+            {
+                NSLog(@"%@ Error: %@", [[self class] description], operationError);
+                //means that there was an error
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                NSNumber *errorNumber;
+                if ([[operationError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
+                    errorNumber = [numberFormatter numberFromString:[operationError objectForKey:@"code"]];
+                }
+                else{
+                    errorNumber = [operationError objectForKey:@"code"];
+                }
+                NSString *errorMessage = [operationError objectForKey:@"message"];
+                NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
+                if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]]) {
+                    //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
+                    [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
+                }
+                else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
+                }
             }
             else{
-            errorNumber = [operationError objectForKey:@"code"];
-            }
-            NSString *errorMessage = [operationError objectForKey:@"message"];
-            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
-            if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]]) {
-                //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
-                [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
-            }
-            else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
+                NSDictionary *result;
+                if([NSJSONSerialization isValidJSONObject:JSON]){
+                    result = JSON;
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
             }
         }
-        else{
-            NSDictionary *result;
-            if([NSJSONSerialization isValidJSONObject:JSON]){
-                result = JSON;
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
+        @catch (NSException *exception) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[exception description], kClientNotificationErrorKey, nil]];
         }
-        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
@@ -194,38 +198,42 @@ static NSInteger kRefreshIntervalMinutes = 30;
 #endif
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"" parameters:parameters];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSDictionary *operationError = [JSON objectForKey:@"error"];
-        if(operationError)
-        {
-            NSLog(@"%@ Error: %@", [[self class] description], operationError);
-            //means that there was an error
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-            NSNumber *errorNumber;
-            if ([[operationError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
-                errorNumber = [numberFormatter numberFromString:[operationError objectForKey:@"code"]];
+        @try {
+            NSDictionary *operationError = [JSON objectForKey:@"error"];
+            if(operationError)
+            {
+                NSLog(@"%@ Error: %@", [[self class] description], operationError);
+                //means that there was an error
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                NSNumber *errorNumber;
+                if ([[operationError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
+                    errorNumber = [numberFormatter numberFromString:[operationError objectForKey:@"code"]];
+                }
+                else{
+                    errorNumber = [operationError objectForKey:@"code"];
+                }
+                NSString *errorMessage = [operationError objectForKey:@"message"];
+                NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
+                if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]]) {
+                    //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
+                    [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
+                }
+                else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
+                }
             }
             else{
-                errorNumber = [operationError objectForKey:@"code"];
-            }
-            NSString *errorMessage = [operationError objectForKey:@"message"];
-            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
-            if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]]) {
-                //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
-                [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
-            }
-            else{
-                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
+                NSDictionary *result;
+                if([NSJSONSerialization isValidJSONObject:JSON]){
+                    result = JSON;
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
             }
         }
-        else{
-            NSDictionary *result;
-            if([NSJSONSerialization isValidJSONObject:JSON]){
-                result = JSON;
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, parameters, kClientNotificationParametersKey, nil]];
+        @catch (NSException *exception) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[exception description], kClientNotificationErrorKey, nil]];
         }
-        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
