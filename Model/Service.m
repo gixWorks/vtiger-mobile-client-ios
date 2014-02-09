@@ -1,8 +1,8 @@
 //
 //  Service.m
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 1/10/14.
+//  Created by Giovanni on 09/02/14.
 //  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
@@ -21,14 +21,14 @@
 
 @implementation Service
 
-@dynamic crm_crmondemand;
-@dynamic crm_url;
-@dynamic crm_username;
-@dynamic crm_userid;
 @dynamic crm_active;
+@dynamic crm_crmondemand;
 @dynamic crm_servicename;
-@dynamic crm_timezone_user;
 @dynamic crm_timezone_server;
+@dynamic crm_timezone_user;
+@dynamic crm_url;
+@dynamic crm_userid;
+@dynamic crm_username;
 @dynamic accounts;
 @dynamic activities;
 @dynamic contacts;

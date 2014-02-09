@@ -1,9 +1,9 @@
 //
 //  Module.m
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/1/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 09/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import "Module.h"

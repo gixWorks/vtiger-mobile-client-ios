@@ -1,31 +1,31 @@
 //
 //  Service.h
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 1/10/14.
+//  Created by Giovanni on 09/02/14.
 //  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/CoreData+MagicalRecord.h>
+#import <CoreData/CoreData.h>
 
 @class Account, Activity, Contact, Lead, Module, Potential, Product, Sync, SyncToken, Ticket;
 
 @interface Service : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * crm_crmondemand;
-@property (nonatomic, retain) NSString * crm_url;
-@property (nonatomic, retain) NSString * crm_username;
-@property (nonatomic, retain) NSString * crm_userid;
 @property (nonatomic, retain) NSNumber * crm_active;
+@property (nonatomic, retain) NSNumber * crm_crmondemand;
 @property (nonatomic, retain) NSString * crm_servicename;
-@property (nonatomic, retain) NSString * crm_timezone_user;
 @property (nonatomic, retain) NSString * crm_timezone_server;
+@property (nonatomic, retain) NSString * crm_timezone_user;
+@property (nonatomic, retain) NSString * crm_url;
+@property (nonatomic, retain) NSString * crm_userid;
+@property (nonatomic, retain) NSString * crm_username;
 @property (nonatomic, retain) NSSet *accounts;
 @property (nonatomic, retain) NSSet *activities;
 @property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) Lead *leads;
-@property (nonatomic, retain) Module *modules;
+@property (nonatomic, retain) NSSet *modules;
 @property (nonatomic, retain) Potential *potentials;
 @property (nonatomic, retain) Product *products;
 @property (nonatomic, retain) NSSet *syncs;
@@ -49,6 +49,11 @@
 - (void)removeContactsObject:(Contact *)value;
 - (void)addContacts:(NSSet *)values;
 - (void)removeContacts:(NSSet *)values;
+
+- (void)addModulesObject:(Module *)value;
+- (void)removeModulesObject:(Module *)value;
+- (void)addModules:(NSSet *)values;
+- (void)removeModules:(NSSet *)values;
 
 - (void)addSyncsObject:(Sync *)value;
 - (void)removeSyncsObject:(Sync *)value;

@@ -1,20 +1,20 @@
 //
 //  Module.h
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/1/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 09/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/CoreData+MagicalRecord.h>
+#import <CoreData/CoreData.h>
 
-@class Field, Service;
+@class CRMField, Service;
 
 @interface Module : NSManagedObject
 
 @property (nonatomic, retain) NSString * crm_id;
-@property (nonatomic) BOOL crm_isEntity;
+@property (nonatomic, retain) NSNumber * crm_isEntity;
 @property (nonatomic, retain) NSString * crm_label;
 @property (nonatomic, retain) NSString * crm_name;
 @property (nonatomic, retain) NSString * crm_singular;
@@ -24,8 +24,8 @@
 
 @interface Module (CoreDataGeneratedAccessors)
 
-- (void)addFieldsObject:(Field *)value;
-- (void)removeFieldsObject:(Field *)value;
+- (void)addFieldsObject:(CRMField *)value;
+- (void)removeFieldsObject:(CRMField *)value;
 - (void)addFields:(NSSet *)values;
 - (void)removeFields:(NSSet *)values;
 
