@@ -42,9 +42,6 @@ NSString* const kOperationFetchRecordsWithGrouping = @"fetchRecordsWithGrouping"
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
 
-//DDLog
-static int ddLogLevel = LOG_LEVEL_WARN;
-
 @interface NetworkOperationManager ()
 {
     //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
@@ -66,16 +63,6 @@ static int ddLogLevel = LOG_LEVEL_WARN;
         shared = [[NetworkOperationManager alloc] init];
     });
     return shared;
-}
-
-+ (void)initialize
-{
-    NSNumber *logLevel = [[NSUserDefaults standardUserDefaults] objectForKey:@"prefsLogLevel"];
-#if DEBUG
-    NSLog(@"Initializing DDLog");
-#endif
-    if (logLevel)
-    ddLogLevel = [logLevel intValue];
 }
 
 - (id)init
