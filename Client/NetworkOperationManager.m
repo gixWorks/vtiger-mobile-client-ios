@@ -43,8 +43,14 @@ NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 @interface NetworkOperationManager ()
+{
+    //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
+    NSInteger countOfDescribes;
+    NSInteger receivedDescribes;
+}
 
 @property (nonatomic, strong) NSMutableDictionary* recordsToFetch;
+@property (nonatomic, strong) NSMutableArray* describeErrors; //TODO: also this is quite ugly. Find a qay to manage the queue of operations
 
 @end
 
@@ -483,12 +489,15 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
             NSInteger count = [Module MR_countOfEntitiesWithPredicate:p];
             NSLog(@"%d modules found", count);
             NSArray *modules = [Module MR_findAllWithPredicate:p inContext:[NSManagedObjectContext MR_defaultContext]];
+            countOfDescribes = count;
+            receivedDescribes = 0;
+            _describeErrors = nil;
+            _describeErrors = [[NSMutableArray alloc] init];
             for (Module *module in modules) {
                 [self describeModule:module.crm_name];
             }
         }
-        //TODO: find a way to notify the end of all the Describe operations
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:parseLoginResult];
+        //Don't notify yet. Notification will be sent when all Describe operations are over
     }
     else{
         //There was an error in the HTTPClient
@@ -553,16 +562,20 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseDescribe:JSON];
-        if ([parseResult objectForKey:@"error"] != nil)
-        {
+        if ([parseResult objectForKey:@"error"] != nil){
             NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            [_describeErrors addObject:[parseResult objectForKey:@"error"]];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDescribe object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
         NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedDescribe object:self userInfo:[notification userInfo]];
+        [_describeErrors addObject:[[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]];
+    }
+    receivedDescribes += 1;
+    if (receivedDescribes == countOfDescribes) {
+        NSDictionary *userInfo = @{@"error" : _describeErrors};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
 }
 
