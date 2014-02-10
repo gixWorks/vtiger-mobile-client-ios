@@ -66,6 +66,9 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     [_sessionTimer invalidate];
     _sessionTimer = nil;
     _sessionTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginWithTimer:) userInfo:nil repeats:NO];
+#if DEBUG
+    NSLog(@"Setting timer at %@", [NSDate dateWithTimeIntervalSinceNow:interval]);
+#endif
 }
 
 - (void)loginWithTimer:(NSTimer*)timer
