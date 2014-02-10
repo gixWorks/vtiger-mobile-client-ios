@@ -27,7 +27,11 @@ NSString* const kClientNotificationParametersKey = @"parameters";
 NSInteger const kErrorCodeAuthenticationFailed = 1210;
 NSInteger const kErrorCodeLoginRequired = 1501;
 
-static NSInteger kRefreshIntervalMinutes = 30;
+#if DEBUG
+    static NSInteger kRefreshIntervalMinutes = 5;
+#else
+    static NSInteger kRefreshIntervalMinutes = 30;
+#endif
 
 @interface VTHTTPClient ()
 
@@ -61,7 +65,12 @@ static NSInteger kRefreshIntervalMinutes = 30;
     NSTimeInterval interval = kRefreshIntervalMinutes*60.0; //Minutes * seconds
     [_sessionTimer invalidate];
     _sessionTimer = nil;
-    _sessionTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginAndExecuteSelector:withObject:withObject:) userInfo:nil repeats:NO];
+    _sessionTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(loginWithTimer:) userInfo:nil repeats:NO];
+}
+
+- (void)loginWithTimer:(NSTimer*)timer
+{
+    [self loginAndExecuteSelector:nil withObject:nil withObject:nil];
 }
 
 #pragma mark - Network methods
@@ -120,10 +129,7 @@ static NSInteger kRefreshIntervalMinutes = 30;
             }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
-            
         }
-        
-        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
