@@ -42,6 +42,9 @@ NSString* const kOperationFetchRecordsWithGrouping = @"fetchRecordsWithGrouping"
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
 
+//DDLog
+static int ddLogLevel = LOG_LEVEL_WARN;
+
 @interface NetworkOperationManager ()
 {
     //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
@@ -63,6 +66,16 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         shared = [[NetworkOperationManager alloc] init];
     });
     return shared;
+}
+
++ (void)initialize
+{
+    NSNumber *logLevel = [[NSUserDefaults standardUserDefaults] objectForKey:@"prefsLogLevel"];
+#if DEBUG
+    NSLog(@"Initializing DDLog");
+#endif
+    if (logLevel)
+    ddLogLevel = [logLevel intValue];
 }
 
 - (id)init
@@ -167,14 +180,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
             urlString = [@"http://" stringByAppendingString:urlString];
             if (![self validateUrl:urlString]) {
                 //it's not a valid url either, means the error must be somewhere else along the URL
-                NSLog(@"error must be somewhere else");
                 NSDictionary *userInfo = @{@"error": @"The URL provided is not a valid URL"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL object:self userInfo:userInfo];
             }
             else{
                 //adding HTTP worked, means that the user just forgot the http:// stuff at beginning
                 //In this case, we need to test HTTPS first and then HTTP
-                //TODO: test HTTPS first, then HTTP
             }
         }
     }
@@ -263,7 +274,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
-    NSLog(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    DDLogDebug(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
 }
 
@@ -272,7 +283,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
-    NSLog(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    DDLogDebug(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
 
@@ -281,7 +292,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
-    NSLog(@"%@ %@ Starting %@ operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kOperationLoginAndFetchModules   );
+    DDLogDebug(@"%@ %@ Starting %@ operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kOperationLoginAndFetchModules   );
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSetupLogin:) name:@"finishedLoginSetup" object:nil];
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
 }
@@ -297,31 +308,25 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
-//- (void)loginAndSyncModulesWithUsername:(NSString*)username password:(NSString*)password
-//{
-//    //TODO: Keep?
-//    [CredentialsHelper savePassword:password];
-//    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
-//    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
-//}
-
 - (void)syncCalendar
 {
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
+    DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = 15 * 60;
     if (syncToken.datetime == nil || [syncToken.datetime timeIntervalSinceNow] > interval) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
-        NSLog(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        DDLogDebug(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
     else{
-        NSLog(@"%@ %@ sync time < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        DDLogInfo(@"%@ %@ sync time < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
 }
 
 - (void)resyncCalendar
 {
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     //Build parameters ignoring the synctoken
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
@@ -331,7 +336,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)syncCalendarFromPage:(NSNumber*)page
 {
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
@@ -342,6 +347,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)describeModule:(NSString*)module
 {
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDescribe,@"_operation", session, @"_session", module, @"module",  nil];
 
@@ -352,7 +358,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 {
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecord,@"_operation", session, @"_session", record, @"record",  nil];
-    NSLog(@"%@ %@ Starting FetchRecord: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
+    DDLogDebug(@"%@ %@ Starting FetchRecord: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
 }
 
@@ -362,7 +368,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:httpNotificationName object:nil];
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
-    NSLog(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
+    DDLogDebug(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
@@ -409,7 +415,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
             [queue addObject:record_id];
         }
     }
-    NSLog(@"%@ %@ Added record %@ to queue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+    DDLogDebug(@"%@ %@ Added record %@ to queue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
     [_recordsToFetch setObject:queue forKey:module];
 }
 
@@ -427,7 +433,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         //queueString should be in the form: ["18x1164", "1x1151"]
         
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordsWithGrouping,@"_operation", module, @"module", queueString, @"ids", session, @"_session", @"", @"alertid", nil];
-        NSLog(@"%@ %@ Processing fetch queue for module :%@ IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, queueString);
+        DDLogDebug(@"%@ %@ Processing fetch queue for module :%@ IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, queueString);
         [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
     }
 }
@@ -436,9 +442,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedLogin:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
-#endif
+    DDLogDebug(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
@@ -447,7 +451,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
     }
@@ -455,9 +459,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedLoginWithoutSave:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
-#endif
+    DDLogDebug(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
@@ -466,7 +468,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
     }
@@ -474,20 +476,15 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleSetupLogin:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
-#endif
+    DDLogDebug(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey] saveToDB:YES];
         if ([parseLoginResult objectForKey:@"error"] == nil) {
             //login result was parsed, which means that modules have been created
-#if DEBUG
-            NSLog(@"Finding all modules for service: %@", [Service getActive]);
-#endif
             NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
             NSInteger count = [Module MR_countOfEntitiesWithPredicate:p];
-            NSLog(@"%d modules found", count);
+            DDLogDebug(@"%d modules to Describe found in current Service", count);
             NSArray *modules = [Module MR_findAllWithPredicate:p inContext:[NSManagedObjectContext MR_defaultContext]];
             countOfDescribes = count;
             receivedDescribes = 0;
@@ -501,7 +498,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
         NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
@@ -509,9 +506,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientHasFinishedLoginAndFetchModules:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
-#endif
+    DDLogDebug(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
 
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //No error, so perform Core Data stuff here
@@ -519,29 +514,28 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         NSDictionary *parseResult = [ResponseParser parseLogin:JSON saveToDB:YES];
 
         if ([parseResult objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
     }
 }
 
 - (void)handleClientFinishedSync:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-#endif
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //parse the results
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
         if ([parseResult objectForKey:@"error"] != nil)
         {
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
         [self processFetchQueue];
@@ -549,27 +543,26 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
     }
 }
 
 - (void)handleClientFinishedDescribe:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-#endif
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseDescribe:JSON];
         if ([parseResult objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
             [_describeErrors addObject:[parseResult objectForKey:@"error"]];
         }
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [_describeErrors addObject:[[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]];
     }
     receivedDescribes += 1;
@@ -582,21 +575,19 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)handleClientFinishedFetchRecord:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-#endif
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseFetchRecord:JSON];
         if ([parseResult objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:parseResult];
         }
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
     }
 }
@@ -606,30 +597,26 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
     //Notification name should be in the form fetchRecordWithGrouping1x123-http , so we discard the "http" part and we take the first part, which is the notification name that the ViewController is watching
     NSString *notificationName = [[notification.name componentsSeparatedByString:@"-"] objectAtIndex:0];
-#if DEBUG
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-#endif
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseFetchRecordWithGrouping:JSON];
         if ([parseResult objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
     }
 }
 
 - (void)handleClientFinishedFetchRecordsWithGrouping:(NSNotification*)notification
 {
-#if DEBUG
-    NSLog(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-#endif
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
@@ -638,13 +625,13 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         NSDictionary *parseResult = [ResponseParser parseFetchRecordsWithGrouping:JSON forModule:module];
         
         if ([parseResult objectForKey:@"error"] != nil){
-            NSLog(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:nil];
     }
     else{
         //There was an error in the HTTPClient
-        NSLog(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
     }
 }
