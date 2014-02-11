@@ -545,8 +545,13 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
+        @try {
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
+        }
+        @catch (NSException *exception) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:@{@"error": [exception description]}];
+        }
     }
 }
 
@@ -563,13 +568,22 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         }
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [_describeErrors addObject:[[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [_describeErrors addObject:[[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]];
+        }
+        @catch (NSException *exception) {
+            //There was an error in the HTTPClient
+            [_describeErrors addObject:@{@"error" : [exception description]}];
+        }
     }
     receivedDescribes += 1;
     if (receivedDescribes == countOfDescribes) {
-        NSDictionary *userInfo = @{@"error" : _describeErrors};
+        NSMutableDictionary *userInfo  = [[NSMutableDictionary alloc] init];
+        if ([_describeErrors count] > 0) {
+            [userInfo setObject:_describeErrors forKey:@"error"];
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
 }
@@ -638,14 +652,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
 }
 
-- (void)handleSaveRecord:(NSNotification*)notification
+- (void)handleClientFinishedSaveRecord:(NSNotification*)notification
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     //check if response is positive
     //remove record from table of records to be sent to server
 }
 
-- (void)handleDeleteRecords:(NSNotification*)notification
+- (void)handleClientFinishedDeleteRecords:(NSNotification*)notification
 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
     //check if response is positive
