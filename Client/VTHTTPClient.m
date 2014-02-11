@@ -241,6 +241,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                     [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
                 }
                 else{
+                    NSString* session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
+                    if (session!=nil) { //This should fix the very first login in the system, where session is not set yet
+                        //Writes the new session
+                        [self updateSession:session];
+                    }
+
                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
                 }
             }
