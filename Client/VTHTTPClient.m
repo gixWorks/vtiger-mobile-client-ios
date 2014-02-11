@@ -48,7 +48,8 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     static dispatch_once_t pred;
     static VTHTTPClient *shared = nil;
     dispatch_once(&pred, ^{
-        shared = [[VTHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:[Service getActiveServiceUrl]]];
+        NSString *u = [Service getActiveServiceUrl];
+        shared = [[VTHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:u]];
     });
     return shared;
 }
@@ -97,7 +98,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     NSString *password = [CredentialsHelper getPassword];
     __block NSString *session;
     
-    NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
+    NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
     
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
@@ -161,7 +162,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         return;
     }
     
-    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"" parameters:parameters];
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];
@@ -217,7 +218,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if DEBUG
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
-    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"" parameters:parameters];
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];

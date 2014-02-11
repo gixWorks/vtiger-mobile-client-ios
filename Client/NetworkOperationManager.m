@@ -237,6 +237,8 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     }
     else{
         //There was no error, means the check resulted successful and we post the notification
+        NSString *u = [[testedUrl absoluteString] stringByReplacingOccurrencesOfString:@"api.php" withString:@""];
+        testedUrl = [NSURL URLWithString:u];
         NSDictionary *userInfo = @{@"url" : testedUrl};
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                             object:self
