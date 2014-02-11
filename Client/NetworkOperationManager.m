@@ -80,6 +80,8 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:kClientHasFinishedFetchRecordWithGrouping object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientHasFinishedLoginAndFetchModules:) name:kClientHasFinishedLoginAndFetchModules object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordsWithGrouping:) name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:kClientHasFinishedSaveRecord object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedDeleteRecords:) name:kClientHasFinishedDeleteRecords object:nil];
     }
     return self;
 }
@@ -359,6 +361,11 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
+- (void)saveChangesToServer
+{
+    //This goes through the table with records to update and delete and sends to server the requests
+}
+
 //- (void)fetchRecord:(NSString*)record andAssociateToRecord:(id<NSObject>)associatedRecord
 //{
 //    NSString *notificationName = [record stringByAppendingString:@"fetch"];
@@ -629,6 +636,20 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         DDLogWarn(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
     }
+}
+
+- (void)handleSaveRecord:(NSNotification*)notification
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    //check if response is positive
+    //remove record from table of records to be sent to server
+}
+
+- (void)handleDeleteRecords:(NSNotification*)notification
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    //check if response is positive
+    //remove records from table of records to be sent to server for deletion
 }
 
 @end

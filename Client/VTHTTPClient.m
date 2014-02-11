@@ -18,6 +18,9 @@ NSString* const kClientHasFinishedDescribe = @"kClientHasFinishedDescribe";
 NSString* const kClientHasFinishedFetchRecord = @"kClientHasFinishedFetchRecord";
 NSString* const kClientHasFinishedFetchRecordWithGrouping = @"kClientHasFinishedFetchRecordWithGrouping";
 NSString* const kClientHasFinishedFetchRecordsWithGrouping =  @"kClientHasFinishedFetchRecordsWithGrouping";
+NSString* const kClientHasFinishedSaveRecord = @"kClientHasFinishedSaveRecord";
+NSString* const kClientHasFinishedDeleteRecords = @"kClientHasFinishedDeleteRecords";
+
 
 //Notification keys constants
 NSString* const kClientNotificationResponseBodyKey = @"responseBody";

@@ -110,4 +110,9 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  */
 - (void)addRecordToFetchQueue:(NSString*)record_id;
 
+/**
+ *  Goes through the table with records to update and delete and sends to server the saveRecord and deleteRecords requests
+ */
+- (void)saveChangesToServer;
+
 @end
