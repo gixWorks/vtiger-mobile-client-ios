@@ -78,7 +78,7 @@
         instance.lead_mobile = [dict objectForKey:kLeadFieldmobile];
         instance.lead_phone= [dict objectForKey:kLeadFieldphone];
         instance.lead_rating = [dict objectForKey:kLeadFieldrating];
-        instance.lead_salutationtype = [dict objectForKey:kLeadFieldrating];
+        instance.lead_salutationtype = [dict objectForKey:kLeadFieldsalutationType];
         instance.lead_yahooid = [dict objectForKey:kLeadFieldyahooid];
         
         //Custom fields
