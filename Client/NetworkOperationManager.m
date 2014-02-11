@@ -433,8 +433,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
-        NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
+            });
+        });
     }
     else{
         //There was an error in the HTTPClient
@@ -519,14 +523,18 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //parse the results
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
-        NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
-        if ([parseResult objectForKey:@"error"] != nil)
-        {
-            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
-        }
-        //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
-        [self processFetchQueue];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
+            if ([parseResult objectForKey:@"error"] != nil)
+            {
+                DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            }
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
+                [self processFetchQueue];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+            });
+        });
     }
     else{
         //There was an error in the HTTPClient
