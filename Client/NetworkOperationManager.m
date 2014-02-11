@@ -301,13 +301,13 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = 15 * 60;
-    if (syncToken.datetime == nil || [syncToken.datetime timeIntervalSinceNow] > interval) {
+    if ([syncToken.datetime timeIntervalSinceNow] < interval) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         DDLogDebug(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
     else{
-        DDLogInfo(@"%@ %@ sync time < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        DDLogInfo(@"%@ %@ last sync time (%@) compared to now > than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd), syncToken.datetime);
     }
 }
 
