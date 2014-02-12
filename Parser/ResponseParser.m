@@ -103,7 +103,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 #if DEBUG
             NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
 #endif
-                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+                __block NSError *saveError;
+                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                    saveError = error;
+                }];
             }
         }
     }
@@ -184,10 +187,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
 #endif
         __block NSError *saveError;
-//        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-//            saveError = error;
-//        }];
-        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            saveError = error;
+        }];
         
         //G- if nextPage != 0 means that we have another page of records to sync
         if (nextPage != 0) {
@@ -340,10 +342,9 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 #if DEBUG
         NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
 #endif
-//        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-//            saveError = error;
-//        }];
-        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            saveError = error;
+        }];
         
         NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"record", saveError, kErrorKey, nil];
         return userInfo;
