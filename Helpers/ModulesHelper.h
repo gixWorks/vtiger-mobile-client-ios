@@ -49,5 +49,15 @@ extern NSString* const kVTModuleProducts;
  *  @return an array of strings with the module names
  */
 + (NSArray*)enabledModules;
+
+/**
+ *  Returns the label for the module `key`
+ *
+ *  @param moduleName the name of the module using the constant such as kModuleLeads
+ *
+ *  @return the localized label from the Database
+ */
++ (NSString*)localizedLabelForModuleName:(NSString*)moduleName;
+
  
 @end

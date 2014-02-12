@@ -58,4 +58,11 @@ NSString* const kVTModuleProducts = @"Products";
     return @[kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads];
 }
 
++ (NSString*)localizedLabelForModuleName:(NSString*)moduleName
+{
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
+    Module *module = [Module MR_findFirstWithPredicate:p];
+    return module.crm_label;
+}
+
 @end
