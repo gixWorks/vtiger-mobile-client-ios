@@ -134,6 +134,14 @@
 //NSString* const kLeadFieldsalutationType = @"salutationtype";
 //NSString* const kLeadFieldyahooid = @"yahooid";
 
+//LeadAddress
+//NSString* const kLeadAddressStreet = @"lane";
+//NSString* const kLeadAddressPobox = @"pobox";
+//NSString* const kLeadAddressCity = @"city";
+//NSString* const kLeadAddressCode = @"code";
+//NSString* const kLeadAddressState = @"state";
+//NSString* const kLeadAddressCountry = @"country";
+
 //Modules
 //NSString* const kModule_id = @"id";
 //NSString* const kModule_name = @"name";

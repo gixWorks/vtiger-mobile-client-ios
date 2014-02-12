@@ -10,7 +10,6 @@
 #import "CRMFieldPicklistValue.h"
 #import "Module.h"
 
-
 @implementation CRMField
 
 @dynamic attribute;

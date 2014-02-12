@@ -1,19 +1,22 @@
 //
 //  Lead.h
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/2/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 12/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/CoreData+MagicalRecord.h>
+#import <CoreData/CoreData.h>
 
-@class Service;
+@class LeadAddress, Service;
 
 @interface Lead : NSManagedObject
 
+@property (nonatomic, retain) NSDate * crm_time_created;
+@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) NSString * lead_assigned_user_id;
+@property (nonatomic, retain) NSString * lead_assigned_user_name;
 @property (nonatomic, retain) NSString * lead_company;
 @property (nonatomic, retain) NSNumber * lead_company_annualrevenue;
 @property (nonatomic, retain) NSString * lead_company_industry;
@@ -33,10 +36,8 @@
 @property (nonatomic, retain) NSString * lead_rating;
 @property (nonatomic, retain) NSString * lead_salutationtype;
 @property (nonatomic, retain) NSString * lead_yahooid;
-@property (nonatomic, retain) NSString * lead_assigned_user_name;
-@property (nonatomic, retain) NSDate * crm_time_created;
-@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) NSData * my_custom_fields;
 @property (nonatomic, retain) Service *service;
+@property (nonatomic, retain) LeadAddress *address;
 
 @end

@@ -90,6 +90,12 @@
             }
         }
         
+        if (instance.address == nil) {
+            instance.address = [LeadAddress MR_createEntity];
+        }
+        [instance.address assignFieldsFromDictionary:dict];
+
+        
         //Add the relationship with the current service
         instance.service = [Service getActive];
     }

@@ -43,4 +43,11 @@ extern NSString* const kVTModuleProducts;
  */
 + (NSString*)localizedSingularModuleNameForRecord:(NSString*)record;
 
+/**
+ *  Returns a list of the enabled modules in the CRM
+ *
+ *  @return an array of strings with the module names
+ */
++ (NSArray*)enabledModules;
+ 
 @end

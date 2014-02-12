@@ -52,5 +52,10 @@ NSString* const kVTModuleProducts = @"Products";
     return nil;
 }
 
++ (NSArray*)enabledModules
+{
+    //In the BETA we support only these modules
+    return @[kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads];
+}
 
 @end

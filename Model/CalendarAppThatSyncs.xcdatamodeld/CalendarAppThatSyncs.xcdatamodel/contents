@@ -167,7 +167,17 @@
         <attribute name="lead_salutationtype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_yahooid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="LeadAddress" inverseName="lead" inverseEntity="LeadAddress" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="leads" inverseEntity="Service" syncable="YES"/>
+    </entity>
+    <entity name="LeadAddress" representedClassName="LeadAddress" syncable="YES">
+        <attribute name="crm_city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_pobox" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_street" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="lead" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lead" inverseName="address" inverseEntity="Lead" syncable="YES"/>
     </entity>
     <entity name="ModifiedRecord" syncable="YES">
         <attribute name="crm_action" optional="YES" attributeType="String" syncable="YES"/>
@@ -288,22 +298,23 @@
     </entity>
     <entity name="User" syncable="YES"/>
     <elements>
-        <element name="Account" positionX="0" positionY="0" width="128" height="465"/>
-        <element name="AccountAddress" positionX="0" positionY="0" width="128" height="240"/>
-        <element name="Activity" positionX="0" positionY="0" width="128" height="524"/>
-        <element name="Contact" positionX="0" positionY="0" width="128" height="495"/>
-        <element name="ContactAddress" positionX="0" positionY="0" width="128" height="240"/>
-        <element name="CRMField" positionX="0" positionY="0" width="128" height="165"/>
-        <element name="CRMFieldPicklistValue" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="Lead" positionX="0" positionY="0" width="128" height="420"/>
-        <element name="ModifiedRecord" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="Module" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="Potential" positionX="0" positionY="0" width="128" height="345"/>
-        <element name="Product" positionX="0" positionY="0" width="128" height="390"/>
-        <element name="Service" positionX="0" positionY="0" width="128" height="315"/>
-        <element name="Sync" positionX="0" positionY="0" width="128" height="150"/>
-        <element name="SyncToken" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="Ticket" positionX="0" positionY="0" width="128" height="330"/>
-        <element name="User" positionX="0" positionY="0" width="128" height="45"/>
+        <element name="Account" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AccountAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Activity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Contact" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ContactAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CRMField" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CRMFieldPicklistValue" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Lead" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ModifiedRecord" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Module" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Potential" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Product" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Service" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Sync" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="SyncToken" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Ticket" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="LeadAddress" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

@@ -1,18 +1,22 @@
 //
 //  Lead.m
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/2/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 12/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import "Lead.h"
+#import "LeadAddress.h"
 #import "Service.h"
 
 
 @implementation Lead
 
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic lead_assigned_user_id;
+@dynamic lead_assigned_user_name;
 @dynamic lead_company;
 @dynamic lead_company_annualrevenue;
 @dynamic lead_company_industry;
@@ -32,10 +36,8 @@
 @dynamic lead_rating;
 @dynamic lead_salutationtype;
 @dynamic lead_yahooid;
-@dynamic lead_assigned_user_name;
-@dynamic crm_time_created;
-@dynamic crm_time_modified;
 @dynamic my_custom_fields;
 @dynamic service;
+@dynamic address;
 
 @end

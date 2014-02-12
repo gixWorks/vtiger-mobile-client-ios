@@ -19,6 +19,7 @@
 #import "Activity+Extra.h"
 #import "Module+Extra.h"
 #import "Lead+Extra.h"
+#import "LeadAddress+Extra.h"
 #import "Contact+Extra.h"
 #import "ContactAddress+Extra.h"
 #import "Account+Extra.h"
@@ -27,5 +28,6 @@
 #import "Service+Extra.h"
 #import "Product+Extra.h"
 #import "Ticket+Extra.h"
+#import "CRMField+Extra.h"
 
 #endif

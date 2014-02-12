@@ -135,6 +135,14 @@
 #define kLeadFieldsalutationType  @"salutationtype"
 #define kLeadFieldyahooid  @"yahooid"
 
+//LeadAddress
+#define kLeadAddressStreet  @"lane"
+#define kLeadAddressPobox  @"pobox"
+#define kLeadAddressCity  @"city"
+#define kLeadAddressCode  @"code"
+#define kLeadAddressState  @"state"
+#define kLeadAddressCountry  @"country"
+
 //Modules
 #define kModule_id  @"id"
 #define kModule_name  @"name"
