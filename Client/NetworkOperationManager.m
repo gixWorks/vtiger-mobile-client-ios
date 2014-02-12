@@ -445,7 +445,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.myParseQueue", 0);
         dispatch_async(myQueue, ^{
             NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
             });
         });
