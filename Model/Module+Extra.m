@@ -58,12 +58,15 @@
     for (CRMField *oldField in self.fields) {
         [oldField MR_deleteEntity];
     }
+    //And I really make sure they are out of the way
+    NSSet* oldFields = self.fields;
+    [self removeFields:oldFields];
     
     if ([dict isKindOfClass:[NSDictionary class]]) {
         for (NSDictionary *f in [dict objectForKey:@"fields"]) {
             CRMField *field = [CRMField modelObjectWithDictionary:f module:self];
             if (field !=nil) {
-                field.module = self;
+                [self addFieldsObject:field];
             }
             else{
                 success = NO;

@@ -35,23 +35,7 @@
         self.crm_pobox = [dict objectForKey:kLeadAddressPobox];
         self.crm_state = [dict objectForKey:kLeadAddressState];
         self.crm_street = [dict objectForKey:kLeadAddressStreet];
-//        self.crm_mailingcity = [dict objectForKey:kContactAddressFieldMailingCity];
-//        self.crm_mailingcountry = [dict objectForKey:kContactAddressFieldMailingCountry];
-//        self.crm_mailingpobox = [dict objectForKey:kContactAddressFieldMailingPobox];
-//        self.crm_mailingstate = [dict objectForKey:kContactAddressFieldMailingState];
-//        self.crm_mailingstreet = [dict objectForKey:kContactAddressFieldMailingStreet];
-//        self.crm_mailingzip = [dict objectForKey:kContactAddressFieldMailingZip];
-//        
-//        self.crm_othercity = [dict objectForKey:kContactAddressFieldOtherCity];
-//        self.crm_othercountry = [dict objectForKey:kContactAddressFieldOtherCountry];
-//        self.crm_otherpobox = [dict objectForKey:kContactAddressFieldOtherPobox];
-//        self.crm_otherstate = [dict objectForKey:kContactAddressFieldOtherState];
-//        self.crm_otherstreet = [dict objectForKey:kContactAddressFieldOtherStreet];
-//        self.crm_otherzip = [dict objectForKey:kContactAddressFieldOtherZip];
-        
-        
     }
-    
 }
 
 @end

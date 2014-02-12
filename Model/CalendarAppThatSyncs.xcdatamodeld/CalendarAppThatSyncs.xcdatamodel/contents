@@ -128,13 +128,13 @@
         <relationship name="contact" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="address" inverseEntity="Contact" syncable="YES"/>
     </entity>
     <entity name="CRMField" representedClassName="CRMField" syncable="YES">
-        <attribute name="attribute" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_mandatory" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="crm_name" attributeType="String" syncable="YES"/>
         <attribute name="crm_options" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="crm_type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="module" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Module" inverseName="fields" inverseEntity="Module" syncable="YES"/>
+        <attribute name="crm_uitype" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="module" maxCount="1" deletionRule="Nullify" destinationEntity="Module" inverseName="fields" inverseEntity="Module" syncable="YES"/>
         <relationship name="picklist_values" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CRMFieldPicklistValue" inverseName="field" inverseEntity="CRMFieldPicklistValue" syncable="YES"/>
     </entity>
     <entity name="CRMFieldPicklistValue" representedClassName="CRMFieldPicklistValue" syncable="YES">

@@ -26,12 +26,14 @@
     
     instance.crm_name = [dict objectForKey:kCRMFieldName];
     instance.crm_label = [dict objectForKey:kCRMFieldlabel];
-    instance.crm_mandatory = [dict objectForKey:kCRMFieldmandatory];
+    instance.crm_mandatory = [NSNumber numberWithBool:[[dict objectForKey:kCRMFieldmandatory] boolValue]];
+    instance.crm_uitype = [dict objectForKey:kCRMFielduitype];
     if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklistValues"]) {
         NSError *jsonError;
+        instance.crm_type = @"picklistValues";
         instance.crm_options = [NSJSONSerialization dataWithJSONObject:[dict objectForKey:kCRMFieldtype] options:0 error:&jsonError];
         if (jsonError!=nil) {
-            NSLog(@"%@ %@ error parsing picklist values for field %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), fieldName);
+            DDLogError(@"%@ %@ error parsing picklist values for field %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), fieldName);
         }
     }
     else{
