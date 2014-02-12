@@ -12,7 +12,7 @@
 
 + (NSString*)localizedLabelForField:(NSString*)fieldName module:(NSString*)moduleName
 {
-    NSPredicate *mp = [NSPredicate predicateWithFormat:@"service = %@ and crm_name = %@", moduleName];
+    NSPredicate *mp = [NSPredicate predicateWithFormat:@"service = %@ and crm_name = %@", [Service getActive], moduleName];
     Module *m = [Module MR_findFirstWithPredicate:mp];
     NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND module = %@", fieldName, m];
     CRMField *f = [CRMField MR_findFirstWithPredicate:p];
