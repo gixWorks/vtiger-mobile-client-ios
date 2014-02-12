@@ -134,6 +134,7 @@
 #define kLeadFieldrating  @"rating"
 #define kLeadFieldsalutationType  @"salutationtype"
 #define kLeadFieldyahooid  @"yahooid"
+#define kLeadFielddescription  @"description"
 
 //LeadAddress
 #define kLeadAddressStreet  @"lane"

@@ -152,6 +152,7 @@
         <attribute name="lead_company_industry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_company_noofemployees" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="lead_company_website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lead_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_designation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lead_fax" optional="YES" attributeType="String" syncable="YES"/>

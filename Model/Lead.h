@@ -37,6 +37,7 @@
 @property (nonatomic, retain) NSString * lead_salutationtype;
 @property (nonatomic, retain) NSString * lead_yahooid;
 @property (nonatomic, retain) NSData * my_custom_fields;
+@property (nonatomic, retain) NSString * lead_description;
 @property (nonatomic, retain) Service *service;
 @property (nonatomic, retain) LeadAddress *address;
 

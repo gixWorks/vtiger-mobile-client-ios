@@ -37,6 +37,7 @@
 @dynamic lead_salutationtype;
 @dynamic lead_yahooid;
 @dynamic my_custom_fields;
+@dynamic lead_description;
 @dynamic service;
 @dynamic address;
 

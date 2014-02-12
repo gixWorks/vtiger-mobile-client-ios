@@ -133,6 +133,7 @@
 //NSString* const kLeadFieldrating = @"rating";
 //NSString* const kLeadFieldsalutationType = @"salutationtype";
 //NSString* const kLeadFieldyahooid = @"yahooid";
+//NSString* const kLeadFielddescription = @"description";
 
 //LeadAddress
 //NSString* const kLeadAddressStreet = @"lane";

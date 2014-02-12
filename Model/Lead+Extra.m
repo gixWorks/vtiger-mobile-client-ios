@@ -80,6 +80,8 @@
         instance.lead_rating = [dict objectForKey:kLeadFieldrating];
         instance.lead_salutationtype = [dict objectForKey:kLeadFieldsalutationType];
         instance.lead_yahooid = [dict objectForKey:kLeadFieldyahooid];
+        instance.lead_description = [dict objectForKey:kLeadFielddescription];
+
         
         //Custom fields
         NSError *cfieldsError;
