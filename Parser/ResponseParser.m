@@ -444,11 +444,12 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         }
         NSDictionary *moduleDescription = [JSON valueForKeyPath:@"result.describe"];
         NSString *moduleName = [moduleDescription objectForKey:@"name"];
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND service = %@", moduleName, [Service getActive]];
         
-        Module *m = [Module MR_findFirstByAttribute:@"service" withValue:[Service getActive]];
+        Module *m = [Module MR_findFirstWithPredicate:p];
         BOOL result = [m setDescriptionWithDictionary:moduleDescription];
         if (result == NO) {
-            NSLog(@"%@ %@ failed to create fields for module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);
+            DDLogError(@"%@ %@ failed to create fields for module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);
         }
 #if DEBUG
         NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
