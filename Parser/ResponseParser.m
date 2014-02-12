@@ -11,6 +11,7 @@
 #import "NetworkOperationManager.h"
 #import "ModulesHelper.h"
 #import "GWLocalNotificationsHelper.h"
+#import "CredentialsHelper.h"
 
 //Error Key
 NSString* const kErrorKey = @"error";
@@ -78,6 +79,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             }
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
             
+            NSString* session = [JSON valueForKeyPath:@"result.session"];
+            if (session != nil && save == YES){
+                [CredentialsHelper saveSession:session];
+            }
             
             //Check if we have some modules
             //Loop through the modules in the returned JSON
