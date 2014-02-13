@@ -19,4 +19,10 @@
     return f.crm_label;
 }
 
++ (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName
+{
+    //TODO
+    return nil;
+}
+
 @end

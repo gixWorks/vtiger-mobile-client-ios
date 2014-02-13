@@ -13,16 +13,6 @@
 
 @implementation ServiceHelper
 
-/*
- Creates a new Service with the specified parameters
- 
- @param url The URL
- @param username The Username
- @param password The user Password
- @param serverTimeZone the time zone of server
- @param userTimeZone time zone specified by user
- @param onDemand indicates if it's a "Cloud installation" (if YES) or a "on premise installation" (if NO)
- */
 + (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand
 {
     //Delete all services eventually there
@@ -42,16 +32,14 @@
     [[NSManagedObjectContext MR_context] MR_saveOnlySelfWithCompletion:nil];
 }
 
-/*
- Creates a new Service with the specified parameters without saving to persistent store
- 
- @param url The URL
- @param username The Username
- @param onDemand indicates if it's a "Cloud installation" (if YES) or a "on premise installation" (if NO)
- */
 + (void)createNewServiceWithoutSavingWithServerURL:(NSURL *)url username:(NSString*)username onDemand:(BOOL)onDemand
 {
     [Service createAndSetActiveWithUsername:username userid:@"" url:[url absoluteString] crmOnDemand:onDemand];
+}
+
++ (NSTimeZone*)currentUserTimeZone
+{
+    return [NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_user];
 }
 
 @end

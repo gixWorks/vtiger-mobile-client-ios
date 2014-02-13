@@ -19,4 +19,16 @@
  *  @return the label field of the CRMField
  */
 + (NSString*)localizedLabelForField:(NSString*)fieldName module:(NSString*)moduleName;
+
+
+/**
+ *  Returns the default value for a field
+ *
+ *  @param fieldName  the field name (use constants)
+ *  @param moduleName the module name (use constants)
+ *
+ *  @return the default value
+ */
++ (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName;
+
 @end

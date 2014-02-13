@@ -59,5 +59,13 @@ extern NSString* const kVTModuleProducts;
  */
 + (NSString*)localizedLabelForModuleName:(NSString*)moduleName;
 
+/**
+ *  Returns the ID of the module given the name, as specified when syncing the modules with CRM
+ *
+ *  @param moduleName the name of the module
+ *
+ *  @return the crm_id of the module from the DB
+ */
++ (NSString*)moduleIdForModuleName:(NSString*)moduleName;
  
 @end
