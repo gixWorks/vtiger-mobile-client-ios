@@ -27,7 +27,11 @@
     instance.crm_name = [dict objectForKey:kCRMFieldName];
     instance.crm_label = [dict objectForKey:kCRMFieldlabel];
     instance.crm_mandatory = [NSNumber numberWithBool:[[dict objectForKey:kCRMFieldmandatory] boolValue]];
-    instance.crm_uitype = [dict objectForKey:kCRMFielduitype];
+//    if ([[dict objectForKey:kCRMFielduitype] isEqualToString:@"<null>"]) {
+//        instance.crm_uitype = nil;
+//    }else{
+//        instance.crm_uitype =  [dict objectForKey:kCRMFielduitype] == nil? nil : [[dict objectForKey:kCRMFielduitype] stringValue];
+//    }
     if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklistValues"]) {
         NSError *jsonError;
         instance.crm_type = @"picklistValues";
