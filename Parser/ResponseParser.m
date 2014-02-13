@@ -467,4 +467,54 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }
 }
 
++ (NSDictionary*)parseDelete:(NSDictionary*)JSON
+{
+    BOOL success = [[JSON valueForKey:@"success"] boolValue];
+    if (NO == success) {
+        return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
+    }
+    NSDictionary *deletedRecords = [JSON valueForKeyPath:@"result.deleted"];
+    NSArray *deletedIds = [deletedRecords allKeys];
+    for (NSString *i in deletedIds) {
+        BOOL suc = [[deletedRecords objectForKey:i] boolValue];
+        if (suc == YES) { //that record has been deleted
+            [[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i] MR_deleteEntity];
+        }
+    }
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    
+    return @{};
+}
+
++ (NSDictionary*)parseSaveRecord:(NSDictionary*)JSON tempRecordId:(NSString*)tempRecordId
+{
+    BOOL success = [[JSON valueForKey:@"success"] boolValue];
+    if (NO == success) {
+        return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
+    }
+    BOOL isNewRecord = NO;
+    if ([tempRecordId rangeOfString:@"-"].location != NSNotFound) {
+        //if the record id is in the structure 1x4345-5445-54554-445 it's been created with CFUUID
+        isNewRecord = YES;
+    }
+
+    NSDictionary *resultRecordParse = [self parseFetchRecordWithGrouping:JSON];
+    if ([resultRecordParse objectForKey:@"error"] != nil) {
+        //means the record was correctly parsed
+        if (isNewRecord == YES) {
+            //if it's a new record, we delete the temporary one from DB as a new one would be created by parseFetchRecordWithGrouping
+            Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
+            [a MR_deleteEntity];
+        }
+        //we now delete the record from the queue of records to be updated
+        ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
+        [mr MR_deleteEntity];
+    }
+    else{
+        
+    }
+    return  @{};
+}
+
+
 @end

@@ -66,15 +66,16 @@
         <attribute name="crm_priority" optional="YES" attributeType="String" maxValueString="200" syncable="YES"/>
         <attribute name="crm_recurringtype" optional="YES" attributeType="String" maxValueString="200" syncable="YES"/>
         <attribute name="crm_sendnotification" optional="YES" attributeType="String" maxValueString="3" defaultValueString="0" syncable="YES"/>
-        <attribute name="crm_status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_subject" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_end" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_start" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="crm_visibility" optional="YES" attributeType="String" maxValueString="50" defaultValueString="all" syncable="YES"/>
         <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="my_datetime_end" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="my_datetime_start" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="my_deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <relationship name="service" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="activities" inverseEntity="Service" syncable="YES"/>
         <fetchedProperty name="activity_relatedlead" optional="YES" syncable="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Account" predicateString="crm_id = self.activity_relatedrecordid"/>
@@ -180,7 +181,7 @@
         <attribute name="crm_street" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="lead" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lead" inverseName="address" inverseEntity="Lead" syncable="YES"/>
     </entity>
-    <entity name="ModifiedRecord" syncable="YES">
+    <entity name="ModifiedRecord" representedClassName="ModifiedRecord" syncable="YES">
         <attribute name="crm_action" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_timestamp" optional="YES" attributeType="Date" syncable="YES"/>
@@ -307,6 +308,7 @@
         <element name="CRMField" positionX="0" positionY="0" width="0" height="0"/>
         <element name="CRMFieldPicklistValue" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Lead" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="LeadAddress" positionX="0" positionY="0" width="0" height="0"/>
         <element name="ModifiedRecord" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Module" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Potential" positionX="0" positionY="0" width="0" height="0"/>
@@ -316,6 +318,5 @@
         <element name="SyncToken" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Ticket" positionX="0" positionY="0" width="0" height="0"/>
         <element name="User" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="LeadAddress" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

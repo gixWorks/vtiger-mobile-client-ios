@@ -35,4 +35,6 @@
 
 - (NSDictionary*)crmRepresentation;
 
+- (NSDictionary*)proxyForJson;
+
 @end

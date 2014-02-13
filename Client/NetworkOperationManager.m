@@ -24,6 +24,7 @@ NSString* const kManagerHasFinishedDescribe = @"kManagerHasFinishedDescribe";
 NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecord";
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
+
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
 
 NSString* const kManagerHasStartedSyncCalendar = @"kManagerHasStartedSyncCalendar";
@@ -39,12 +40,15 @@ NSString* const kOperationDescribe = @"describe";
 NSString* const kOperationFetchRecord = @"fetchRecord";
 NSString* const kOperationFetchRecordWithGrouping = @"fetchRecordWithGrouping";
 NSString* const kOperationFetchRecordsWithGrouping = @"fetchRecordsWithGrouping";
+NSString* const kOperationDeleteRecords = @"deleteRecords";
+NSString* const kOperationSaveRecord = @"saveRecord";
 
 //Parameters
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 static int kMinutesFromLastSync = 15;
+static int kMinutesToRetrySave = 15;
 
 @interface NetworkOperationManager ()
 {
@@ -370,7 +374,37 @@ static int kMinutesFromLastSync = 15;
 
 - (void)saveChangesToServer
 {
+    NSString *session = [CredentialsHelper getSession];
     //This goes through the table with records to update and delete and sends to server the requests
+    //First the deleted ones
+    NSArray *deleted = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:@"DELETE"];
+    NSMutableArray *deletedIds = [[NSMutableArray alloc] init];
+    for (ModifiedRecord *mr in deleted) {
+        [deletedIds addObject:mr.crm_id];
+    }
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
+    DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
+    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
+    
+    //Then the updated ones
+    NSArray *updated = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:@"UPDATE"];
+    NSMutableArray *updated_records = [[NSMutableArray alloc] init];
+    for (ModifiedRecord *mr in updated) {
+        //TODO: FOR NOW CAN BE ONLY ACTIVITIES
+        Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id];
+        [updated_records addObject:[a crmRepresentation]];
+    }
+    
+    for (NSDictionary *r in updated_records) {
+        NSString *recordid = [r objectForKey:kCalendarFieldid];
+        //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
+        NSString *notificationName = [NSString stringWithFormat:@"%@_%@",kClientHasFinishedSaveRecord,recordid];
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", kVTModuleCalendar, @"module", r, @"values",  nil];
+        DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
+        sleep(1);
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
+        [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+    }
 }
 
 //- (void)fetchRecord:(NSString*)record andAssociateToRecord:(id<NSObject>)associatedRecord
@@ -469,8 +503,8 @@ static int kMinutesFromLastSync = 15;
             }
         }else{
             //can be anything else
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:@"error"] );
-        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey] };
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:@"error"] );
+            NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey] };
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
         }
     }
@@ -686,16 +720,56 @@ static int kMinutesFromLastSync = 15;
 
 - (void)handleClientFinishedSaveRecord:(NSNotification*)notification
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    //check if response is positive
-    //remove record from table of records to be sent to server
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    @try {
+        if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
+            DDLogDebug(@"Delete was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            //we will retry
+            double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self saveChangesToServer];
+            });
+        }
+        else{
+            NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+            NSDictionary *parseResult = [ResponseParser parseDelete:JSON];
+            if ([parseResult objectForKey:@"error"] != nil) {
+                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:@"error"]);
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        DDLogError(@"%@ Exception: %@", NSStringFromSelector(_cmd), [exception description]);
+    }
 }
 
 - (void)handleClientFinishedDeleteRecords:(NSNotification*)notification
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    //check if response is positive
-    //remove records from table of records to be sent to server for deletion
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
+    NSString *recordid = [[notification.name componentsSeparatedByString:@"_"] lastObject];
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    @try {
+        if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
+            DDLogDebug(@"Save was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            //we will retry
+            double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self saveChangesToServer];
+            });
+        }
+        else{
+            NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+            NSDictionary *parseResult = [ResponseParser parseSaveRecord:JSON tempRecordId:recordid];
+            if ([parseResult objectForKey:@"error"] != nil) {
+                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:@"error"]);
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        DDLogError(@"%@ Exception: %@", NSStringFromSelector(_cmd), [exception description]);
+    }
 }
 
 @end

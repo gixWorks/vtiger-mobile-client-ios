@@ -1,9 +1,9 @@
 //
 //  Activity.m
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/2/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 13/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import "Activity.h"
@@ -13,6 +13,8 @@
 @implementation Activity
 
 @dynamic crm_activitytype;
+@dynamic crm_assigned_user_id;
+@dynamic crm_assigned_user_name;
 @dynamic crm_contact_id;
 @dynamic crm_contact_name;
 @dynamic crm_date_start;
@@ -30,17 +32,16 @@
 @dynamic crm_priority;
 @dynamic crm_recurringtype;
 @dynamic crm_sendnotification;
-@dynamic crm_status;
 @dynamic crm_subject;
+@dynamic crm_time_created;
+@dynamic crm_time_modified;
 @dynamic crm_time_start;
 @dynamic crm_visibility;
 @dynamic my_custom_fields;
 @dynamic my_datetime_end;
 @dynamic my_datetime_start;
-@dynamic crm_assigned_user_id;
-@dynamic crm_assigned_user_name;
-@dynamic crm_time_created;
-@dynamic crm_time_modified;
+@dynamic crm_time_end;
+@dynamic my_deleted;
 @dynamic service;
 
 @end

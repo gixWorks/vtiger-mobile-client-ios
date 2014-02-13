@@ -11,11 +11,12 @@
 
 #import <CoreData+MagicalRecord.h>
 
-//Model objects
+//Model objects without Categories
 #import "Sync.h"
 #import "SyncToken.h"
+#import "ModifiedRecord.h"
 
-//Their extra methods, which already import the base class
+//Their Extra categories, which already import the base class
 #import "Activity+Extra.h"
 #import "Module+Extra.h"
 #import "Lead+Extra.h"

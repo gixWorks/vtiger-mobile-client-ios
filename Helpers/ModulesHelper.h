@@ -58,5 +58,14 @@
  *  @return the crm_id of the module from the DB
  */
 + (NSString*)moduleIdForModuleName:(NSString*)moduleName;
+
+/**
+ *  Returns the correct module id depending on the activity record type (Call, Task, Meeting)
+ *
+ *  @param calendarRecordType the Calendar record type (Call,Task,Meeting)
+ *
+ *  @return the ID of the corresponding module
+ */
++ (NSString*)moduleIdForCalendarRecordType:(NSString*)calendarRecordType;
  
 @end

@@ -1,19 +1,21 @@
 //
 //  Activity.h
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 12/2/13.
-//  Copyright (c) 2013 gixWorks. All rights reserved.
+//  Created by Giovanni on 13/02/14.
+//  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/CoreData+MagicalRecord.h>
+#import <CoreData/CoreData.h>
 
 @class Service;
 
 @interface Activity : NSManagedObject
 
 @property (nonatomic, retain) NSString * crm_activitytype;
+@property (nonatomic, retain) NSString * crm_assigned_user_id;
+@property (nonatomic, retain) NSString * crm_assigned_user_name;
 @property (nonatomic, retain) NSString * crm_contact_id;
 @property (nonatomic, retain) NSString * crm_contact_name;
 @property (nonatomic, retain) NSDate * crm_date_start;
@@ -31,17 +33,16 @@
 @property (nonatomic, retain) NSString * crm_priority;
 @property (nonatomic, retain) NSString * crm_recurringtype;
 @property (nonatomic, retain) NSString * crm_sendnotification;
-@property (nonatomic, retain) NSString * crm_status;
 @property (nonatomic, retain) NSString * crm_subject;
+@property (nonatomic, retain) NSDate * crm_time_created;
+@property (nonatomic, retain) NSDate * crm_time_modified;
 @property (nonatomic, retain) NSDate * crm_time_start;
 @property (nonatomic, retain) NSString * crm_visibility;
 @property (nonatomic, retain) NSData * my_custom_fields;
 @property (nonatomic, retain) NSDate * my_datetime_end;
 @property (nonatomic, retain) NSDate * my_datetime_start;
-@property (nonatomic, retain) NSString * crm_assigned_user_id;
-@property (nonatomic, retain) NSString * crm_assigned_user_name;
-@property (nonatomic, retain) NSDate * crm_time_created;
-@property (nonatomic, retain) NSDate * crm_time_modified;
+@property (nonatomic, retain) NSDate * crm_time_end;
+@property (nonatomic, retain) NSNumber * my_deleted;
 @property (nonatomic, retain) Service *service;
 
 @end

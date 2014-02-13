@@ -16,5 +16,7 @@
 + (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON;
 + (NSDictionary*)parseFetchRecordsWithGrouping:(NSDictionary*)JSON forModule:(NSString*)module;
 + (NSDictionary*)parseDescribe:(NSDictionary*)JSON;
++ (NSDictionary*)parseDelete:(NSDictionary*)JSON;
++ (NSDictionary*)parseSaveRecord:(NSDictionary*)JSON tempRecordId:(NSString*)tempRecordId;
 
 @end

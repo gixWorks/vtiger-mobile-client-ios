@@ -64,4 +64,15 @@
     return module.crm_id;
 }
 
++ (NSString *)moduleIdForCalendarRecordType:(NSString *)calendarRecordType
+{
+    if ([calendarRecordType isEqualToString:@"Call"] || [calendarRecordType isEqualToString:@"Meeting"]) {
+        return @"18";
+    }
+    else if ([calendarRecordType isEqualToString:@"Task"]){
+        return @"1";
+    }
+    return nil;
+}
+
 @end
