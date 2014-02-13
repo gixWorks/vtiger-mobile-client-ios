@@ -24,6 +24,7 @@ NSString* const kManagerHasFinishedDescribe = @"kManagerHasFinishedDescribe";
 NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecord";
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
+NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
 
 NSString* const kManagerHasStartedSyncCalendar = @"kManagerHasStartedSyncCalendar";
 
@@ -453,10 +454,23 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         //        });
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
-        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+        //There was an error in the HTTPClient, first check if it's a known code
+        if([[[notification userInfo] objectForKey:@"error"] objectForKey:@"code"])
+        {
+            //if it has an Error Code, means it was an error from the CRM and not a network error
+            NSNumber *errorCode = [[[notification userInfo] objectForKey:@"error"] objectForKey:@"code"];
+            if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
+                //THIS SUCKS! The user mistook the credentials!
+                //1- cancel all the operations
+                [[[VTHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+                //2- Send the notification that the login was not valid
+            }
+        }else{
+            //can be anything else
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:@"error"] );
+        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey] };
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+        }
     }
 }
 

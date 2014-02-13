@@ -8,6 +8,7 @@
 
 #import "VTHTTPClient.h"
 #import "CredentialsHelper.h"
+#import "CRMLoginRequestOperation.h"
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
@@ -54,12 +55,14 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     return shared;
 }
 
-//- (id)initWithBaseURL:(NSURL *)url
-//{
-//    self = [super initWithBaseURL:url];
-//    self.parameterEncoding = AFFormURLParameterEncoding;
-//    return self;
-//}
+- (id) initWithBaseURL:(NSURL *)url {
+    self = [super initWithBaseURL:url];
+    if (self){
+        [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+        [self registerHTTPOperationClass:[CRMLoginRequestOperation class]];
+    }
+    return self;
+}
 
 #pragma mark - Session
 
@@ -98,9 +101,17 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     NSString *password = [CredentialsHelper getPassword];
     __block NSString *session;
     
+    //Check if a Login operation is already in the queue!
+    for (NSOperation *operation in self.operationQueue.operations) {
+        if ([operation isKindOfClass:[CRMLoginRequestOperation class]]) {
+            //there's already a login operation!
+            //TODO: we should somehow stop the queue
+        }
+    }
+    
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+    CRMLoginRequestOperation *operation = [CRMLoginRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         
         NSDictionary *loginError = [JSON objectForKey:@"error"];
@@ -108,9 +119,17 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         {
             NSLog(@"%@ %@ Login error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loginError);
             //means that there was an error
-            NSString *errorCode = [loginError objectForKey:@"code"];
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            NSNumber *errorNumber;
+            if ([[loginError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
+                errorNumber = [numberFormatter numberFromString:[loginError objectForKey:@"code"]];
+            }
+            else{
+                errorNumber = [loginError objectForKey:@"code"];
+            }
             NSString *errorMessage = [loginError objectForKey:@"message"];
-            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorCode, @"code", errorMessage, @"message", nil];
+            NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, @"error", nil]];
         }
         else{
@@ -135,7 +154,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #pragma clang diagnostic pop
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
         }
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
@@ -157,7 +176,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if DEBUG
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
-    if ([CredentialsHelper getSession] == nil) {
+    if ([parameters objectForKey:@"_session"] == nil) {
         [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
         return;
     }
@@ -204,6 +223,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
+    
+    if ([CredentialsHelper getSession] == nil) {
+
+        return;
+    }
+
     [self.operationQueue addOperation:operation];
 }
 
@@ -242,11 +267,11 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                     [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
                 }
                 else{
-                    NSString* session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
-                    if (session!=nil) { //This should fix the very first login in the system, where session is not set yet
-                        //Writes the new session
-                        [self updateSession:session];
-                    }
+//                    NSString* session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
+//                    if (session!=nil) { //This should fix the very first login in the system, where session is not set yet
+//                        //Writes the new session
+//                        [self updateSession:session];
+//                    }
 
                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
                 }

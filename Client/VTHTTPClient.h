@@ -27,6 +27,11 @@ extern NSString* const kClientNotificationResponseBodyKey;
 extern NSString* const kClientNotificationErrorKey;
 extern NSString* const kClientNotificationParametersKey;
 
+//Error codes from CRM
+extern NSInteger const kErrorCodeAuthenticationFailed;
+extern NSInteger const kErrorCodeLoginRequired;
+
+
 @interface VTHTTPClient : AFHTTPClient
 
 + (VTHTTPClient*)sharedInstance;
