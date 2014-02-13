@@ -11,6 +11,15 @@
 //NSString* const kFieldCreatedTime = @"createdtime";
 //NSString* const kFieldModifiedTime = @"modifiedtime";
 
+//Module names constants
+//NSString* const kVTModuleCalendar = @"Calendar";
+//NSString* const kVTModuleAccounts = @"Accounts";
+//NSString* const kVTModuleContacts = @"Contacts";
+//NSString* const kVTModuleLeads = @"Leads";
+//NSString* const kVTModulePotentials = @"Potentials";
+//NSString* const kVTModuleHelpDesk = @"HelpDesk";
+//NSString* const kVTModuleProducts = @"Products";
+
 //Accounts
 //NSString* const kAccountFieldaccountname = @"accountname";
 //NSString* const kAccountFieldaccount_no = @"account_no";

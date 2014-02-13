@@ -13,6 +13,7 @@
 #import "URLCheckerClient.h"
 #import "NSURL+GWAdditions.h"
 #import "ModulesHelper.h"
+#import "CRMFieldConstants.h"
 
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
@@ -89,16 +90,16 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)dealloc
 {
     
-//    [self save];
-
+    //    [self save];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedLogin object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedSyncCalendar object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedDescribe object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecord object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordWithGrouping object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedLoginAndFetchModules object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedLogin object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedSyncCalendar object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedDescribe object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecord object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordWithGrouping object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedLoginAndFetchModules object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
 }
 
 //#pragma mark - Save and restore
@@ -109,10 +110,10 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    NSString *filePath = [docsPath stringByAppendingPathComponent: @"Operations"];
 //    NSMutableData *data = [NSMutableData data];
 //    NSKeyedArchiver *encoder = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-//    
+//
 //    [encoder encodeObject:_recordsToFetch forKey:@"recordsToFetch"];
 //    [encoder finishEncoding];
-//    
+//
 //    BOOL result = [data writeToFile:filePath atomically:YES];
 //    [self addSkipBackupAttributeToItemAtURL:filePath]; //convert filePath to URL first
 //    return result;
@@ -124,7 +125,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 //    NSString *filePath = [docsPath stringByAppendingPathComponent: @"Operations"];
 //    NSMutableData *data = [[NSMutableData alloc] initWithContentsOfFile:filePath];
-//    
+//
 //    if (data){
 //        NSKeyedUnarchiver *decoder = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
 //        _recordsToFetch = [decoder decodeObjectForKey:@"recordsToFetch"];
@@ -134,7 +135,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //    {
 //        NSLog(@"Data for restoring is NULL");
 //    }
-//    
+//
 //}
 
 /** Avoid to backup to iCloud
@@ -199,7 +200,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         secureUserUrl = userUrl;
         userUrl = [userUrl GW_nonSecureURL];
     }
-
+    
     //We now send a request to URL, to check if it points to an existing resource (HTTP CODE = 200)
     URLCheckerClient *client =  [[URLCheckerClient alloc] initWithDelegate:self url:secureUserUrl];
     [client startTestingReachability];
@@ -333,7 +334,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
-
+    
 }
 
 - (void)describeModule:(NSString*)module
@@ -341,7 +342,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDescribe,@"_operation", session, @"_session", module, @"module",  nil];
-
+    
     [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
 }
 
@@ -372,7 +373,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //{
 //    NSString *notificationName = [record stringByAppendingString:@"fetch"];
 //    [[NSNotificationCenter defaultCenter] addObserverForName:notificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
-//    
+//
 //        NSDictionary *JSON = [[note userInfo] objectForKey:kClientNotificationResponseBodyKey];
 //        //parse the record and get the fetched record
 //        //associate with associatedRecord
@@ -383,16 +384,16 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 //                [((Activity*)associatedRecord) setRelatedlead:object];
 //            }
 //        }
-//        
-//        
+//
+//
 //        [[NSNotificationCenter defaultCenter] removeObserver:self name:record object:nil];
 //    }];
-//    
+//
 ////    NSString *module_id = [[record componentsSeparatedByString:@"x"] objectAtIndex:0];
 //    NSString *session = [[AppState sharedInstance] session];
 //    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
 //    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
-//    
+//
 //}
 
 #pragma mark - Mass Records fetch (no sync)
@@ -423,7 +424,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
             break;
         }
         NSString *session = [CredentialsHelper getSession];
-       
+        
         NSError *jsonError;
         NSString *queueString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:queue options:0 error:&jsonError] encoding:NSUTF8StringEncoding] ;
         //queueString should be in the form: ["18x1164", "1x1151"]
@@ -442,13 +443,13 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
-//        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.myParseQueue", 0);
-//        dispatch_async(myQueue, ^{
-            NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
-//            });
-//        });
+        //        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.myParseQueue", 0);
+        //        dispatch_async(myQueue, ^{
+        NSDictionary *parseLoginResult = [ResponseParser parseLogin:JSON saveToDB:YES];
+        //            dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
+        //            });
+        //        });
     }
     else{
         //There was an error in the HTTPClient
@@ -508,12 +509,12 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)handleClientHasFinishedLoginAndFetchModules:(NSNotification*)notification
 {
     DDLogDebug(@"%@ %@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [notification userInfo]);
-
+    
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //No error, so perform Core Data stuff here
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseLogin:JSON saveToDB:YES];
-
+        
         if ([parseResult objectForKey:@"error"] != nil){
             DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
@@ -533,19 +534,19 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //parse the results
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
-//        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.syncParseQueue", 0);
-//        dispatch_async(myQueue, ^{
-            NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
-            if ([parseResult objectForKey:@"error"] != nil)
-            {
-                DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
-            }
-//            dispatch_async(dispatch_get_main_queue(), ^{
-                //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
-                [self processFetchQueue];
-                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
-//            });
-//        });
+        //        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.syncParseQueue", 0);
+        //        dispatch_async(myQueue, ^{
+        NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
+        if ([parseResult objectForKey:@"error"] != nil)
+        {
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+        //            dispatch_async(dispatch_get_main_queue(), ^{
+        //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
+        [self processFetchQueue];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+        //            });
+        //        });
     }
     else{
         //There was an error in the HTTPClient
@@ -596,7 +597,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)handleClientFinishedFetchRecord:(NSNotification*)notification
 {
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-
+    
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseFetchRecord:JSON];
@@ -606,9 +607,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         }
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
+        }
+        @catch (NSException *exception) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:@{@"error": [exception description]}];
+        }
     }
 }
 
@@ -637,7 +643,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 - (void)handleClientFinishedFetchRecordsWithGrouping:(NSNotification*)notification
 {
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-
+    
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
@@ -650,9 +656,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:nil];
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"API  Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
+        }
+        @catch (NSException *exception) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:@{@"error": [exception description]}];
+        }
     }
 }
 

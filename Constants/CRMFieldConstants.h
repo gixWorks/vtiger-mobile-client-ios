@@ -12,6 +12,15 @@
 #define kFieldCreatedTime   @"createdtime"
 #define kFieldModifiedTime  @"modifiedtime"
 
+//Module names constants
+#define kVTModuleCalendar  @"Calendar"
+#define kVTModuleAccounts  @"Accounts"
+#define kVTModuleContacts  @"Contacts"
+#define kVTModuleLeads  @"Leads"
+#define kVTModulePotentials  @"Potentials"
+#define kVTModuleHelpDesk  @"HelpDesk"
+#define kVTModuleProducts  @"Products"
+
 //Accounts
 #define kAccountFieldaccountname    @"accountname"
 #define kAccountFieldaccount_no     @"account_no"

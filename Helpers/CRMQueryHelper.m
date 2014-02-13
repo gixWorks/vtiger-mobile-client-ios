@@ -7,6 +7,7 @@
 //
 
 #import "CRMQueryHelper.h"
+#import "CRMFieldConstants.h"
 #import "ModulesHelper.h"
 
 @implementation CRMQueryHelper

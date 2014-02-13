@@ -12,6 +12,7 @@
 #import "ModulesHelper.h"
 #import "GWLocalNotificationsHelper.h"
 #import "CredentialsHelper.h"
+#import "CRMFieldConstants.h"
 
 //Error Key
 NSString* const kErrorKey = @"error";

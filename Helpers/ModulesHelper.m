@@ -7,15 +7,7 @@
 //
 
 #import "ModulesHelper.h"
-
-//Module names constants
-NSString* const kVTModuleCalendar = @"Calendar";
-NSString* const kVTModuleAccounts = @"Accounts";
-NSString* const kVTModuleContacts = @"Contacts";
-NSString* const kVTModuleLeads = @"Leads";
-NSString* const kVTModulePotentials = @"Potentials";
-NSString* const kVTModuleHelpDesk = @"HelpDesk";
-NSString* const kVTModuleProducts = @"Products";
+#import "CRMFieldConstants.h"
 
 @implementation ModulesHelper
 
