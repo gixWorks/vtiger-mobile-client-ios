@@ -281,6 +281,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 
 - (void)loginSetup
 {
+    [[[VTHTTPClient sharedInstance] operationQueue] cancelAllOperations];
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
