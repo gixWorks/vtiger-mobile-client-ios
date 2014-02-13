@@ -44,6 +44,8 @@ NSString* const kOperationFetchRecordsWithGrouping = @"fetchRecordsWithGrouping"
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
 
+static int kMinutesFromLastSync = 15;
+
 @interface NetworkOperationManager ()
 {
     //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
@@ -307,14 +309,14 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
-    NSTimeInterval interval = 15 * 60;
-    if ([syncToken.datetime timeIntervalSinceNow] < interval) {
+    NSTimeInterval interval = kMinutesFromLastSync * 60;
+    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         DDLogDebug(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     }
     else{
-        DDLogInfo(@"%@ %@ last sync time (%@) compared to now > than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd), syncToken.datetime);
+        DDLogInfo(@"%@ %@  abs(last sync time) (%@) compared to now (%d) < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd), syncToken.datetime, abs([syncToken.datetime timeIntervalSinceNow]));
     }
 }
 
