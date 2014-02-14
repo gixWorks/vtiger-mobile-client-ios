@@ -89,7 +89,7 @@ static int kMinutesToRetrySave = 15;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:kClientHasFinishedFetchRecordWithGrouping object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientHasFinishedLoginAndFetchModules:) name:kClientHasFinishedLoginAndFetchModules object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordsWithGrouping:) name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:kClientHasFinishedSaveRecord object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:kClientHasFinishedSaveRecord object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedDeleteRecords:) name:kClientHasFinishedDeleteRecords object:nil];
     }
     return self;
@@ -323,7 +323,7 @@ static int kMinutesToRetrySave = 15;
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = kMinutesFromLastSync * 60;
     if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil) {
-        [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
+        [self syncModule:module fromPage:@0];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSync object:self];
         DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module);
     }
@@ -419,10 +419,12 @@ static int kMinutesToRetrySave = 15;
     for (ModifiedRecord *mr in deleted) {
         [deletedIds addObject:mr.crm_id];
     }
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
-    DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
-    
+    if ([deletedIds count] > 0) {
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
+        DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
+        [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
+    }
+
     //Then the updated ones
     NSArray *updated = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:@"UPDATE"];
     NSMutableArray *updated_records = [[NSMutableArray alloc] init];
