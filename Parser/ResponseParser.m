@@ -80,7 +80,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             }
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
             
-            NSString* session = [JSON valueForKeyPath:@"result.session"];
+            NSString* session = [JSON valueForKeyPath:@"result.login.session"];
             if (session != nil && save == YES){
                 [CredentialsHelper saveSession:session];
             }
@@ -92,17 +92,17 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 for (NSDictionary *module in modules) {
                     [Module modelObjectWithDictionary:module]; //it's already added to context
                 }
-//                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//                    NSDictionary *field = (NSDictionary*)obj;
-//                    [Module modelObjectWithDictionary:field]; //Should already add to Context
-//                }];                
+                //                [modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                //                    NSDictionary *field = (NSDictionary*)obj;
+                //                    [Module modelObjectWithDictionary:field]; //Should already add to Context
+                //                }];
             }
             
             if(save == YES){
                 //Finally I save
                 //Save the record in the datasource
 #if DEBUG
-            NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+                NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
 #endif
                 __block NSError *saveError;
                 [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
@@ -116,6 +116,154 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         [parseResult setObject:[exception description] forKey:kErrorKey];
     }
     return parseResult;
+}
+
++ (NSDictionary*)parseSync:(NSDictionary*)JSON moduleName:(NSString*)module
+{
+    @try {
+        BOOL success = [[JSON objectForKey:@"success"] boolValue];
+        NSDictionary *sync = [JSON valueForKeyPath:@"result.sync"];
+        NSString *nextSyncToken;
+        if ([[sync objectForKey:@"nextSyncToken"] isKindOfClass:[NSString class]]) {
+            nextSyncToken = [sync objectForKey:@"nextSyncToken"];
+        }
+        else{
+            nextSyncToken = [[sync objectForKey:@"nextSyncToken"] stringValue];
+        }
+        NSArray *deletedRecords = [sync objectForKey:@"deleted"];
+        NSArray *updatedRecords = [sync objectForKey:@"updated"];
+        NSInteger nextPage = [[sync objectForKey:@"nextPage"] integerValue];
+#if DEBUG
+        NSLog(@"%@ Deleted Records: %ld Updated Records: %ld", NSStringFromSelector(_cmd), (unsigned long)[deletedRecords count], (unsigned long)[updatedRecords count]);
+#endif
+        if (success != YES) {
+            NSDictionary *error = [JSON objectForKey:kErrorKey];
+            return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
+        }
+        
+        //1- Do something with the synctoken, save it in AppData
+        //...
+        //2- Go through the deleted records, get the IDs and remove them from database
+        //...
+        //3- Go through the updated records, create entities and save them
+        
+        for (NSDictionary* entity in updatedRecords) { //Main loop, we are going through each entitiy
+            //A- Prepare the main elements of each record: the identifier and the blocks
+            NSString *identifier = [entity objectForKey:@"id"];
+            NSArray *blocks = [entity objectForKey:@"blocks"];
+            NSMutableDictionary *entityFields = [[NSMutableDictionary alloc] init];
+            NSMutableDictionary *entityCustomFields = [[NSMutableDictionary alloc] init];
+            [entityFields setObject:identifier forKey:@"id"];
+            for (NSDictionary* block in blocks) {
+                //This is the loop for each block of fields
+                NSArray *fields = [block objectForKey:@"fields"];
+                for (NSDictionary* field in fields) {
+                    //C- Extract all the fields from the returned JSON
+                    NSString* fieldName = [field objectForKey:@"name"];
+                    [entityFields setObject:[field objectForKey:@"value"] forKey:fieldName];
+                    //C1- Parse Custom Fields
+                    if ([fieldName hasPrefix:@"cf_"]) { //means it's a custom field
+                        [entityCustomFields setObject:field forKey:fieldName];
+                    }
+                }
+            }
+            //D - create the item, using the fields from the Dictionary. The item is already added to persistent storage.
+            NSManagedObject *returnedRecord;
+            if ([module isEqualToString:kVTModuleCalendar]) {
+                returnedRecord = [Activity modelObjectWithDictionary:entityFields];
+                //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
+                [GWLocalNotificationsHelper unscheduleNotificationForRecordId:((Activity*)returnedRecord).crm_id];
+                [GWLocalNotificationsHelper scheduleNotificationWithItem:(Activity*)returnedRecord interval:15];
+            }
+            else if([module isEqualToString:kVTModuleAccounts]){
+                returnedRecord = [Account modelObjectWithDictionary:entityFields];
+            }
+            else if([module isEqualToString:kVTModuleContacts]){
+                returnedRecord = [Contact modelObjectWithDictionary:entityFields];
+            }
+            else if([module isEqualToString:kVTModuleLeads]){
+                returnedRecord = [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+            }
+            else if([module isEqualToString:kVTModulePotentials]){
+                returnedRecord = [Potential modelObjectWithDictionary:entityFields];
+            }
+            else if([module isEqualToString:kVTModuleHelpDesk]){
+                returnedRecord = [Ticket modelObjectWithDictionary:entityFields];
+            }
+            else if([module isEqualToString:kVTModuleProducts]){
+                returnedRecord = [Product modelObjectWithDictionary:entityFields];
+            }
+            else{
+                NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
+                return  userInfo;
+            }
+            
+            
+        }   //end main loop
+        
+        //E- Parse through Deleted Records, which is just an Array of record IDs
+        for (NSString* identifier in deletedRecords) {
+            if ([module isEqualToString:kVTModuleCalendar]) {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Activity MR_deleteAllMatchingPredicate:predicate];
+                [GWLocalNotificationsHelper unscheduleNotificationForRecordId:identifier];
+            }
+            else if([module isEqualToString:kVTModuleAccounts]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Account MR_deleteAllMatchingPredicate:predicate];
+            }
+            else if([module isEqualToString:kVTModuleContacts]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Account MR_deleteAllMatchingPredicate:predicate];
+            }
+            else if([module isEqualToString:kVTModuleLeads]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lead_leadid = %@",identifier];
+                [Lead MR_deleteAllMatchingPredicate:predicate];
+            }
+            else if([module isEqualToString:kVTModulePotentials]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Potential MR_deleteAllMatchingPredicate:predicate];
+            }
+            else if([module isEqualToString:kVTModuleHelpDesk]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Ticket MR_deleteAllMatchingPredicate:predicate];
+            }
+            else if([module isEqualToString:kVTModuleProducts]){
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+                [Product MR_deleteAllMatchingPredicate:predicate];
+            }
+        }
+        
+        //F- Save to Core Data (or whatever) the array of items
+#if DEBUG
+        NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
+        __block NSError *saveError;
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            saveError = error;
+        }];
+        
+        //G- if nextPage != 0 means that we have another page of records to sync
+        if (nextPage != 0) {
+            [[NetworkOperationManager sharedInstance] syncModule:module fromPage:[NSNumber numberWithInteger:nextPage]];
+        }
+        else{
+            //I save the synctoken only if we don't have the next page (it's the last page of the sync)
+            //H- If Save went OK, set the next synctoken
+            if (saveError == nil) {
+                SyncToken *token = [SyncToken MR_createEntity];
+                token.token = nextSyncToken;
+                token.module = module;
+                token.datetime = [NSDate date];
+                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+            }
+        }
+        
+        return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
+    }
+    @catch (NSException *exception) {
+        return [NSDictionary dictionaryWithObject:[exception description] forKey:kErrorKey];
+    }
 }
 
 + (NSDictionary*)parseCalendarSync:(NSDictionary *)JSON
@@ -171,8 +319,8 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             Activity *a = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             
             //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
-                [GWLocalNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
-                [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:15];
+            [GWLocalNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
+            [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:15];
             
         }   //end main loop
         
@@ -196,14 +344,15 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         if (nextPage != 0) {
             [[NetworkOperationManager sharedInstance] syncCalendarFromPage:[NSNumber numberWithInteger:nextPage]];
         }
-        
-        //H- If Save went OK, set the next synctoken
-        if (saveError == nil) {
-            SyncToken *token = [SyncToken MR_createEntity];
-            token.token = nextSyncToken;
-            token.module = kVTModuleCalendar;
-            token.datetime = [NSDate date];
-            [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+        else{
+            //H- If Save went OK, set the next synctoken
+            if (saveError == nil) {
+                SyncToken *token = [SyncToken MR_createEntity];
+                token.token = nextSyncToken;
+                token.module = kVTModuleCalendar;
+                token.datetime = [NSDate date];
+                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+            }
         }
         
         return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
@@ -469,6 +618,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
 
 + (NSDictionary*)parseDelete:(NSDictionary*)JSON
 {
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     BOOL success = [[JSON valueForKey:@"success"] boolValue];
     if (NO == success) {
         return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
@@ -497,7 +647,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         //if the record id is in the structure 1x4345-5445-54554-445 it's been created with CFUUID
         isNewRecord = YES;
     }
-
+    
     NSDictionary *resultRecordParse = [self parseFetchRecordWithGrouping:JSON];
     if ([resultRecordParse objectForKey:@"error"] != nil) {
         //means the record was correctly parsed

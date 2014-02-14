@@ -27,6 +27,7 @@ NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinis
 
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
 
+NSString* const kManagerHasStartedSync = @"kManagerHasStartedSync";
 NSString* const kManagerHasStartedSyncCalendar = @"kManagerHasStartedSyncCalendar";
 
 //Notification suffix for building notifications to the HTTP client
@@ -308,16 +309,52 @@ static int kMinutesToRetrySave = 15;
     [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
+- (void)syncModules
+{
+    [self syncModule:kVTModuleAccounts];
+    [self syncModule:kVTModuleContacts];
+    [self syncModule:kVTModuleLeads];
+}
+
+- (void)syncModule:(NSString*)module
+{
+    SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
+    DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
+    //If the date is > xx minutes since last sync
+    NSTimeInterval interval = kMinutesFromLastSync * 60;
+    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil) {
+        [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSync object:self];
+        DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module);
+    }
+    else{
+        DDLogInfo(@"%@ %@  abs(last sync time) (%@) compared to now (%d) < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd), syncToken.datetime, abs([syncToken.datetime timeIntervalSinceNow]));
+    }
+}
+
+- (void)syncModule:(NSString*)module fromPage:(NSNumber*)page
+{
+    NSString *notificationName = [NSString stringWithFormat:@"%@-%@",kClientHasFinishedSync, module];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSyncModule:) name:notificationName object:nil];
+    
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
+    NSString *token = syncToken.token;
+    NSString *session = [CredentialsHelper getSession];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
+    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+}
+
 - (void)syncCalendar
 {
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = kMinutesFromLastSync * 60;
-    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval) {
+    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
-        DDLogDebug(@"%@ %@ Starting Calendar Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar);
     }
     else{
         DDLogInfo(@"%@ %@  abs(last sync time) (%@) compared to now (%d) < than interval, no syncing", NSStringFromClass([self class]), NSStringFromSelector(_cmd), syncToken.datetime, abs([syncToken.datetime timeIntervalSinceNow]));
@@ -392,7 +429,12 @@ static int kMinutesToRetrySave = 15;
     for (ModifiedRecord *mr in updated) {
         //TODO: FOR NOW CAN BE ONLY ACTIVITIES
         Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id];
-        [updated_records addObject:[a crmRepresentation]];
+        if(a != nil){
+            [updated_records addObject:[a crmRepresentation]];
+        }
+        else{
+            DDLogWarn(@"%@ there is a record to update (%@) which is not present in the database??", NSStringFromSelector(_cmd), mr.crm_id);
+        }
     }
     
     for (NSDictionary *r in updated_records) {
@@ -595,6 +637,7 @@ static int kMinutesToRetrySave = 15;
         //            dispatch_async(dispatch_get_main_queue(), ^{
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
         [self processFetchQueue];
+        [self syncModules]; //Dangerous! How long will it take??
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
         //            });
         //        });
@@ -607,6 +650,33 @@ static int kMinutesToRetrySave = 15;
         }
         @catch (NSException *exception) {
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:@{@"error": [exception description]}];
+        }
+    }
+}
+
+- (void)handleClientFinishedSyncModule:(NSNotification*)notification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
+    NSString *moduleName = [[notification.name componentsSeparatedByString:@"-"] lastObject];
+    
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        //parse the results
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseSync:JSON moduleName:moduleName];
+        if ([parseResult objectForKey:@"error"] != nil)
+        {
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+    }
+    else{
+        //There was an error in the HTTPClient
+        @try {
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@", [exception description]);
         }
     }
 }

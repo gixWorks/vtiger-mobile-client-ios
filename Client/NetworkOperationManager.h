@@ -71,6 +71,19 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 - (void)resyncCalendar;
 
 /**
+ *  Performs sync of all modules known to CRM
+ */
+- (void)syncModules;
+
+/**
+ *  syncs the specified module from a specific page
+ *
+ *  @param module the module name
+ *  @param page   the page to start with the sync
+ */
+- (void)syncModule:(NSString*)module fromPage:(NSNumber*)page;
+
+/**
  *  Performs the syncModule operation for the Calendar module honoring the existence of sync tokens in the db
  */
 - (void)syncCalendar;

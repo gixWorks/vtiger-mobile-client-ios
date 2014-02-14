@@ -15,6 +15,7 @@ extern NSString* const kClientHasFinishedLogin;
 extern NSString* const kClientHasFinishedLoginWithoutSave;
 extern NSString* const kClientHasFinishedLoginAndFetchModules;
 extern NSString* const kClientHasFinishedSyncCalendar;
+extern NSString* const kClientHasFinishedSync;
 extern NSString* const kClientHasFinishedDescribe;
 extern NSString* const kClientHasFinishedFetchRecord;
 extern NSString* const kClientHasFinishedFetchRecordWithGrouping;

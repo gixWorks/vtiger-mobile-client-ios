@@ -15,6 +15,7 @@ NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
 NSString* const kClientHasFinishedLoginWithoutSave = @"kClientHasFinishedLoginWithoutSave";
 NSString* const kClientHasFinishedLoginAndFetchModules = @"kClientHasFinishedLoginAndFetchModules";
 NSString* const kClientHasFinishedSyncCalendar = @"kClientHasFinishedSyncCalendar";
+NSString* const kClientHasFinishedSync = @"kClientHasFinishedSync";
 NSString* const kClientHasFinishedDescribe = @"kClientHasFinishedDescribe";
 NSString* const kClientHasFinishedFetchRecord = @"kClientHasFinishedFetchRecord";
 NSString* const kClientHasFinishedFetchRecordWithGrouping = @"kClientHasFinishedFetchRecordWithGrouping";
@@ -60,6 +61,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     if (self){
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self registerHTTPOperationClass:[CRMLoginRequestOperation class]];
+        [[self operationQueue] setMaxConcurrentOperationCount:2];
     }
     return self;
 }
