@@ -173,7 +173,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 returnedRecord = [Activity modelObjectWithDictionary:entityFields];
                 //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
                 [GWLocalNotificationsHelper unscheduleNotificationForRecordId:((Activity*)returnedRecord).crm_id];
-                [GWLocalNotificationsHelper scheduleNotificationWithItem:(Activity*)returnedRecord interval:15];
+                [GWLocalNotificationsHelper scheduleNotificationWithItem:(Activity*)returnedRecord interval:30];
             }
             else if([module isEqualToString:kVTModuleAccounts]){
                 returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -320,7 +320,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             
             //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
             [GWLocalNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
-            [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:15];
+            [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:30];
             
         }   //end main loop
         
