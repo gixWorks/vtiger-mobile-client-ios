@@ -10,6 +10,6 @@
 
 @interface Account (Extra)
 
-+ (Account *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (Account *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields;
 
 @end

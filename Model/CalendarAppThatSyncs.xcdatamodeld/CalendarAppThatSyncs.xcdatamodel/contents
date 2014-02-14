@@ -27,6 +27,7 @@
         <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="AccountAddress" inverseName="account" inverseEntity="AccountAddress" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="accounts" inverseEntity="Service" syncable="YES"/>
     </entity>
@@ -110,6 +111,7 @@
         <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
         <attribute name="crm_title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_yahooid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="address" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ContactAddress" inverseName="contact" inverseEntity="ContactAddress" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="contacts" inverseEntity="Service" syncable="YES"/>
     </entity>

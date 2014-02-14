@@ -11,7 +11,7 @@
 
 @implementation Account (Extra)
 
-+ (Account *)modelObjectWithDictionary:(NSDictionary *)dict
++ (Account *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields
 {
     NSString *record_id = [dict objectForKey:kAccountFieldid];
     Account *instance;
@@ -84,6 +84,16 @@
         instance.crm_tickersymbol = [dict objectForKey:kAccountFieldticketsymbol];
         instance.crm_website = [dict objectForKey:kAccountFieldwebsite];
         
+        //Custom fields
+        NSError *cfieldsError;
+        if(cfields != nil) {
+            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            if (cfieldsError != nil) {
+                NSLog(@"Entity: %@ Error in custom fields: %@", instance.crm_id, [cfieldsError description]);
+            }
+        }
+        
+        //Address
         if (instance.address == nil) {
             instance.address = [AccountAddress MR_createEntity];
         }

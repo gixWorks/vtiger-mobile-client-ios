@@ -11,7 +11,7 @@
 
 @implementation Contact (Extra)
 
-+ (Contact *)modelObjectWithDictionary:(NSDictionary *)dict
++ (Contact *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields
 {
     NSString *record_id = [dict objectForKey:kContactFieldId];
     Contact *instance;
@@ -90,7 +90,16 @@
             instance.address = [ContactAddress MR_createEntity];
         }
         [instance.address assignFieldsFromDictionary:dict];
-
+        
+        //Custom fields
+        NSError *cfieldsError;
+        if(cfields != nil) {
+            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            if (cfieldsError != nil) {
+                NSLog(@"Entity: %@ Error in custom fields: %@", instance.crm_id, [cfieldsError description]);
+            }
+        }
+        
         //Add the relationship with the current service
         instance.service = [Service getActive];
 

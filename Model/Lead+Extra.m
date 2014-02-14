@@ -92,6 +92,7 @@
             }
         }
         
+        //Address
         if (instance.address == nil) {
             instance.address = [LeadAddress MR_createEntity];
         }

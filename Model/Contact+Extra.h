@@ -10,6 +10,6 @@
 
 @interface Contact (Extra)
 
-+ (Contact *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (Contact *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields;
 
 @end

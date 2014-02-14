@@ -176,10 +176,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 [GWLocalNotificationsHelper scheduleNotificationWithItem:(Activity*)returnedRecord interval:15];
             }
             else if([module isEqualToString:kVTModuleAccounts]){
-                returnedRecord = [Account modelObjectWithDictionary:entityFields];
+                returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if([module isEqualToString:kVTModuleContacts]){
-                returnedRecord = [Contact modelObjectWithDictionary:entityFields];
+                returnedRecord = [Contact modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if([module isEqualToString:kVTModuleLeads]){
                 returnedRecord = [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -385,10 +385,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             returnedRecord = [Activity modelObjectWithDictionary:record];
         }
         else if([module isEqualToString:kVTModuleAccounts]){
-            returnedRecord = [Account modelObjectWithDictionary:record];
+            returnedRecord = [Account modelObjectWithDictionary:record customFields:nil];
         }
         else if([module isEqualToString:kVTModuleContacts]){
-            returnedRecord = [Contact modelObjectWithDictionary:record];
+            returnedRecord = [Contact modelObjectWithDictionary:record customFields:nil];
         }
         else if([module isEqualToString:kVTModuleLeads]){
             returnedRecord = [Lead modelObjectWithDictionary:record customFields:nil];
@@ -465,10 +465,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             returnedRecord = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         else if([module isEqualToString:kVTModuleAccounts]){
-            returnedRecord = [Account modelObjectWithDictionary:entityFields];
+            returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         else if([module isEqualToString:kVTModuleContacts]){
-            returnedRecord = [Contact modelObjectWithDictionary:entityFields];
+            returnedRecord = [Contact modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         else if([module isEqualToString:kVTModuleLeads]){
             returnedRecord = [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -496,7 +496,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             saveError = error;
         }];
         
-        NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"record", saveError, kErrorKey, nil];
+        NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"record", module, @"module", saveError, kErrorKey, nil];
         return userInfo;
     }
     @catch (NSException *exception) {
@@ -548,10 +548,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
                 [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleAccounts]) {
-                [Account modelObjectWithDictionary:entityFields];
+                [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleContacts]) {
-                [Contact modelObjectWithDictionary:entityFields];
+                [Contact modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleLeads]) {
                 [Lead modelObjectWithDictionary:entityFields customFields:entityCustomFields];

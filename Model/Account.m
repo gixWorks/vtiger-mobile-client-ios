@@ -1,8 +1,8 @@
 //
 //  Account.m
-//  VTFunctionalitiesApp
+//  ContactiCalVtiger
 //
-//  Created by Giovanni on 1/10/14.
+//  Created by Giovanni on 14/02/14.
 //  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
@@ -13,7 +13,6 @@
 
 @implementation Account
 
-@dynamic crm_memberof_id;
 @dynamic crm_account_no;
 @dynamic crm_accountname;
 @dynamic crm_accounttype;
@@ -28,6 +27,8 @@
 @dynamic crm_fax;
 @dynamic crm_id;
 @dynamic crm_industry;
+@dynamic crm_memberof_id;
+@dynamic crm_memberof_name;
 @dynamic crm_notify_owner;
 @dynamic crm_otherphone;
 @dynamic crm_ownership;
@@ -35,10 +36,10 @@
 @dynamic crm_rating;
 @dynamic crm_siccode;
 @dynamic crm_tickersymbol;
-@dynamic crm_website;
-@dynamic crm_memberof_name;
 @dynamic crm_time_created;
 @dynamic crm_time_modified;
+@dynamic crm_website;
+@dynamic my_custom_fields;
 @dynamic address;
 @dynamic service;
 
