@@ -124,10 +124,9 @@
             }
             
             //Properties defined by me
-            NSCalendar *gregorian = [[NSCalendar alloc]
-                                     initWithCalendarIdentifier:NSGregorianCalendar];
+            NSCalendar *cal = [NSCalendar currentCalendar];
             NSDateComponents *comps = [[NSDateComponents alloc] init];
-            NSDateComponents *start_date_comp = [gregorian components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:instance.crm_date_start];
+            NSDateComponents *start_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:instance.crm_date_start];
             NSDateComponents *start_time_comp;
             //Xcode complains if I try to get Time Components from a nil NSDate, so I first check if it's nil
             if (instance.crm_time_start == nil) {
@@ -137,7 +136,7 @@
                 [start_time_comp setSecond:0];
             }
             else{
-                start_time_comp = [gregorian components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:instance.crm_time_start];
+                start_time_comp = [cal components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:instance.crm_time_start];
             }
             [comps setYear:[start_date_comp year]];
             [comps setMonth:[start_date_comp month]];
@@ -145,7 +144,7 @@
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
             
-            instance.my_datetime_start = [gregorian dateFromComponents:comps];
+            instance.my_datetime_start = [cal dateFromComponents:comps];
             NSTimeInterval duration = ( [instance.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [instance.crm_duration_minutes integerValue] * 60.0 );
             instance.my_datetime_end = [instance.my_datetime_start dateByAddingTimeInterval:duration];
             
