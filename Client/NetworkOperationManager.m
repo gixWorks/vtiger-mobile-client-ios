@@ -487,14 +487,16 @@ static int kMinutesToRetrySave = 15;
     if (queue == nil) {
         queue = [[NSMutableArray alloc] init];
         [queue addObject:record_id];
-        
     }
     else{
         if ([queue indexOfObject:record_id] == NSNotFound) {
             [queue addObject:record_id];
+            DDLogDebug(@"%@ %@ Added record %@ to queue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
+        }
+        else{
+            DDLogDebug(@"%@ %@ Skipped record %@ because already in fetchqueue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
         }
     }
-    DDLogDebug(@"%@ %@ Added record %@ to queue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
     [_recordsToFetch setObject:queue forKey:module];
 }
 
