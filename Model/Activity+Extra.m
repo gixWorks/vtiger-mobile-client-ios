@@ -220,27 +220,27 @@
     if ([self.crm_contact_id length] > 0) {
         [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
     }
-    [dict setObject:[dateFormat stringFromDate:self.crm_date_start] forKey:kCalendarFielddate_start];
-    [dict setObject:self.crm_description forKey:kCalendarFielddescription];
-    [dict setObject:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date]; 
-    [dict setObject:[numberFormatter stringFromNumber:self.crm_duration_hours] forKey:kCalendarFieldduration_hours];
-    [dict setObject:[numberFormatter stringFromNumber:self.crm_duration_minutes] forKey:kCalendarFieldduration_minutes];
-    [dict setObject:self.crm_eventstatus forKey:kCalendarFieldeventstatus];
-    [dict setObject:self.crm_location forKey:kCalendarFieldlocation];
+    [dict setValue:[dateFormat stringFromDate:self.crm_date_start] forKey:kCalendarFielddate_start];
+    [dict setValue:self.crm_description forKey:kCalendarFielddescription];
+    [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
+    [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_hours] forKey:kCalendarFieldduration_hours];
+    [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_minutes] forKey:kCalendarFieldduration_minutes];
+    [dict setValue:self.crm_eventstatus forKey:kCalendarFieldeventstatus];
+    [dict setValue:self.crm_location forKey:kCalendarFieldlocation];
 //    [dict setObject:self.crm_notime forKey:kCalendarFieldnotime]; //skip for the moment
     if ([self.crm_parent_id length] > 0) {
         [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
     }
-    [dict setObject:self.crm_recurringtype forKey:kCalendarFieldrecurringtype];
+    [dict setValue:self.crm_recurringtype forKey:kCalendarFieldrecurringtype];
 //    [dict setObject:self.crm_remindertime forKey:kCalendarFieldreminder_time]; //skip for the moment
 //    [dict setObject:self.crm_sendnotification forKey:kCalendarFieldsendnotification]; //skip for the moment
-    [dict setObject:self.crm_subject forKey:kCalendarFieldsubject];
+    [dict setValue:self.crm_subject forKey:kCalendarFieldsubject];
 //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
 //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
 //    [dict setObject:self.crm_priority forKey:kCalendarFieldtaskpriority];
-    [dict setObject:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
-    [dict setObject:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
-    [dict setObject:self.crm_visibility forKey:kCalendarFieldvisibility];
+    [dict setValue:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
+    [dict setValue:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
+    [dict setValue:self.crm_visibility forKey:kCalendarFieldvisibility];
     
     if (isNewRecord == NO) {
         [dict setObject:self.crm_id forKey:kCalendarFieldid];

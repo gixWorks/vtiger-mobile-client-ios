@@ -202,7 +202,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                 }
                 NSString *errorMessage = [operationError objectForKey:@"message"];
                 NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
-                if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]]) {
+                if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]] && [errorMessage isEqualToString:@"Login required"]) {
                     //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
                     [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
                 }

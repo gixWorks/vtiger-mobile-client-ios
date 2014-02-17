@@ -13,6 +13,7 @@
 #import "URLCheckerClient.h"
 #import "NSURL+GWAdditions.h"
 #import "ModulesHelper.h"
+#import "NSDictionary+GWJSONString.h"
 #import "CRMFieldConstants.h"
 
 //Notification constants
@@ -168,15 +169,14 @@ static int kMinutesToRetrySave = 15;
 - (void)checkURL:(NSString*)serverUrl
 {
     //Check if the url entered is valid
-    NSString *urlString = serverUrl;
     if (![self validateUrl:serverUrl]) {
         //the url is not a valid url!
         //maybe it just needs the resource specifier
-        if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
+        if (![serverUrl hasPrefix:@"http://"] && ![serverUrl hasPrefix:@"https://"]) {
             //We are here: means the server url does not start neither with http or https
             //I try to build a http:// URL
-            urlString = [@"http://" stringByAppendingString:urlString];
-            if (![self validateUrl:urlString]) {
+            serverUrl = [@"http://" stringByAppendingString:serverUrl];
+            if (![self validateUrl:serverUrl]) {
                 //it's not a valid url either, means the error must be somewhere else along the URL
                 NSDictionary *userInfo = @{@"error": @"The URL provided is not a valid URL"};
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL object:self userInfo:userInfo];
@@ -188,7 +188,7 @@ static int kMinutesToRetrySave = 15;
         }
     }
     //If we're here, we got a URL that is synctactically correct
-    NSURL *userUrl = [NSURL URLWithString:urlString];
+    NSURL *userUrl = [NSURL URLWithString:serverUrl];
     NSString *mobileModulePath = @"modules/Mobile/api.php";
     if ([[userUrl lastPathComponent] isEqualToString:@"api.php"]) {
         //means that the user already entered a path that ends with api.php, so we just continue
@@ -215,10 +215,13 @@ static int kMinutesToRetrySave = 15;
 }
 
 - (BOOL) validateUrl: (NSString *) candidate {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-    return [urlTest evaluateWithObject:candidate];
+    NSError *error = NULL;
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink
+                                                               error:&error];
+    NSUInteger numberOfMatches = [detector numberOfMatchesInString:candidate
+                                                           options:0
+                                                             range:NSMakeRange(0, [candidate length])];
+    return numberOfMatches > 0 ? YES : NO;
 }
 
 - (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl
@@ -433,21 +436,19 @@ static int kMinutesToRetrySave = 15;
         Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id];
         if(a != nil){
             [updated_records addObject:[a crmRepresentation]];
+            NSDictionary *r = [a crmRepresentation];
+            //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
+            NSString *notificationName = [NSString stringWithFormat:@"%@_%@",kClientHasFinishedSaveRecord,a.crm_id];
+            NSString *valuesString = [r gw_jsonStringWithPrettyPrint:NO];
+            NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSaveRecord,@"_operation", session, @"_session", kVTModuleCalendar, @"module", valuesString, @"values",  nil];
+            DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
+            sleep(1);
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
+            [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
         }
         else{
             DDLogWarn(@"%@ there is a record to update (%@) which is not present in the database??", NSStringFromSelector(_cmd), mr.crm_id);
         }
-    }
-    
-    for (NSDictionary *r in updated_records) {
-        NSString *recordid = [r objectForKey:kCalendarFieldid];
-        //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
-        NSString *notificationName = [NSString stringWithFormat:@"%@_%@",kClientHasFinishedSaveRecord,recordid];
-        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", kVTModuleCalendar, @"module", r, @"values",  nil];
-        DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
-        sleep(1);
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
-        [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
     }
 }
 
@@ -797,7 +798,7 @@ static int kMinutesToRetrySave = 15;
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     @try {
         if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
-            DDLogDebug(@"Delete was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            DDLogDebug(@"Update was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
             //we will retry
             double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
