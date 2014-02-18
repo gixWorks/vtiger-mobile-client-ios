@@ -178,7 +178,7 @@ static int kMinutesToRetrySave = 15;
             serverUrl = [@"http://" stringByAppendingString:serverUrl];
             if (![self validateUrl:serverUrl]) {
                 //it's not a valid url either, means the error must be somewhere else along the URL
-                NSDictionary *userInfo = @{@"error": @"The URL provided is not a valid URL"};
+                NSDictionary *userInfo = @{@"error": @"Please check for spelling error."};
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL object:self userInfo:userInfo];
             }
             else{
@@ -187,6 +187,8 @@ static int kMinutesToRetrySave = 15;
             }
         }
     }
+    if (![serverUrl hasPrefix:@"http://"] && ![serverUrl hasPrefix:@"https://"])
+        serverUrl = [@"http://" stringByAppendingString:serverUrl];
     //If we're here, we got a URL that is synctactically correct
     NSURL *userUrl = [NSURL URLWithString:serverUrl];
     NSString *mobileModulePath = @"modules/Mobile/api.php";
