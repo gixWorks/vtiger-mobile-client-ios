@@ -795,12 +795,12 @@ static int kMinutesToRetrySave = 15;
     }
 }
 
-- (void)handleClientFinishedSaveRecord:(NSNotification*)notification
+- (void)handleClientFinishedDeleteRecords:(NSNotification*)notification
 {
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     @try {
         if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
-            DDLogDebug(@"Update was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            DDLogDebug(@"Delete was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
             //we will retry
             double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -821,7 +821,7 @@ static int kMinutesToRetrySave = 15;
     }
 }
 
-- (void)handleClientFinishedDeleteRecords:(NSNotification*)notification
+- (void)handleClientFinishedSaveRecord:(NSNotification*)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
     NSString *recordid = [[notification.name componentsSeparatedByString:@"_"] lastObject];
