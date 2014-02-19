@@ -435,7 +435,8 @@ static int kMinutesToRetrySave = 15;
     NSMutableArray *updated_records = [[NSMutableArray alloc] init];
     for (ModifiedRecord *mr in updated) {
         //TODO: FOR NOW CAN BE ONLY ACTIVITIES
-        Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id];
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_id = %@ AND service = %@ AND my_deleted != %@", mr.crm_id, [Service getActive], @YES];
+        Activity *a = [Activity MR_findFirstWithPredicate:p];
         if(a != nil){
             [updated_records addObject:[a crmRepresentation]];
             NSDictionary *r = [a crmRepresentation];
