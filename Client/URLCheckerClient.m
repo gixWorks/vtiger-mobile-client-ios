@@ -76,7 +76,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 {
     connection = nil;
     NSLog(@"%@ %@ connection failed with error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error description] url:self.url];
+    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -85,8 +85,8 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     
     if (httpResponse.statusCode != 200) {
         //Something is wrong with the url provided by the server
-        NSLog(@"%@ %@ Bad response code: %d", NSStringFromClass([self class]), NSStringFromSelector(_cmd), httpResponse.statusCode);
-        NSString *err = [NSString stringWithFormat:@"Bad response code %d", httpResponse.statusCode];
+        NSLog(@"%@ %@ The server is not available (Response code %d)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), httpResponse.statusCode);
+        NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %d)", httpResponse.statusCode];
         [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url];
     }
     else

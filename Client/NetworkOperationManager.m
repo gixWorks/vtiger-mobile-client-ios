@@ -217,13 +217,24 @@ static int kMinutesToRetrySave = 15;
 }
 
 - (BOOL) validateUrl: (NSString *) candidate {
-    NSError *error = NULL;
-    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink
-                                                               error:&error];
-    NSUInteger numberOfMatches = [detector numberOfMatchesInString:candidate
-                                                           options:0
-                                                             range:NSMakeRange(0, [candidate length])];
-    return numberOfMatches > 0 ? YES : NO;
+        NSUInteger length = [candidate length];
+        // Empty strings should return NO
+        if (length > 0) {
+            NSError *error = nil;
+            NSDataDetector *dataDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
+            if (dataDetector && !error) {
+                NSRange range = NSMakeRange(0, length);
+                NSRange notFoundRange = (NSRange){NSNotFound, 0};
+                NSRange linkRange = [dataDetector rangeOfFirstMatchInString:candidate options:0 range:range];
+                if (!NSEqualRanges(notFoundRange, linkRange) && NSEqualRanges(range, linkRange)) {
+                    return YES;
+                }
+            }
+            else {
+                NSLog(@"Could not create link data detector: %@ %@", [error localizedDescription], [error userInfo]);
+            }
+        }
+        return NO;
 }
 
 - (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl
@@ -232,7 +243,7 @@ static int kMinutesToRetrySave = 15;
         //There was an error when trying to reach the URL
         if ([[testedUrl scheme] isEqualToString:@"http"]) {
             //if we were in http:// scheme, means that we totally failed the check
-            NSDictionary *userInfo = @{@"url": testedUrl, @"error": error};
+            NSDictionary *userInfo = @{@"url": testedUrl, @"error": [error description]};
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                                 object:self
                                                               userInfo:userInfo
