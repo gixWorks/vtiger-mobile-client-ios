@@ -302,23 +302,23 @@
     </entity>
     <entity name="User" syncable="YES"/>
     <elements>
-        <element name="Account" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="AccountAddress" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Activity" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Contact" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ContactAddress" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="CRMField" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="CRMFieldPicklistValue" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Lead" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="LeadAddress" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ModifiedRecord" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Module" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Potential" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Product" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Service" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Sync" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="SyncToken" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Ticket" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Account" positionX="-128" positionY="27" width="128" height="480"/>
+        <element name="AccountAddress" positionX="43" positionY="243" width="128" height="240"/>
+        <element name="Activity" positionX="288" positionY="820" width="128" height="539"/>
+        <element name="Contact" positionX="583" positionY="756" width="128" height="510"/>
+        <element name="ContactAddress" positionX="754" positionY="768" width="128" height="240"/>
+        <element name="CRMField" positionX="-324" positionY="630" width="128" height="165"/>
+        <element name="CRMFieldPicklistValue" positionX="-272" positionY="855" width="128" height="90"/>
+        <element name="Lead" positionX="-299" positionY="144" width="128" height="450"/>
+        <element name="LeadAddress" positionX="-486" positionY="432" width="128" height="150"/>
+        <element name="ModifiedRecord" positionX="574" positionY="477" width="128" height="90"/>
+        <element name="Module" positionX="-155" positionY="624" width="128" height="150"/>
+        <element name="Potential" positionX="628" positionY="105" width="128" height="345"/>
+        <element name="Product" positionX="403" positionY="27" width="128" height="390"/>
+        <element name="Service" positionX="261" positionY="441" width="128" height="315"/>
+        <element name="Sync" positionX="43" positionY="54" width="128" height="150"/>
+        <element name="SyncToken" positionX="216" positionY="54" width="128" height="105"/>
+        <element name="Ticket" positionX="90" positionY="855" width="128" height="330"/>
+        <element name="User" positionX="-342" positionY="72" width="128" height="45"/>
     </elements>
 </model>
