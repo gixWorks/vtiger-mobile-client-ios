@@ -1,5 +1,5 @@
 //
-//  NetworkOperationManager.h
+//  CRMClient.h
 //  FunctionalitiesApp
 //
 //  Created by Giovanni on 11/23/13.
@@ -10,7 +10,6 @@
 #import "URLCheckerClientDelegate.h"
 
 @class URLCheckerClient;
-@class NetworkOperationManager;
 
 extern NSString* const kManagerHasFinishedCheckURL;
 extern NSString* const kManagerHasFinishedLogin;
@@ -24,9 +23,9 @@ extern NSString* const kManagerErrorUserHasUnvalidCredentials;
 
 extern NSString* const kManagerHasStartedSyncCalendar;
 
-@interface NetworkOperationManager : NSObject <URLCheckerClientDelegate>
+@interface CRMClient : NSObject <URLCheckerClientDelegate>
 
-+ (NetworkOperationManager*)sharedInstance;
++ (CRMClient*)sharedInstance;
 
 /**
  *  Checks for exisiting server for the specified URL, first trying https then https

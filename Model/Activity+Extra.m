@@ -7,7 +7,7 @@
 //
 
 #import "Activity+Extra.h"
-#import "NetworkOperationManager.h"
+#import "CRMClient.h"
 #import "ModulesHelper.h"
 #import "GWPreferencesHelper.h"
 #import "CRMFieldConstants.h"
@@ -164,13 +164,13 @@
                 instance.crm_parent_id = [parent_record objectForKey:@"value"];
                 instance.crm_parent_name = [parent_record objectForKey:@"label"];
                 instance.crm_parent_type = [ModulesHelper decodeModuleForRecordId:instance.crm_parent_id];
-                [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
+                [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
             }
             NSDictionary *contact_id = [dict objectForKey:kCalendarFieldcontact_id];
             if ([[contact_id objectForKey:@"value"] length] > 0) {
                 instance.crm_contact_id = [contact_id objectForKey:@"value"];
                 instance.crm_contact_name = [contact_id objectForKey:@"label"];
-                [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_contact_id];
+                [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_contact_id];
             }
             
             //Custom fields

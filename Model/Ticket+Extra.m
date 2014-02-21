@@ -7,7 +7,7 @@
 //
 
 #import "Ticket+Extra.h"
-#import "NetworkOperationManager.h"
+#import "CRMClient.h"
 #import "ModulesHelper.h"
 #import "CRMFieldConstants.h"
 
@@ -70,14 +70,14 @@
             instance.crm_parent_id = [parent_record objectForKey:@"value"];
             instance.crm_parent_name = [parent_record objectForKey:@"label"];
             instance.crm_parent_type = [ModulesHelper decodeModuleForRecordId:instance.crm_parent_id];
-            [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
+            [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
         }
         
         NSDictionary *product = [dict objectForKey:kTicketFieldProductId];
         if ([[product objectForKey:@"value"] length] > 0) {
             instance.crm_product_id = [product objectForKey:@"value"];
             instance.crm_product_name = [product objectForKey:@"label"];
-            [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_product_id];
+            [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_product_id];
             //            [[NetworkOperationManager sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
         }
 

@@ -1,5 +1,5 @@
 //
-//  VTHTTPClient.h
+//  CRMHTTPClient.h
 //  FunctionalitiesApp
 //
 //  Created by Giovanni on 11/18/13.
@@ -33,9 +33,9 @@ extern NSInteger const kErrorCodeAuthenticationFailed;
 extern NSInteger const kErrorCodeLoginRequired;
 
 
-@interface VTHTTPClient : AFHTTPClient
+@interface CRMHTTPClient : AFHTTPClient
 
-+ (VTHTTPClient*)sharedInstance;
++ (CRMHTTPClient*)sharedInstance;
 
 - (void)executeOperationWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;
 - (void)executeOperationWithoutLoginWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;

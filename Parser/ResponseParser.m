@@ -8,7 +8,7 @@
 
 #import "ResponseParser.h"
 #import "Model.h"
-#import "NetworkOperationManager.h"
+#import "CRMClient.h"
 #import "ModulesHelper.h"
 #import "GWLocalNotificationsHelper.h"
 #import "CredentialsHelper.h"
@@ -245,7 +245,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         
         //G- if nextPage != 0 means that we have another page of records to sync
         if (nextPage != 0) {
-            [[NetworkOperationManager sharedInstance] syncModule:module fromPage:[NSNumber numberWithInteger:nextPage]];
+            [[CRMClient sharedInstance] syncModule:module fromPage:[NSNumber numberWithInteger:nextPage]];
         }
         else{
             //I save the synctoken only if we don't have the next page (it's the last page of the sync)
@@ -342,7 +342,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         
         //G- if nextPage != 0 means that we have another page of records to sync
         if (nextPage != 0) {
-            [[NetworkOperationManager sharedInstance] syncCalendarFromPage:[NSNumber numberWithInteger:nextPage]];
+            [[CRMClient sharedInstance] syncCalendarFromPage:[NSNumber numberWithInteger:nextPage]];
         }
         else{
             //H- If Save went OK, set the next synctoken

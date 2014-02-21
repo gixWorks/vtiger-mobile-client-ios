@@ -1,13 +1,13 @@
 //
-//  NetworkOperationManager.m
+//  CRMClient.m
 //  FunctionalitiesApp
 //
 //  Created by Giovanni on 11/23/13.
 //  Copyright (c) 2013 gixWorks. All rights reserved.
 //
 
-#import "NetworkOperationManager.h"
-#import "VTHTTPClient.h"
+#import "CRMClient.h"
+#import "CRMHTTPClient.h"
 #import "CredentialsHelper.h"
 #import "ResponseParser.h"
 #import "URLCheckerClient.h"
@@ -52,7 +52,7 @@ NSString* const kSyncModePUBLIC = @"PUBLIC";
 static int kMinutesFromLastSync = 15;
 static int kMinutesToRetrySave = 15;
 
-@interface NetworkOperationManager ()
+@interface CRMClient ()
 {
     //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
     NSInteger countOfDescribes;
@@ -64,13 +64,13 @@ static int kMinutesToRetrySave = 15;
 
 @end
 
-@implementation NetworkOperationManager
+@implementation CRMClient
 
-+(NetworkOperationManager *)sharedInstance {
++(CRMClient *)sharedInstance {
     static dispatch_once_t pred;
-    static NetworkOperationManager *shared = nil;
+    static CRMClient *shared = nil;
     dispatch_once(&pred, ^{
-        shared = [[NetworkOperationManager alloc] init];
+        shared = [[CRMClient alloc] init];
     });
     return shared;
 }
@@ -275,7 +275,7 @@ static int kMinutesToRetrySave = 15;
 
 - (BOOL)checkReachability
 {
-    VTHTTPClient *c = [VTHTTPClient sharedInstance];
+    CRMHTTPClient *c = [CRMHTTPClient sharedInstance];
     NSInteger reachable = [c networkReachabilityStatus];
     if (reachable == AFNetworkReachabilityStatusReachableViaWiFi || reachable == AFNetworkReachabilityStatusReachableViaWWAN)   {
         return YES;
@@ -291,7 +291,7 @@ static int kMinutesToRetrySave = 15;
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
+    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
 }
 
 - (void)loginAndSyncModules
@@ -300,18 +300,18 @@ static int kMinutesToRetrySave = 15;
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
+    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
 
 - (void)loginSetup
 {
-    [[[VTHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting %@ operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kOperationLoginAndFetchModules   );
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSetupLogin:) name:@"finishedLoginSetup" object:nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
+    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
 }
 
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password
@@ -322,7 +322,7 @@ static int kMinutesToRetrySave = 15;
                                 username, @"username",
                                 password, @"password",
                                 nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
+    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
 - (void)syncModules
@@ -358,7 +358,7 @@ static int kMinutesToRetrySave = 15;
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
 }
 
 - (void)syncCalendar
@@ -384,7 +384,7 @@ static int kMinutesToRetrySave = 15;
     //Build parameters ignoring the synctoken
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
 }
 
 - (void)syncCalendarFromPage:(NSNumber*)page
@@ -394,7 +394,7 @@ static int kMinutesToRetrySave = 15;
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
     
 }
 
@@ -404,7 +404,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDescribe,@"_operation", session, @"_session", module, @"module",  nil];
     
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
 }
 
 - (void)fetchRecord:(NSString*)record
@@ -412,7 +412,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecord,@"_operation", session, @"_session", record, @"record",  nil];
     DDLogDebug(@"%@ %@ Starting FetchRecord: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
 }
 
 - (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName
@@ -422,7 +422,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
     DDLogDebug(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
 - (void)saveChangesToServer
@@ -438,7 +438,7 @@ static int kMinutesToRetrySave = 15;
     if ([deletedIds count] > 0) {
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
         DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
-        [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
+        [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
     }
 
     //Then the updated ones
@@ -458,7 +458,7 @@ static int kMinutesToRetrySave = 15;
             DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
             sleep(1);
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
-            [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+            [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
         }
         else{
             DDLogWarn(@"%@ there is a record to update (%@) which is not present in the database??", NSStringFromSelector(_cmd), mr.crm_id);
@@ -489,7 +489,7 @@ static int kMinutesToRetrySave = 15;
 ////    NSString *module_id = [[record componentsSeparatedByString:@"x"] objectAtIndex:0];
 //    NSString *session = [[AppState sharedInstance] session];
 //    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
-//    [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+//    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
 //
 //}
 
@@ -530,7 +530,7 @@ static int kMinutesToRetrySave = 15;
         
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordsWithGrouping,@"_operation", module, @"module", queueString, @"ids", session, @"_session", @"", @"alertid", nil];
         DDLogDebug(@"%@ %@ Processing fetch queue for module :%@ IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, queueString);
-        [[VTHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
+        [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
     }
 }
 
@@ -559,7 +559,7 @@ static int kMinutesToRetrySave = 15;
             if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
                 //THIS SUCKS! The user mistook the credentials!
                 //1- cancel all the operations
-                [[[VTHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+                [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
                 //2- Send the notification that the login was not valid
             }
         }else{

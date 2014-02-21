@@ -1,12 +1,12 @@
 //
-//  VTHTTPClient.m
+//  CRMHTTPClient.m
 //  FunctionalitiesApp
 //
 //  Created by Giovanni on 11/18/13.
 //  Copyright (c) 2013 gixWorks. All rights reserved.
 //
 
-#import "VTHTTPClient.h"
+#import "CRMHTTPClient.h"
 #import "CredentialsHelper.h"
 #import "CRMLoginRequestOperation.h"
 
@@ -38,20 +38,20 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     static NSInteger kRefreshIntervalMinutes = 30;
 #endif
 
-@interface VTHTTPClient ()
+@interface CRMHTTPClient ()
 
 @property (nonatomic, strong) NSTimer *sessionTimer;
 
 @end
 
-@implementation VTHTTPClient
+@implementation CRMHTTPClient
 
-+(VTHTTPClient *)sharedInstance {
++(CRMHTTPClient *)sharedInstance {
     static dispatch_once_t pred;
-    static VTHTTPClient *shared = nil;
+    static CRMHTTPClient *shared = nil;
     dispatch_once(&pred, ^{
         NSString *u = [Service getActiveServiceUrl];
-        shared = [[VTHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:u]];
+        shared = [[CRMHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:u]];
     });
     return shared;
 }

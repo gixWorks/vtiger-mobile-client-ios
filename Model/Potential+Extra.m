@@ -8,7 +8,7 @@
 
 #import "Potential+Extra.h"
 #import "ResponseParser.h"
-#import "NetworkOperationManager.h"
+#import "CRMClient.h"
 #import "ModulesHelper.h"
 #import "CRMFieldConstants.h"
 
@@ -70,7 +70,7 @@
             instance.crm_related_to_id = [related_record objectForKey:@"value"];
             instance.crm_related_to_name = [related_record objectForKey:@"label"];
             instance.crm_related_to_type = [ModulesHelper decodeModuleForRecordId:instance.crm_related_to_id];
-            [[NetworkOperationManager sharedInstance] addRecordToFetchQueue:instance.crm_related_to_id];
+            [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_related_to_id];
         }
         instance.crm_sales_stage = [dict objectForKey:kPotentialsFieldSalesStage];
         
