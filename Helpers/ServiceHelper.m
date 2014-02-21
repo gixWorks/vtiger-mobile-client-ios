@@ -29,7 +29,7 @@
     //Initialize the preferences for the newly created service
     [GWPreferencesHelper initializePreferencesForService:[url absoluteString]];
 
-    [[NSManagedObjectContext MR_context] MR_saveOnlySelfWithCompletion:nil];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfWithCompletion:nil];
 }
 
 + (void)createNewServiceWithoutSavingWithServerURL:(NSURL *)url username:(NSString*)username onDemand:(BOOL)onDemand
