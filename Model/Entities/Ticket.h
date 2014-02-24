@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MagicalRecord/CoreData+MagicalRecord.h>
 
 @class Service;
 

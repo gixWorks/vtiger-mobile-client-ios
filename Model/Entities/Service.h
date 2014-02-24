@@ -1,15 +1,15 @@
 //
 //  Service.h
-//  ContactiCalVtiger
+//  TapkuLibrary
 //
-//  Created by Giovanni on 09/02/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
+//  Created by Giovanni on 24/02/14.
+//
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Account, Activity, Contact, Lead, Module, Potential, Product, Sync, SyncToken, Ticket;
+@class Account, Activity, Contact, Group, Lead, Module, Potential, Product, Sync, SyncToken, Ticket, User;
 
 @interface Service : NSManagedObject
 
@@ -31,6 +31,9 @@
 @property (nonatomic, retain) NSSet *syncs;
 @property (nonatomic, retain) SyncToken *synctokens;
 @property (nonatomic, retain) Ticket *tickets;
+@property (nonatomic, retain) NSSet *users;
+@property (nonatomic, retain) NSSet *groups;
+@property (nonatomic, retain) NSSet *documents;
 @end
 
 @interface Service (CoreDataGeneratedAccessors)
@@ -59,5 +62,20 @@
 - (void)removeSyncsObject:(Sync *)value;
 - (void)addSyncs:(NSSet *)values;
 - (void)removeSyncs:(NSSet *)values;
+
+- (void)addUsersObject:(User *)value;
+- (void)removeUsersObject:(User *)value;
+- (void)addUsers:(NSSet *)values;
+- (void)removeUsers:(NSSet *)values;
+
+- (void)addGroupsObject:(Group *)value;
+- (void)removeGroupsObject:(Group *)value;
+- (void)addGroups:(NSSet *)values;
+- (void)removeGroups:(NSSet *)values;
+
+- (void)addDocumentsObject:(NSManagedObject *)value;
+- (void)removeDocumentsObject:(NSManagedObject *)value;
+- (void)addDocuments:(NSSet *)values;
+- (void)removeDocuments:(NSSet *)values;
 
 @end

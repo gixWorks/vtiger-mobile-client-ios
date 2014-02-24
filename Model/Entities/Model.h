@@ -9,12 +9,15 @@
 #ifndef CalendarAppThatSyncs_AllEntities_h
 #define CalendarAppThatSyncs_AllEntities_h
 
-#import <CoreData+MagicalRecord.h>
+#import <MagicalRecord/CoreData+MagicalRecord.h>
 
 //Model objects without Categories
 #import "Sync.h"
 #import "SyncToken.h"
 #import "ModifiedRecord.h"
+#import "User.h"
+#import "Group.h"
+#import "Document.h"
 
 //Their Extra categories, which already import the base class
 #import "Activity+Extra.h"

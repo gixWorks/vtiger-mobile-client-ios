@@ -1,15 +1,16 @@
 //
 //  Service.m
-//  ContactiCalVtiger
+//  TapkuLibrary
 //
-//  Created by Giovanni on 09/02/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
+//  Created by Giovanni on 24/02/14.
+//
 //
 
 #import "Service.h"
 #import "Account.h"
 #import "Activity.h"
 #import "Contact.h"
+#import "Group.h"
 #import "Lead.h"
 #import "Module.h"
 #import "Potential.h"
@@ -17,6 +18,7 @@
 #import "Sync.h"
 #import "SyncToken.h"
 #import "Ticket.h"
+#import "User.h"
 
 
 @implementation Service
@@ -39,5 +41,8 @@
 @dynamic syncs;
 @dynamic synctokens;
 @dynamic tickets;
+@dynamic users;
+@dynamic groups;
+@dynamic documents;
 
 @end
