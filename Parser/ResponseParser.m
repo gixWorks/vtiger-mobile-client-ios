@@ -10,7 +10,7 @@
 #import "Model.h"
 #import "CRMClient.h"
 #import "ModulesHelper.h"
-#import "GWLocalNotificationsHelper.h"
+#import "GWNotificationNames.h"
 #import "CredentialsHelper.h"
 #import "CRMFieldConstants.h"
 
@@ -172,8 +172,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             if ([module isEqualToString:kVTModuleCalendar]) {
                 returnedRecord = [Activity modelObjectWithDictionary:entityFields];
                 //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
-                [GWLocalNotificationsHelper unscheduleNotificationForRecordId:((Activity*)returnedRecord).crm_id];
-                [GWLocalNotificationsHelper scheduleNotificationWithItem:(Activity*)returnedRecord interval:30];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: (Activity*)returnedRecord, kNotificationUserInfoInterval: @30}];
             }
             else if([module isEqualToString:kVTModuleAccounts]){
                 returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -206,7 +205,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             if ([module isEqualToString:kVTModuleCalendar]) {
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
                 [Activity MR_deleteAllMatchingPredicate:predicate];
-                [GWLocalNotificationsHelper unscheduleNotificationForRecordId:identifier];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUnscheduleNotificationForRecord object:self userInfo:@{kNotificationUserInfoRecordId: identifier}];
             }
             else if([module isEqualToString:kVTModuleAccounts]){
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
@@ -319,16 +318,15 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             Activity *a = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             
             //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
-            [GWLocalNotificationsHelper unscheduleNotificationForRecordId:a.crm_id];
-            [GWLocalNotificationsHelper scheduleNotificationWithItem:a interval:30];
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: a, kNotificationUserInfoInterval: @30}];
+
         }   //end main loop
         
         //E- Parse through Deleted Records, which is just an Array of record IDs
         for (NSString* identifier in deletedRecords) {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
             [Activity MR_deleteAllMatchingPredicate:predicate];
-            [GWLocalNotificationsHelper unscheduleNotificationForRecordId:identifier];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUnscheduleNotificationForRecord object:self userInfo:@{kNotificationUserInfoRecordId: identifier}];
         }
         
         //F- Save to Core Data (or whatever) the array of items
