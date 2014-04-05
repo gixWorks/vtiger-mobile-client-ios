@@ -41,6 +41,12 @@
     if (module != nil) {
         return module.crm_singular;
     }
+    else{
+        if ([m isEqualToString:@"18"]) {  //Ugly because ID of some modules are not synced through vTiger
+            Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:record];
+            return NSLocalizedString(a.crm_activitytype, @"This contains the crm_activitytype field");
+        }
+    }
     return nil;
 }
 
