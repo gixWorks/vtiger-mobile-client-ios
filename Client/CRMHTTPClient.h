@@ -22,6 +22,7 @@ extern NSString* const kClientHasFinishedFetchRecordWithGrouping;
 extern NSString* const kClientHasFinishedFetchRecordsWithGrouping;
 extern NSString* const kClientHasFinishedSaveRecord;
 extern NSString* const kClientHasFinishedDeleteRecords;
+extern NSString* const kClientHasFinishedListRecords;
 
 //The notifications keys
 extern NSString* const kClientNotificationResponseBodyKey;

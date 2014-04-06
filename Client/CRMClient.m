@@ -44,10 +44,15 @@ NSString* const kOperationFetchRecordWithGrouping = @"fetchRecordWithGrouping";
 NSString* const kOperationFetchRecordsWithGrouping = @"fetchRecordsWithGrouping";
 NSString* const kOperationDeleteRecords = @"deleteRecords";
 NSString* const kOperationSaveRecord = @"saveRecord";
+NSString* const kOperationListModuleRecords = @"listModuleRecords";
+NSString* const kOperationQuery = @"query";
 
 //Parameters
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
+
+//Separator
+NSString* const kNotificationSeparator = @"@@@@@@@";
 
 static int kMinutesFromLastSync = 15;
 static int kMinutesToRetrySave = 15;
@@ -325,6 +330,33 @@ static int kMinutesToRetrySave = 15;
     [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
+- (void)listModuleRecords:(NSString*)module
+{
+    NSString *notificationName = [NSString stringWithFormat:@"%@%@%@",kClientHasFinishedListRecords, kNotificationSeparator, module];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedListRecords:) name:notificationName object:nil];
+    
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    NSString *session = [CredentialsHelper getSession];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationListModuleRecords,@"_operation", module, @"module", session, @"_session", nil];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+}
+
+- (void)executeQuery:(NSString*)query module:(NSString*)module
+{
+    [self executeQuery:query module:module page:@0];
+}
+
+- (void)executeQuery:(NSString*)query module:(NSString*)module page:(NSNumber*)page
+{
+    NSString *notificationName = [NSString stringWithFormat:@"%@%@%@%@%@",kClientHasFinishedQuery, kNotificationSeparator, module, kNotificationSeparator, query];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedQuery:) name:notificationName object:nil];
+    
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    NSString *session = [CredentialsHelper getSession];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationQuery,@"_operation", query, @"query", session, @"_session", page, @"page", nil];
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+}
+
 - (void)syncModules
 {
     [self syncModule:kVTModuleAccounts];
@@ -350,7 +382,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncModule:(NSString*)module fromPage:(NSNumber*)page
 {
-    NSString *notificationName = [NSString stringWithFormat:@"%@-%@",kClientHasFinishedSync, module];
+    NSString *notificationName = [NSString stringWithFormat:@"%@%@%@",kClientHasFinishedSync, kNotificationSeparator ,module];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSyncModule:) name:notificationName object:nil];
     
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
@@ -417,7 +449,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName
 {
-    NSString *httpNotificationName = [NSString stringWithFormat:@"%@-%@", notificationName, kNotificationSuffixHTTP];
+    NSString *httpNotificationName = [NSString stringWithFormat:@"%@%@%@", notificationName, kNotificationSeparator, kNotificationSuffixHTTP];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedFetchRecordWithGrouping:) name:httpNotificationName object:nil];
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
@@ -492,6 +524,11 @@ static int kMinutesToRetrySave = 15;
 //    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
 //
 //}
+
+- (void)fetchUsersAndGroups
+{
+    [self listModuleRecords:kVTModuleUsers];
+}
 
 #pragma mark - Mass Records fetch (no sync)
 
@@ -676,7 +713,7 @@ static int kMinutesToRetrySave = 15;
 - (void)handleClientFinishedSyncModule:(NSNotification*)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
-    NSString *moduleName = [[notification.name componentsSeparatedByString:@"-"] lastObject];
+    NSString *moduleName = [[notification.name componentsSeparatedByString:kNotificationSeparator] lastObject];
     
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     
@@ -762,7 +799,7 @@ static int kMinutesToRetrySave = 15;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
     //Notification name should be in the form fetchRecordWithGrouping1x123-http , so we discard the "http" part and we take the first part, which is the notification name that the ViewController is watching
-    NSString *notificationName = [[notification.name componentsSeparatedByString:@"-"] objectAtIndex:0];
+    NSString *notificationName = [[notification.name componentsSeparatedByString:kNotificationSeparator] objectAtIndex:0];
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         //Everything ok, process
@@ -858,6 +895,49 @@ static int kMinutesToRetrySave = 15;
     }
     @catch (NSException *exception) {
         DDLogError(@"%@ Exception: %@", NSStringFromSelector(_cmd), [exception description]);
+    }
+}
+
+- (void)handleClientFinishedListRecords:(NSNotification*)notification
+{
+    NSString *module = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:1];
+    NSString *notificationName = [[notification.name componentsSeparatedByString:kNotificationSeparator] objectAtIndex:0];
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        //Everything ok, process
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseListRecords:JSON module:module];
+        if ([parseResult objectForKey:@"error"] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
+    }
+    else{
+        //There was an error in the HTTPClient
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
+    }
+}
+
+- (void)handleClientFinishedQuery:(NSNotification*)notification
+{
+    NSString *query = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:2];
+    NSString *module = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:1];
+    NSString *notificationName = [[notification.name componentsSeparatedByString:kNotificationSeparator] objectAtIndex:0];
+    DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
+        //Everything ok, process
+        NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
+        NSDictionary *parseResult = [ResponseParser parseQuery:JSON module:module];
+        if ([parseResult objectForKey:@"error"] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
+    }
+    else{
+        //There was an error in the HTTPClient
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
     }
 }
 

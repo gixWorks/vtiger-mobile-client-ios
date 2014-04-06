@@ -664,5 +664,73 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     return  @{};
 }
 
++ (NSDictionary*)parseListRecords:(NSDictionary*)JSON module:(NSString*)module
+{
+    BOOL success = [[JSON valueForKey:@"success"] boolValue];
+    if (NO == success) {
+        return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
+    }
+    NSArray *records = [JSON valueForKeyPath:@"result.records"];
+    NSMutableArray *identifiers = [[NSMutableArray alloc] init];
+    
+    if ([module isEqualToString:kVTModuleUsers]) {
+        //delete all users because we dont' want old users around
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
+        [User MR_deleteAllMatchingPredicate:p];
+        for (NSDictionary* record in records) {
+            [User modelObjectWithDictionary:record];
+            [identifiers addObject:[record objectForKey:@"id"]];
+        }
+    }
+    @try{
+    //Save to Core Data (or whatever) the array of items
+#if DEBUG
+    NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
+    __block NSError *saveError;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+        saveError = error;
+    }];
+    return [NSDictionary dictionaryWithObjectsAndKeys:identifiers,@"record",saveError,kErrorKey, nil];
+    }
+    @catch (NSException *exception) {
+        return [NSDictionary dictionaryWithObject:[exception description] forKey:kErrorKey];
+    }
+}
+
++ (NSDictionary*)parseQuery:(NSDictionary*)JSON module:(NSString*)module
+{
+    BOOL success = [[JSON valueForKey:@"success"] boolValue];
+    if (NO == success) {
+        return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
+    }
+    NSArray *records = [JSON valueForKeyPath:@"result.records"];
+    NSMutableArray *identifiers = [[NSMutableArray alloc] init];
+    
+    if ([module isEqualToString:kVTModuleGroups]) {
+        //delete all users because we dont' want old users around
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
+        [Group MR_deleteAllMatchingPredicate:p];
+        for (NSDictionary* record in records) {
+            [Group modelObjectWithDictionary:record];
+            [identifiers addObject:[record objectForKey:@"id"]];
+        }
+    }
+    @try{
+        //Save to Core Data (or whatever) the array of items
+#if DEBUG
+        NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
+#endif
+        __block NSError *saveError;
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            saveError = error;
+        }];
+        return [NSDictionary dictionaryWithObjectsAndKeys:identifiers,@"record",saveError,kErrorKey, nil];
+    }
+    @catch (NSException *exception) {
+        return [NSDictionary dictionaryWithObject:[exception description] forKey:kErrorKey];
+    }
+}
+
 
 @end

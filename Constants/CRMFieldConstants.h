@@ -11,6 +11,8 @@
 //Shared
 #define kFieldCreatedTime   @"createdtime"
 #define kFieldModifiedTime  @"modifiedtime"
+#define kFieldId            @"id"
+#define kFieldLabel         @"label"
 
 //Module names constants
 #define kVTModuleCalendar  @"Calendar"
@@ -20,6 +22,8 @@
 #define kVTModulePotentials  @"Potentials"
 #define kVTModuleHelpDesk  @"HelpDesk"
 #define kVTModuleProducts  @"Products"
+#define kVTModuleUsers  @"Users"
+#define kVTModuleGroups  @"Groups"
 
 //Accounts
 #define kAccountFieldaccountname    @"accountname"
@@ -223,6 +227,11 @@
 #define kCRMFielduitype @"uitype"
 #define kCRMFieldlen @"len"
 #define kCRMFieldoptions @"options"
+
+//Groups
+#define kGroupFieldId @"id"
+#define kGroupFieldGroupName @"groupname"
+#define kGroupFieldDescription @"description"
 
 @interface CRMFieldConstants : NSObject
 

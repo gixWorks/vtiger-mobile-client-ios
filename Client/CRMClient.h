@@ -128,4 +128,9 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  */
 - (void)saveChangesToServer;
 
+/**
+ * Fetches users and groups
+ */
+- (void)fetchUsersAndGroups;
+
 @end

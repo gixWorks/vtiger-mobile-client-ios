@@ -36,7 +36,7 @@
         }
     }
     else{
-        instance = [Lead MR_createEntity];
+        instance = [Ticket MR_createEntity];
     }
     
     // This check serves to make sure that a non-NSDictionary object

@@ -22,6 +22,8 @@ NSString* const kClientHasFinishedFetchRecordWithGrouping = @"kClientHasFinished
 NSString* const kClientHasFinishedFetchRecordsWithGrouping =  @"kClientHasFinishedFetchRecordsWithGrouping";
 NSString* const kClientHasFinishedSaveRecord = @"kClientHasFinishedSaveRecord";
 NSString* const kClientHasFinishedDeleteRecords = @"kClientHasFinishedDeleteRecords";
+NSString* const kClientHasFinishedListRecords = @"kClientHasFinishedListRecords";
+NSString* const kClientHasFinishedQuery = @"kClientHasFinishedQuery";
 
 
 //Notification keys constants
