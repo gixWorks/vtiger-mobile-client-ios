@@ -1,32 +1,17 @@
-//
-//  Module.h
-//  ContactiCalVtiger
-//
-//  Created by Giovanni on 09/02/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
-//
+#import "_Module.h"
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@interface Module : _Module {}
 
-@class CRMField, Service;
+/*** Init methods ***/
 
-@interface Module : NSManagedObject
++ (Module *)modelObjectWithDictionary:(NSDictionary *)dict;
+//+ (Module *)modelObjectWithFieldsWithDictionary:(NSDictionary *)dict;
 
-@property (nonatomic, retain) NSString * crm_id;
-@property (nonatomic, retain) NSNumber * crm_isEntity;
-@property (nonatomic, retain) NSString * crm_label;
-@property (nonatomic, retain) NSString * crm_name;
-@property (nonatomic, retain) NSString * crm_singular;
-@property (nonatomic, retain) NSSet *fields;
-@property (nonatomic, retain) Service *service;
-@end
+/*** Related properties methods ***/
 
-@interface Module (CoreDataGeneratedAccessors)
+- (BOOL)setDescriptionWithDictionary:(NSDictionary*)dict;
 
-- (void)addFieldsObject:(CRMField *)value;
-- (void)removeFieldsObject:(CRMField *)value;
-- (void)addFields:(NSSet *)values;
-- (void)removeFields:(NSSet *)values;
+/*** Representation methods ***/
+- (NSDictionary*)dictionaryRepresentation;
 
 @end

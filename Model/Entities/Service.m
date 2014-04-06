@@ -1,48 +1,48 @@
-//
-//  Service.m
-//  TapkuLibrary
-//
-//  Created by Giovanni on 24/02/14.
-//
-//
-
 #import "Service.h"
-#import "Account.h"
-#import "Activity.h"
-#import "Contact.h"
-#import "Group.h"
-#import "Lead.h"
-#import "Module.h"
-#import "Potential.h"
-#import "Product.h"
-#import "Sync.h"
-#import "SyncToken.h"
-#import "Ticket.h"
-#import "User.h"
+
+
+@interface Service ()
+
+// Private interface goes here.
+
+@end
 
 
 @implementation Service
 
-@dynamic crm_active;
-@dynamic crm_crmondemand;
-@dynamic crm_servicename;
-@dynamic crm_timezone_server;
-@dynamic crm_timezone_user;
-@dynamic crm_url;
-@dynamic crm_userid;
-@dynamic crm_username;
-@dynamic accounts;
-@dynamic activities;
-@dynamic contacts;
-@dynamic leads;
-@dynamic modules;
-@dynamic potentials;
-@dynamic products;
-@dynamic syncs;
-@dynamic synctokens;
-@dynamic tickets;
-@dynamic users;
-@dynamic groups;
-@dynamic documents;
+- (void)setActive
+{
+    for (Service* service in [Service MR_findAll]) {
+        service.crm_active = [NSNumber numberWithBool:NO];
+    }
+    self.crm_active = [NSNumber numberWithBool:YES];
+}
+
++ (Service*)getActive
+{
+    return [Service MR_findFirstByAttribute:@"crm_active" withValue:[NSNumber numberWithBool:YES]];
+}
+
++ (NSString*)getActiveServiceUsername
+{
+    return [[Service getActive] crm_username];
+}
+
++ (NSString*)getActiveServiceUrl
+{
+    return [[Service getActive] crm_url];
+}
+
++ (Service*)createAndSetActiveWithUsername:(NSString*)username userid:(NSString*)userid url:(NSString*)url crmOnDemand:(BOOL)onDemand
+{
+    Service *service = [Service MR_createEntity];
+    service.crm_url = url;
+    service.crm_userid = userid;
+    service.crm_username = username;
+    service.crm_crmondemand = [NSNumber numberWithBool:onDemand];
+    [service setActive];
+    return service;
+    
+}
 
 @end

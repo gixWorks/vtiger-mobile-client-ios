@@ -1,32 +1,8 @@
-//
-//  ContactAddress.h
-//  VTFunctionalitiesApp
-//
-//  Created by Giovanni on 1/9/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
-//
+#import "_ContactAddress.h"
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@interface ContactAddress : _ContactAddress {}
 
-@class Contact;
-
-@interface ContactAddress : NSManagedObject
-
-@property (nonatomic, retain) NSString * crm_mailingstreet;
-@property (nonatomic, retain) NSString * crm_mailingcity;
-@property (nonatomic, retain) NSString * crm_mailingpobox;
-@property (nonatomic, retain) NSString * crm_mailingzip;
-@property (nonatomic, retain) NSString * crm_mailingstate;
-@property (nonatomic, retain) NSString * crm_othercity;
-@property (nonatomic, retain) NSString * crm_otherpobox;
-@property (nonatomic, retain) NSString * crm_otherstate;
-@property (nonatomic, retain) NSString * crm_otherstreet;
-@property (nonatomic, retain) NSString * crm_otherzip;
-@property (nonatomic, retain) NSString * crm_mailingcountry;
-@property (nonatomic, retain) NSString * crm_othercountry;
-@property (nonatomic, retain) NSDate * crm_time_created;
-@property (nonatomic, retain) NSDate * crm_time_modified;
-@property (nonatomic, retain) Contact *contact;
++ (ContactAddress *)modelObjectWithDictionary:(NSDictionary *)dict;
+- (void)assignFieldsFromDictionary:(NSDictionary *)dict;
 
 @end

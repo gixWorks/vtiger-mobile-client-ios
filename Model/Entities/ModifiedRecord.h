@@ -1,19 +1,5 @@
-//
-//  ModifiedRecord.h
-//  ContactiCalVtiger
-//
-//  Created by Giovanni on 13/02/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
-//
+#import "_ModifiedRecord.h"
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
-
-@interface ModifiedRecord : NSManagedObject
-
-@property (nonatomic, retain) NSString * crm_action;
-@property (nonatomic, retain) NSString * crm_id;
-@property (nonatomic, retain) NSDate * crm_timestamp;
-
+@interface ModifiedRecord : _ModifiedRecord {}
+// Custom logic goes here.
 @end

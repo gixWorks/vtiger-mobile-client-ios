@@ -1,19 +1,15 @@
-//
-//  Group.m
-//  ContactiCalVtiger
-//
-//  Created by Giovanni on 24/02/14.
-//  Copyright (c) 2014 gixWorks. All rights reserved.
-//
-
 #import "Group.h"
-#import "Service.h"
+
+
+@interface Group ()
+
+// Private interface goes here.
+
+@end
 
 
 @implementation Group
 
-@dynamic crm_id;
-@dynamic crm_label;
-@dynamic service;
+// Custom logic goes here.
 
 @end
