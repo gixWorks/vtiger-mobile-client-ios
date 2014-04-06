@@ -20,5 +20,6 @@
 + (NSDictionary*)parseDelete:(NSDictionary*)JSON;
 + (NSDictionary*)parseSaveRecord:(NSDictionary*)JSON tempRecordId:(NSString*)tempRecordId;
 + (NSDictionary*)parseListRecords:(NSDictionary*)JSON module:(NSString*)module;
++ (NSDictionary*)parseQuery:(NSDictionary*)JSON module:(NSString*)module;
 
 @end
