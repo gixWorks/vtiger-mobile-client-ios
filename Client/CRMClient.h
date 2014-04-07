@@ -133,4 +133,12 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  */
 - (void)fetchUsersAndGroups;
 
+
+/**
+ *  Fetches the documents related to a record
+ *
+ *  @param recordId The ID of the record whose Documents are to be fetched
+ */
+- (void)fetchDocumentsForRecord:(NSString*)recordId;
+
 @end

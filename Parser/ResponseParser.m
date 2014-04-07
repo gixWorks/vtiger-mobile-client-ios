@@ -563,6 +563,10 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
             else if ([module isEqualToString:kVTModuleProducts]) {
                 [Product modelObjectWithDictionary:entityFields];
             }
+            else if ([module isEqualToString:kVTModuleDocuments]) {
+                //TODO: DOCUMENT MODEL!!!!
+//                [Document modelObjectWithDictionary:entityFields];
+            }
             else{
                 NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
                 return  userInfo;

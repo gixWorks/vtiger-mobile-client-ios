@@ -24,6 +24,7 @@
 #define kVTModuleProducts  @"Products"
 #define kVTModuleUsers  @"Users"
 #define kVTModuleGroups  @"Groups"
+#define kVTModuleDocuments @"Documents"
 
 //Accounts
 #define kAccountFieldaccountname    @"accountname"

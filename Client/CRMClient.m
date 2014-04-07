@@ -15,6 +15,7 @@
 #import "ModulesHelper.h"
 #import "NSDictionary+GWJSONString.h"
 #import "CRMFieldConstants.h"
+#import "NotificationsHandler.h"
 
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
@@ -25,6 +26,7 @@ NSString* const kManagerHasFinishedDescribe = @"kManagerHasFinishedDescribe";
 NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecord";
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
+NSString* const kManagerHasFinishedRelatedRecordsWithGrouping = @"kManagerHasFinishedRelatedRecordsWithGrouping";
 
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
 
@@ -46,6 +48,7 @@ NSString* const kOperationDeleteRecords = @"deleteRecords";
 NSString* const kOperationSaveRecord = @"saveRecord";
 NSString* const kOperationListModuleRecords = @"listModuleRecords";
 NSString* const kOperationQuery = @"query";
+NSString* const kOperationRelatedRecordsWithGrouping = @"relatedRecordsWithGrouping";
 
 //Parameters
 NSString* const kSyncModePRIVATE = @"PRIVATE";
@@ -59,13 +62,16 @@ static int kMinutesToRetrySave = 15;
 
 @interface CRMClient ()
 {
-    //TODO: This is quite ugly for managing multiple Describe operations. Find a qay to manage the queue of operations
+    //TODO: This is quite ugly for managing multiple Describe operations. Find a way to manage the queue of operations
     NSInteger countOfDescribes;
     NSInteger receivedDescribes;
 }
 
 @property (nonatomic, strong) NSMutableDictionary* recordsToFetch;
 @property (nonatomic, strong) NSMutableArray* describeErrors; //TODO: also this is quite ugly. Find a qay to manage the queue of operations
+
+//Private Interface
+- (void)relatedRecordsWithGrouping:(NSString*)record relatedModule:(NSString*)module;
 
 @end
 
@@ -447,6 +453,17 @@ static int kMinutesToRetrySave = 15;
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
 }
 
+- (void)relatedRecordsWithGrouping:(NSString*)record relatedModule:(NSString*)module
+{
+    NSString *httpNotificationName = [NSString stringWithFormat:@"%@%@%@%@%@", kManagerHasFinishedRelatedRecordsWithGrouping, kNotificationSeparator, record, kNotificationSeparator, module];
+    NotificationsHandler *n = [[NotificationsHandler alloc] init];
+    [[NSNotificationCenter defaultCenter] addObserver:n selector:@selector(handleClientHasFinishedRelatedRecords:) name:httpNotificationName object:nil];
+    NSString *session = [CredentialsHelper getSession];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationRelatedRecordsWithGrouping,@"_operation", session, @"_session", record, @"record", module, @"relatedmodule",  nil];
+    DDLogDebug(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
+    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
+}
+
 - (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName
 {
     NSString *httpNotificationName = [NSString stringWithFormat:@"%@%@%@", notificationName, kNotificationSeparator, kNotificationSuffixHTTP];
@@ -528,6 +545,12 @@ static int kMinutesToRetrySave = 15;
 - (void)fetchUsersAndGroups
 {
     [self listModuleRecords:kVTModuleUsers];
+    [self executeQuery:@"SELECT * from Groups" module:kVTModuleGroups];
+}
+
+- (void)fetchDocumentsForRecord:(NSString*)recordId
+{
+    
 }
 
 #pragma mark - Mass Records fetch (no sync)
