@@ -19,6 +19,8 @@ NSString* const kNotificationUserInfoInterval = @"interval";
 NSString* const kNotificationUserInfoService = @"service";
 NSString* const kNotificationUserInfoRecordId = @"recordId";
 
+//Separator
+NSString* const kNotificationSeparator = @"@@@@@@@";
 
 @implementation GWNotificationNames
 

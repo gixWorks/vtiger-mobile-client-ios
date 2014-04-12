@@ -16,6 +16,8 @@
 #import "NSDictionary+GWJSONString.h"
 #import "CRMFieldConstants.h"
 #import "NotificationsHandler.h"
+#import "CRMConstants.h"
+#import "GWNotificationNames.h"
 
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
@@ -53,9 +55,6 @@ NSString* const kOperationRelatedRecordsWithGrouping = @"relatedRecordsWithGroup
 //Parameters
 NSString* const kSyncModePRIVATE = @"PRIVATE";
 NSString* const kSyncModePUBLIC = @"PUBLIC";
-
-//Separator
-NSString* const kNotificationSeparator = @"@@@@@@@";
 
 static int kMinutesFromLastSync = 15;
 static int kMinutesToRetrySave = 15;
@@ -189,7 +188,7 @@ static int kMinutesToRetrySave = 15;
             serverUrl = [@"http://" stringByAppendingString:serverUrl];
             if (![self validateUrl:serverUrl]) {
                 //it's not a valid url either, means the error must be somewhere else along the URL
-                NSDictionary *userInfo = @{@"error": @"Please check for spelling error."};
+                NSDictionary *userInfo = @{kErrorKey: @"Please check for spelling error."};
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL object:self userInfo:userInfo];
             }
             else{
@@ -254,7 +253,7 @@ static int kMinutesToRetrySave = 15;
         //There was an error when trying to reach the URL
         if ([[testedUrl scheme] isEqualToString:@"http"]) {
             //if we were in http:// scheme, means that we totally failed the check
-            NSDictionary *userInfo = @{@"url": testedUrl, @"error": [error description]};
+            NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description]};
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                                 object:self
                                                               userInfo:userInfo
@@ -399,6 +398,12 @@ static int kMinutesToRetrySave = 15;
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
 }
 
+- (void)syncCalendarAndUsers
+{
+    [self resyncCalendar];
+    [self fetchUsersAndGroups];
+}
+
 - (void)syncCalendar
 {
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
@@ -501,16 +506,22 @@ static int kMinutesToRetrySave = 15;
             [updated_records addObject:[a crmRepresentation]];
             NSDictionary *r = [a crmRepresentation];
             //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
-            NSString *notificationName = [NSString stringWithFormat:@"%@_%@",kClientHasFinishedSaveRecord,a.crm_id];
+            NSString *notificationName = [NSString stringWithFormat:@"%@%@%@",kClientHasFinishedSaveRecord, kNotificationSeparator, a.crm_id];
             NSString *valuesString = [r gw_jsonStringWithPrettyPrint:NO];
             NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSaveRecord,@"_operation", session, @"_session", kVTModuleCalendar, @"module", valuesString, @"values",  nil];
             DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
-            sleep(1);
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
-            [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+            //Dispatch this operation after some delay to not overload server (?)
+            NSInteger delayInSeconds = 0.5;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
+                [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+            });
         }
         else{
             DDLogWarn(@"%@ there is a record to update (%@) which is not present in the database??", NSStringFromSelector(_cmd), mr.crm_id);
+            //Delete this "orphan" reference 
+            [[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id] MR_deleteEntity];
         }
     }
 }
@@ -612,10 +623,10 @@ static int kMinutesToRetrySave = 15;
     }
     else{
         //There was an error in the HTTPClient, first check if it's a known code
-        if([[[notification userInfo] objectForKey:@"error"] objectForKey:@"code"])
+        if([[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"])
         {
             //if it has an Error Code, means it was an error from the CRM and not a network error
-            NSNumber *errorCode = [[[notification userInfo] objectForKey:@"error"] objectForKey:@"code"];
+            NSNumber *errorCode = [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"];
             if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
                 //THIS SUCKS! The user mistook the credentials!
                 //1- cancel all the operations
@@ -624,8 +635,8 @@ static int kMinutesToRetrySave = 15;
             }
         }else{
             //can be anything else
-            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:@"error"] );
-            NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey] };
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kErrorKey] );
+            NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey] };
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
         }
     }
@@ -642,8 +653,8 @@ static int kMinutesToRetrySave = 15;
     }
     else{
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
-        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"message"]);
+        NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
     }
 }
@@ -654,7 +665,7 @@ static int kMinutesToRetrySave = 15;
     
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *parseLoginResult = [ResponseParser parseLogin:[[notification userInfo] objectForKey:kClientNotificationResponseBodyKey] saveToDB:YES];
-        if ([parseLoginResult objectForKey:@"error"] == nil) {
+        if ([parseLoginResult objectForKey:kErrorKey] == nil) {
             //login result was parsed, which means that modules have been created
             NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
             NSInteger count = [Module MR_countOfEntitiesWithPredicate:p];
@@ -672,8 +683,8 @@ static int kMinutesToRetrySave = 15;
     }
     else{
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:@"error"] objectForKey:@"message"]);
-        NSDictionary *userInfo = @{@"error" : [notification userInfo][kClientNotificationErrorKey][@"message"] };
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"message"]);
+        NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
 }
@@ -687,8 +698,8 @@ static int kMinutesToRetrySave = 15;
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseLogin:JSON saveToDB:YES];
         
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseResult];
     }
@@ -709,9 +720,9 @@ static int kMinutesToRetrySave = 15;
         //        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.syncParseQueue", 0);
         //        dispatch_async(myQueue, ^{
         NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
-        if ([parseResult objectForKey:@"error"] != nil)
+        if ([parseResult objectForKey:kErrorKey] != nil)
         {
-            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         //            dispatch_async(dispatch_get_main_queue(), ^{
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
@@ -728,7 +739,7 @@ static int kMinutesToRetrySave = 15;
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
         }
         @catch (NSException *exception) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:@{@"error": [exception description]}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:@{kErrorKey: [exception description]}];
         }
     }
 }
@@ -744,9 +755,9 @@ static int kMinutesToRetrySave = 15;
         //parse the results
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseSync:JSON moduleName:moduleName];
-        if ([parseResult objectForKey:@"error"] != nil)
+        if ([parseResult objectForKey:kErrorKey] != nil)
         {
-            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
     }
     else{
@@ -767,9 +778,9 @@ static int kMinutesToRetrySave = 15;
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseDescribe:JSON];
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
-            [_describeErrors addObject:[parseResult objectForKey:@"error"]];
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
+            [_describeErrors addObject:[parseResult objectForKey:kErrorKey]];
         }
     }
     else{
@@ -780,14 +791,14 @@ static int kMinutesToRetrySave = 15;
         }
         @catch (NSException *exception) {
             //There was an error in the HTTPClient
-            [_describeErrors addObject:@{@"error" : [exception description]}];
+            [_describeErrors addObject:@{kErrorKey : [exception description]}];
         }
     }
     receivedDescribes += 1;
     if (receivedDescribes == countOfDescribes) {
         NSMutableDictionary *userInfo  = [[NSMutableDictionary alloc] init];
         if ([_describeErrors count] > 0) {
-            [userInfo setObject:_describeErrors forKey:@"error"];
+            [userInfo setObject:_describeErrors forKey:kErrorKey];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
     }
@@ -801,8 +812,8 @@ static int kMinutesToRetrySave = 15;
     if (![[notification userInfo] objectForKey:kClientNotificationErrorKey]) {
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseFetchRecord:JSON];
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:parseResult];
         }
     }
@@ -813,7 +824,7 @@ static int kMinutesToRetrySave = 15;
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:[notification userInfo]];
         }
         @catch (NSException *exception) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:@{@"error": [exception description]}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecord object:self userInfo:@{kErrorKey: [exception description]}];
         }
     }
 }
@@ -828,8 +839,8 @@ static int kMinutesToRetrySave = 15;
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseFetchRecordWithGrouping:JSON];
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
@@ -850,8 +861,8 @@ static int kMinutesToRetrySave = 15;
         NSString *module = [[[notification userInfo] objectForKey:@"parameters"] objectForKey:@"module"];
         NSDictionary *parseResult = [ResponseParser parseFetchRecordsWithGrouping:JSON forModule:module];
         
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:nil];
     }
@@ -862,7 +873,7 @@ static int kMinutesToRetrySave = 15;
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:[notification userInfo]];
         }
         @catch (NSException *exception) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:@{@"error": [exception description]}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedFetchRecordsWithGrouping object:self userInfo:@{kErrorKey: [exception description]}];
         }
     }
 }
@@ -883,8 +894,8 @@ static int kMinutesToRetrySave = 15;
         else{
             NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
             NSDictionary *parseResult = [ResponseParser parseDelete:JSON];
-            if ([parseResult objectForKey:@"error"] != nil) {
-                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:@"error"]);
+            if ([parseResult objectForKey:kErrorKey] != nil) {
+                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:kErrorKey]);
             }
         }
     }
@@ -896,7 +907,7 @@ static int kMinutesToRetrySave = 15;
 - (void)handleClientFinishedSaveRecord:(NSNotification*)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:notification.name object:nil];
-    NSString *recordid = [[notification.name componentsSeparatedByString:@"_"] lastObject];
+    NSString *recordid = [[notification.name componentsSeparatedByString:kNotificationSeparator] lastObject];
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     @try {
         if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
@@ -911,8 +922,8 @@ static int kMinutesToRetrySave = 15;
         else{
             NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
             NSDictionary *parseResult = [ResponseParser parseSaveRecord:JSON tempRecordId:recordid];
-            if ([parseResult objectForKey:@"error"] != nil) {
-                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:@"error"]);
+            if ([parseResult objectForKey:kErrorKey] != nil) {
+                DDLogError(@"%@ %@", NSStringFromSelector(_cmd), [parseResult objectForKey:kErrorKey]);
             }
         }
     }
@@ -930,8 +941,8 @@ static int kMinutesToRetrySave = 15;
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseListRecords:JSON module:module];
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
@@ -944,7 +955,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)handleClientFinishedQuery:(NSNotification*)notification
 {
-    NSString *query = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:2];
+//    NSString *query = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:2];
     NSString *module = [[[notification name] componentsSeparatedByString:kNotificationSeparator] objectAtIndex:1];
     NSString *notificationName = [[notification.name componentsSeparatedByString:kNotificationSeparator] objectAtIndex:0];
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
@@ -952,8 +963,8 @@ static int kMinutesToRetrySave = 15;
         //Everything ok, process
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         NSDictionary *parseResult = [ResponseParser parseQuery:JSON module:module];
-        if ([parseResult objectForKey:@"error"] != nil){
-            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
+        if ([parseResult objectForKey:kErrorKey] != nil){
+            DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }

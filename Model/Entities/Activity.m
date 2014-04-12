@@ -218,7 +218,9 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.crm_activitytype forKey:kCalendarFieldactivitytype];
     if ([self.crm_contact_id length] > 0) {
-        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
+        //There's a related Contact
+        [dict setObject:self.crm_contact_id forKey:kCalendarFieldcontact_id];
+//        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
     }
     [dict setValue:[dateFormat stringFromDate:self.crm_date_start] forKey:kCalendarFielddate_start];
     [dict setValue:self.crm_description forKey:kCalendarFielddescription];
@@ -229,7 +231,9 @@
     [dict setValue:self.crm_location forKey:kCalendarFieldlocation];
     //    [dict setObject:self.crm_notime forKey:kCalendarFieldnotime]; //skip for the moment
     if ([self.crm_parent_id length] > 0) {
-        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
+        //There is a related record (not a Contact, for Contacts there is "contact_id")
+        [dict setObject:self.crm_parent_id forKey:kCalendarFieldparent_id];
+//        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
     }
     [dict setValue:self.crm_recurringtype forKey:kCalendarFieldrecurringtype];
     //    [dict setObject:self.crm_remindertime forKey:kCalendarFieldreminder_time]; //skip for the moment
@@ -244,10 +248,12 @@
     
     if (isNewRecord == NO) {
         [dict setObject:self.crm_id forKey:kCalendarFieldid];
-        if ([self.crm_assigned_user_id length] > 0) {
-            [dict setObject:@{ @"value" : self.crm_assigned_user_id, @"label" : self.crm_assigned_user_name } forKey:kCalendarFieldassigned_user_id];
-        }
     }
+    if ([self.crm_assigned_user_id length] > 0) {
+        [dict setObject:self.crm_assigned_user_id forKey:kCalendarFieldassigned_user_id];
+//        [dict setObject:@{ @"value" : self.crm_assigned_user_id, @"label" : self.crm_assigned_user_name } forKey:kCalendarFieldassigned_user_id];
+    }
+
     
     return [dict copy];
 }

@@ -13,12 +13,7 @@
 #import "GWNotificationNames.h"
 #import "CredentialsHelper.h"
 #import "CRMFieldConstants.h"
-
-//Error Key
-NSString* const kErrorKey = @"error";
-
-//Other
-NSString* const kMinimumRequiredVersion = @"5.2.0";
+#import "CRMConstants.h"
 
 @implementation ResponseParser
 
@@ -646,12 +641,12 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
     }
     BOOL isNewRecord = NO;
     if ([tempRecordId rangeOfString:@"-"].location != NSNotFound) {
-        //if the record id is in the structure 1x4345-5445-54554-445 it's been created with CFUUID
+        //if the record id is in the structure 1x4345-5445-54554-445 it's been created with CFUUID which means it's a new record
         isNewRecord = YES;
     }
     
     NSDictionary *resultRecordParse = [self parseFetchRecordWithGrouping:JSON];
-    if ([resultRecordParse objectForKey:@"error"] != nil) {
+    if ([resultRecordParse objectForKey:kErrorKey] == nil) {
         //means the record was correctly parsed
         if (isNewRecord == YES) {
             //if it's a new record, we delete the temporary one from DB as a new one would be created by parseFetchRecordWithGrouping
@@ -661,6 +656,7 @@ NSString* const kMinimumRequiredVersion = @"5.2.0";
         //we now delete the record from the queue of records to be updated
         ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
         [mr MR_deleteEntity];
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
     }
     else{
         

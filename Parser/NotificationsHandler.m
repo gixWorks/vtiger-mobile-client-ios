@@ -8,12 +8,11 @@
 
 #import "NotificationsHandler.h"
 #import "ResponseParser.h"
+#import "CRMConstants.h"
+#import "GWNotificationNames.h"
 
-//Separator
-NSString* kNotificationSep = @"@@@@@@@";
 
 //
-NSString* kNotifErrorKey = @"error";
 NSString* kNotificationResponseBodyKey = @"responseBody";
 
 @implementation NotificationsHandler
@@ -21,17 +20,15 @@ NSString* kNotificationResponseBodyKey = @"responseBody";
 - (void)handleClientHasFinishedRelatedRecords:(NSNotification *)notification
 {
     //Check this is not deallocated
-    NSArray *params = [[notification name] componentsSeparatedByString:kNotificationSep];
+    NSArray *params = [[notification name] componentsSeparatedByString:kNotificationSeparator];
     NSString *module = [params objectAtIndex:2];
     NSString *recordId = [params objectAtIndex:1];
     NSString *notificationName = [params objectAtIndex:0];
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    if ([[notification userInfo] objectForKey:kNotifErrorKey]) {
+    if ([[notification userInfo] objectForKey:kErrorKey]) {
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kNotifErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"message"]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
-        
-
     }
     else{
         
@@ -42,7 +39,6 @@ NSString* kNotificationResponseBodyKey = @"responseBody";
             DDLogWarn(@"%@ %@ Parser returned error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:@"error"] description]);
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
-        
     }
 }
 

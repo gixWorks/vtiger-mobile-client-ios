@@ -65,9 +65,19 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;
 
 /**
+ *  Syncs the Calendar and Users
+ */
+- (void)syncCalendarAndUsers;
+
+/**
+ *  Performs the syncModule operation for the Calendar module honoring the existence of sync tokens in the db
+ */
+- (void)syncCalendar;
+
+/**
  *  Performs the syncModule operation for the Calendar module ignoring the existence of sync tokens, thus syncinc from beginning of records
  */
-- (void)resyncCalendar;
+//- (void)resyncCalendar;
 
 /**
  *  Performs sync of all modules known to CRM
@@ -82,10 +92,7 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  */
 - (void)syncModule:(NSString*)module fromPage:(NSNumber*)page;
 
-/**
- *  Performs the syncModule operation for the Calendar module honoring the existence of sync tokens in the db
- */
-- (void)syncCalendar;
+
 
 /**
  *  Performs the syncModule operation for the Calendar starting from a specific page in the paginated records list

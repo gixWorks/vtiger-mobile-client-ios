@@ -19,6 +19,8 @@ extern NSString* const kNotificationUserInfoInterval;
 extern NSString* const kNotificationUserInfoService;
 extern NSString* const kNotificationUserInfoRecordId;
 
+extern NSString* const kNotificationSeparator;
+
 @interface GWNotificationNames : NSObject
 
 @end
