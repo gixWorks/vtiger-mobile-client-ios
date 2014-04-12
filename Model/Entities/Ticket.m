@@ -77,7 +77,7 @@
             instance.crm_product_id = [product objectForKey:@"value"];
             instance.crm_product_name = [product objectForKey:@"label"];
             [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_product_id];
-            //            [[NetworkOperationManager sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
+            //            [[CRMClient sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
         }
         
         //Add the relationship with the current service

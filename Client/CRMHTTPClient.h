@@ -10,7 +10,7 @@
 #import <AFNetworking/AFNetworking.h>
 @class CredentialsHelper;
 
-//These constants are accessed from the NetworkOperationManager 
+//These constants are accessed from the CRMClient 
 extern NSString* const kClientHasFinishedLogin;
 extern NSString* const kClientHasFinishedLoginWithoutSave;
 extern NSString* const kClientHasFinishedLoginAndFetchModules;
