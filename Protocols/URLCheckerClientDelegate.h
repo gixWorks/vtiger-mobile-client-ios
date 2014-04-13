@@ -10,6 +10,6 @@
 
 @protocol URLCheckerClientDelegate <NSObject>
 
-- (void)urlCheckerDidFinishWithError:(NSString*)error url:(NSURL*)testedUrl;
+- (void)urlCheckerDidFinishWithError:(NSString*)error url:(NSURL*)testedUrl invalid_certificate:(BOOL)invalid_certificate;
 
 @end

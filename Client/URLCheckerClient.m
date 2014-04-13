@@ -10,6 +10,13 @@
 
 static BOOL user_wants_to_trust_invalid_certificates = YES;
 
+@interface URLCheckerClient ()
+{
+    BOOL using_invalid_certificate;
+}
+
+@end
+
 @implementation URLCheckerClient
 
 - (void)startTestingReachability
@@ -33,6 +40,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     if (self) {
         self.URLCheckerClientDelegate = delegate;
         self.url = urlToTest;
+        using_invalid_certificate = NO; //we start without self-signed certificate
     }
     return self;
 }
@@ -59,8 +67,10 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         if (trusted) {
             [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]
                  forAuthenticationChallenge:challenge];
+            using_invalid_certificate = NO;
         } else {
-            if (user_wants_to_trust_invalid_certificates) {
+            if (user_wants_to_trust_invalid_certificates) { //always defaulted to YES //GM
+                using_invalid_certificate = YES;
                 [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]
                      forAuthenticationChallenge:challenge];
             } else {
@@ -76,7 +86,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 {
     connection = nil;
     NSLog(@"%@ %@ connection failed with error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url];
+    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url invalid_certificate:using_invalid_certificate];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -87,11 +97,11 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         //Something is wrong with the url provided by the server
         NSLog(@"%@ %@ The server is not available (Response code %d)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %d)", httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate];
     }
     else
     {
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate];
     }
 }
 
