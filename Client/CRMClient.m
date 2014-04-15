@@ -394,7 +394,7 @@ static int kMinutesToRetrySave = 15;
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session,  @"mode", token, @"syncToken", nil];
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
 }
 
@@ -425,7 +425,7 @@ static int kMinutesToRetrySave = 15;
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     //Build parameters ignoring the synctoken
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", nil];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
 }
@@ -436,7 +436,7 @@ static int kMinutesToRetrySave = 15;
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePRIVATE, @"mode", token, @"syncToken", nil];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", token, @"syncToken", nil];
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
     
 }
@@ -561,7 +561,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)fetchDocumentsForRecord:(NSString*)recordId
 {
-    
+  //TODO
 }
 
 #pragma mark - Mass Records fetch (no sync)
