@@ -255,7 +255,7 @@
     }
 
     
-    return [dict copy];
+    return [dict copy]; //TODO: do we need to copy??
 }
 
 - (NSDictionary *)proxyForJson

@@ -20,10 +20,10 @@
     
     //I first try to count the entities (should take less time) and load the entity only if strictly necessary (if count > 0). The Count operation should be less intensive than the Fetch, so I use it for checking the existence
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@", record_id];
-    NSUInteger count = [Lead MR_countOfEntitiesWithPredicate:predicate];
+    NSUInteger count = [Ticket MR_countOfEntitiesWithPredicate:predicate];
     
     if (count > 0) {
-        instance = [Lead MR_findFirstByAttribute:@"crm_id" withValue:record_id];
+        instance = [Ticket MR_findFirstByAttribute:@"crm_id" withValue:record_id];
         NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
         [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
