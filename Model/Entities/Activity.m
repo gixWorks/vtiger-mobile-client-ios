@@ -255,7 +255,7 @@
     }
 
     
-    return [dict copy]; //TODO: do we need to copy??
+    return [dict copy]; //We return the immutable copy because dict is mutable. 
 }
 
 - (NSDictionary *)proxyForJson
