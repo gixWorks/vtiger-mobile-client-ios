@@ -623,7 +623,8 @@ static int kMinutesToRetrySave = 15;
     }
     else{
         //There was an error in the HTTPClient, first check if it's a known code
-        if([[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"])
+        //First I check if it's not [NSNull null]
+        if(![[[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"] isEqual:[NSNull null]])
         {
             //if it has an Error Code, means it was an error from the CRM and not a network error
             NSNumber *errorCode = [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"];
@@ -735,7 +736,7 @@ static int kMinutesToRetrySave = 15;
     else{
         //There was an error in the HTTPClient
         @try {
-            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
         }
         @catch (NSException *exception) {
@@ -948,7 +949,7 @@ static int kMinutesToRetrySave = 15;
     }
     else{
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
     }
 }
@@ -969,9 +970,16 @@ static int kMinutesToRetrySave = 15;
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        }
+        @finally{
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
+        }
     }
 }
 

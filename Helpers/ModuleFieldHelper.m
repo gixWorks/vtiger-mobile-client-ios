@@ -7,6 +7,7 @@
 //
 
 #import "ModuleFieldHelper.h"
+#import "GTMNSString+HTML.h"
 
 @implementation ModuleFieldHelper
 
@@ -16,7 +17,7 @@
     Module *m = [Module MR_findFirstWithPredicate:mp];
     NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND module = %@", fieldName, m];
     CRMField *f = [CRMField MR_findFirstWithPredicate:p];
-    return f.crm_label;
+    return [f.crm_label gtm_stringByUnescapingFromHTML];
 }
 
 + (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName
