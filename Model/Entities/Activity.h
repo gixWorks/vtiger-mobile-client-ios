@@ -27,4 +27,6 @@
 
 - (NSDictionary*)proxyForJson;
 
+- (BOOL)updateModelObjectWithDictionary:(NSDictionary*)dict customFields:(NSDictionary*)cfields;
+
 @end

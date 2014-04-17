@@ -53,6 +53,14 @@
         instance = [Activity MR_createEntity];
     }
     
+    if (![instance updateModelObjectWithDictionary:dict customFields:cfields]) {
+        return nil;
+    }
+    return instance;
+}
+
+- (BOOL)updateModelObjectWithDictionary:(NSDictionary*)dict customFields:(NSDictionary*)cfields
+{
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if([dict isKindOfClass:[NSDictionary class]]) {
@@ -81,8 +89,8 @@
             [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
             NSDate *time_created = [dateTimeFormat dateFromString:[dict objectForKey:kFieldCreatedTime]];
-            instance.crm_time_modified = time_modified;
-            instance.crm_time_created = time_created;
+            self.crm_time_modified = time_modified;
+            self.crm_time_created = time_created;
             
             //Format some variables
             NSDate *start_date = [dateFormat dateFromString:[dict objectForKey:kCalendarFielddate_start]];
@@ -99,44 +107,44 @@
             }
             
             //Properties defined by CRM
-            instance.crm_subject = [dict objectForKey:kCalendarFieldsubject];
-            instance.crm_time_start = start_time;
-            instance.crm_date_start = start_date;
+            self.crm_subject = [dict objectForKey:kCalendarFieldsubject];
+            self.crm_time_start = start_time;
+            self.crm_date_start = start_date;
             //            instance.crm_time_end = end_time;
-            instance.crm_id = [dict objectForKey:kCalendarFieldid];
-            instance.crm_assigned_user_id = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"value"];
-            instance.crm_assigned_user_name = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"label"];
-            instance.crm_activitytype = [dict objectForKey:kCalendarFieldactivitytype];
-            instance.crm_notime = [dict objectForKey:kCalendarFieldnotime];
-            instance.crm_sendnotification = [dict objectForKey:kCalendarFieldsendnotification];
-            instance.crm_visibility = [dict objectForKey:kCalendarFieldvisibility];
-            instance.crm_location = [dict objectForKey:kCalendarFieldlocation];
-            instance.crm_priority = [dict objectForKey:kCalendarFieldtaskpriority];
-            instance.crm_recurringtype = [dict objectForKey:kCalendarFieldrecurringtype];
-            instance.crm_due_date =  due_date;
-            instance.crm_duration_hours = duration_hours;
-            instance.crm_duration_minutes = duration_minutes;
-            if ([instance.crm_activitytype isEqualToString:@"Task"]) {
-                instance.crm_eventstatus = [dict objectForKey:kCalendarFieldtaskstatus];
+            self.crm_id = [dict objectForKey:kCalendarFieldid];
+            self.crm_assigned_user_id = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"value"];
+            self.crm_assigned_user_name = [[dict objectForKey:kCalendarFieldassigned_user_id] objectForKey:@"label"];
+            self.crm_activitytype = [dict objectForKey:kCalendarFieldactivitytype];
+            self.crm_notime = [dict objectForKey:kCalendarFieldnotime];
+            self.crm_sendnotification = [dict objectForKey:kCalendarFieldsendnotification];
+            self.crm_visibility = [dict objectForKey:kCalendarFieldvisibility];
+            self.crm_location = [dict objectForKey:kCalendarFieldlocation];
+            self.crm_priority = [dict objectForKey:kCalendarFieldtaskpriority];
+            self.crm_recurringtype = [dict objectForKey:kCalendarFieldrecurringtype];
+            self.crm_due_date =  due_date;
+            self.crm_duration_hours = duration_hours;
+            self.crm_duration_minutes = duration_minutes;
+            if ([self.crm_activitytype isEqualToString:@"Task"]) {
+                self.crm_eventstatus = [dict objectForKey:kCalendarFieldtaskstatus];
             }
             else{
-                instance.crm_eventstatus = [dict objectForKey:kCalendarFieldeventstatus];
+                self.crm_eventstatus = [dict objectForKey:kCalendarFieldeventstatus];
             }
             
             //Properties defined by me
             NSCalendar *cal = [NSCalendar currentCalendar];
             NSDateComponents *comps = [[NSDateComponents alloc] init];
-            NSDateComponents *start_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:instance.crm_date_start];
+            NSDateComponents *start_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_date_start];
             NSDateComponents *start_time_comp;
             //Xcode complains if I try to get Time Components from a nil NSDate, so I first check if it's nil
-            if (instance.crm_time_start == nil) {
+            if (self.crm_time_start == nil) {
                 start_time_comp = [NSDateComponents alloc];
                 [start_time_comp setHour:0];
                 [start_time_comp setMinute:0];
                 [start_time_comp setSecond:0];
             }
             else{
-                start_time_comp = [cal components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:instance.crm_time_start];
+                start_time_comp = [cal components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:self.crm_time_start];
             }
             [comps setYear:[start_date_comp year]];
             [comps setMonth:[start_date_comp month]];
@@ -144,53 +152,54 @@
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
             
-            instance.my_datetime_start = [cal dateFromComponents:comps];
-            NSTimeInterval duration = ( [instance.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [instance.crm_duration_minutes integerValue] * 60.0 );
-            instance.my_datetime_end = [instance.my_datetime_start dateByAddingTimeInterval:duration];
+            self.my_datetime_start = [cal dateFromComponents:comps];
+            NSTimeInterval duration = ( [self.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [self.crm_duration_minutes integerValue] * 60.0 );
+            self.my_datetime_end = [self.my_datetime_start dateByAddingTimeInterval:duration];
             
             //Now that we have end date, we check if we should actually sync it
             NSDate *syncBackTo = [GWPreferencesHelper getDateToSyncBackTo];
-            if ([instance.my_datetime_end compare:syncBackTo] == NSOrderedAscending) {
+            if ([self.my_datetime_end compare:syncBackTo] == NSOrderedAscending) {
                 //Means we should not sync this item
 #if DEBUG
-                NSLog(@"%@ Skipping item %@ as it happens earlier than the date to sync back to: %@", NSStringFromSelector(_cmd), instance.crm_id, syncBackTo);
+                NSLog(@"%@ Skipping item %@ as it happens earlier than the date to sync back to: %@", NSStringFromSelector(_cmd), self.crm_id, syncBackTo);
 #endif
-                return nil;
+                return NO;
             }
             
             //Related records
             NSDictionary *parent_record = [dict objectForKey:kCalendarFieldparent_id];
             if ([[parent_record objectForKey:@"value"] length] > 0) {
-                instance.crm_parent_id = [parent_record objectForKey:@"value"];
-                instance.crm_parent_name = [parent_record objectForKey:@"label"];
-                instance.crm_parent_type = [ModulesHelper decodeModuleForRecordId:instance.crm_parent_id];
-                [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_parent_id];
+                self.crm_parent_id = [parent_record objectForKey:@"value"];
+                self.crm_parent_name = [parent_record objectForKey:@"label"];
+                self.crm_parent_type = [ModulesHelper decodeModuleForRecordId:self.crm_parent_id];
+                [[CRMClient sharedInstance] addRecordToFetchQueue:self.crm_parent_id];
             }
             NSDictionary *contact_id = [dict objectForKey:kCalendarFieldcontact_id];
             if ([[contact_id objectForKey:@"value"] length] > 0) {
-                instance.crm_contact_id = [contact_id objectForKey:@"value"];
-                instance.crm_contact_name = [contact_id objectForKey:@"label"];
-                [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_contact_id];
+                self.crm_contact_id = [contact_id objectForKey:@"value"];
+                self.crm_contact_name = [contact_id objectForKey:@"label"];
+                [[CRMClient sharedInstance] addRecordToFetchQueue:self.crm_contact_id];
             }
             
             //Custom fields
             NSError *cfieldsError;
-            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            self.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
             if (cfieldsError != nil) {
-                NSLog(@"Entity: %@ Error in custom fields: %@", instance.crm_id, [cfieldsError description]);
+                NSLog(@"Entity: %@ Error in custom fields: %@", self.crm_id, [cfieldsError description]);
             }
             
             //Add the relationship with the current service
-            instance.service = [Service getActive];
+            self.service = [Service getActive];
         }
         @catch (NSException *exception) {
             //clean this object from the context
-            [[NSManagedObjectContext MR_defaultContext] deleteObject:instance];
+            [[NSManagedObjectContext MR_defaultContext] deleteObject:self];
             //log the exception
             NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
         }
     }
-    return instance;
+    
+    return YES;
 }
 
 - (NSDictionary *)crmRepresentation

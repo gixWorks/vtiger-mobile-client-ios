@@ -15,6 +15,12 @@
 #import "CRMFieldConstants.h"
 #import "CRMConstants.h"
 
+@interface ResponseParser ()
+
++ (NSDictionary*) parseFetchRecordWithGrouping:(NSDictionary*)JSON andUpdateRecord:(NSString*)tempRecordId;
+
+@end
+
 @implementation ResponseParser
 
 + (NSDictionary*)parseLogin:(NSDictionary *)JSON saveToDB:(BOOL)save
@@ -417,7 +423,7 @@
     }
 }
 
-+ (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON
++ (NSDictionary*) parseFetchRecordWithGrouping:(NSDictionary*)JSON andUpdateRecord:(NSString*)tempRecordId
 {
     @try {
         NSManagedObject *returnedRecord = nil;
@@ -455,7 +461,14 @@
         //To create the new entity, we need to decode the type
         NSString *module = [ModulesHelper decodeModuleForRecordId:identifier];
         if ([module isEqualToString:kVTModuleCalendar]) {
+            if(tempRecordId != nil){
+                Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
+                [a updateModelObjectWithDictionary:entityFields customFields:entityCustomFields];
+                returnedRecord = a;
+            }
+            else{
             returnedRecord = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+            }
         }
         else if([module isEqualToString:kVTModuleAccounts]){
             returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -560,7 +573,7 @@
             }
             else if ([module isEqualToString:kVTModuleDocuments]) {
                 //TODO: DOCUMENT MODEL!!!!
-//                [Document modelObjectWithDictionary:entityFields];
+                //                [Document modelObjectWithDictionary:entityFields];
             }
             else{
                 NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
@@ -581,6 +594,11 @@
     @catch (NSException *exception) {
         return [NSDictionary dictionaryWithObject:[exception description] forKey:kErrorKey];
     }
+}
+
++ (NSDictionary*)parseFetchRecordWithGrouping:(NSDictionary*)JSON
+{
+    return [self parseFetchRecordWithGrouping:JSON andUpdateRecord:nil];
 }
 
 + (NSDictionary*)parseDescribe:(NSDictionary*)JSON
@@ -645,13 +663,15 @@
         isNewRecord = YES;
     }
     
-    NSDictionary *resultRecordParse = [self parseFetchRecordWithGrouping:JSON];
+    NSDictionary *resultRecordParse = [self parseFetchRecordWithGrouping:JSON andUpdateRecord:tempRecordId];
     if ([resultRecordParse objectForKey:kErrorKey] == nil) {
         //means the record was correctly parsed
         if (isNewRecord == YES) {
             //if it's a new record, we delete the temporary one from DB as a new one would be created by parseFetchRecordWithGrouping
             Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
             [a MR_deleteEntity];
+            //We also unschedule the previous notification that was associated with the other record!
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUnscheduleNotificationForRecord object:self userInfo:@{kNotificationUserInfoRecordId: tempRecordId}];
         }
         //we now delete the record from the queue of records to be updated
         ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
