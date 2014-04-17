@@ -64,6 +64,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self registerHTTPOperationClass:[CRMLoginRequestOperation class]];
         [[self operationQueue] setMaxConcurrentOperationCount:2];
+        self.defaultSSLPinningMode = AFSSLPinningModeCertificate;
     }
     return self;
 }
@@ -164,6 +165,9 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
+#if TARGET_IPHONE_SIMULATOR
+    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+#endif
     [self.operationQueue addOperation:operation];
 }
 
@@ -232,7 +236,9 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 
         return;
     }
-
+#if TARGET_IPHONE_SIMULATOR
+    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+#endif
     [self.operationQueue addOperation:operation];
 }
 
@@ -295,6 +301,9 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         NSLog(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
     }];
+#if TARGET_IPHONE_SIMULATOR
+    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+#endif
     [self.operationQueue addOperation:operation];
 }
 
