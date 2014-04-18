@@ -625,7 +625,11 @@
     for (NSString *i in deletedIds) {
         BOOL suc = [[deletedRecords objectForKey:i] boolValue];
         if (suc == YES) { //that record has been deleted
+            //Delete the Record
             [[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i] MR_deleteEntity];
+            //And delete it from the ModifiedRecords
+            ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i];
+            [mr MR_deleteEntity];
         }
     }
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
