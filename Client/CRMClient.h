@@ -70,9 +70,11 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 - (void)syncCalendarAndUsers;
 
 /**
- *  Performs the syncModule operation for the Calendar module honoring the existence of sync tokens in the db
+ *  Performs the syncModule operation for the Calendar module honoring the existence of sync tokens in the db, but ignoring the time interval since the last syncToken
+ *
+ *  @param requested specifies whether the sync has been explicitly requested by user, and it should happen even if the last sync time was earlier than the interval for automatic synchronization
  */
-- (void)syncCalendar;
+- (void)syncCalendarRequestedByUser:(BOOL)requested;
 
 /**
  *  Performs the syncModule operation for the Calendar module ignoring the existence of sync tokens, thus syncinc from beginning of records
@@ -147,5 +149,7 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  *  @param recordId The ID of the record whose Documents are to be fetched
  */
 - (void)fetchDocumentsForRecord:(NSString*)recordId;
+
+- (void)cancelAllOperations;
 
 @end

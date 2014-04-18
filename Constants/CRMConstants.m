@@ -30,6 +30,9 @@ NSString* const kCRMActivityCallMeetingStatusPlanned = @"Planned";
 NSString* const kCRMActivityCallMeetingStatusHeld = @"Held";
 NSString* const kCRMActivityCallMeetingStatusNotHeld = @"Not Held";
 
+NSString* const kModifiedRecordActionDELETE = @"DELETE";
+NSString* const kModifiedRecordActionUPDATE = @"UPDATE";
+
 @implementation CRMConstants
 
 @end

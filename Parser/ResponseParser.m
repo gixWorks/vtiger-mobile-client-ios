@@ -319,7 +319,9 @@
             Activity *a = [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             
             //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: a, kNotificationUserInfoInterval: @30}];
+            if (a != nil) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: a, kNotificationUserInfoInterval: @30}];
+            }
 
         }   //end main loop
         
@@ -638,20 +640,30 @@
     if (NO == success) {
         return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
     }
-    NSDictionary *deletedRecords = [JSON valueForKeyPath:@"result.deleted"];
-    NSArray *deletedIds = [deletedRecords allKeys];
-    for (NSString *i in deletedIds) {
-        BOOL suc = [[deletedRecords objectForKey:i] boolValue];
-        if (suc == YES) { //that record has been deleted
-            //Delete the Record
-            [[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i] MR_deleteEntity];
-            //And delete it from the ModifiedRecords
-            ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i];
-            [mr MR_deleteEntity];
-        }
+    id deletedRecords = [JSON valueForKeyPath:@"result.deleted"];
+    if ([deletedRecords isKindOfClass:[NSArray class]]) {
+        //it's an Array. This usually happens when the deleted records are empty
+        //We can afford removing the records to be deleted from ModifiedRecords
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_action = %@", kModifiedRecordActionDELETE];
+        [ModifiedRecord MR_deleteAllMatchingPredicate:p];
     }
-    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
-    
+    else if([deletedRecords isKindOfClass:[NSDictionary class]]){
+        NSArray *deletedIds = [deletedRecords allKeys];
+        for (NSString *i in deletedIds) {
+            BOOL suc = [[deletedRecords objectForKey:i] boolValue];
+            if (suc == YES) { //that record has been deleted remotely
+                //Delete the Record locally on the database
+                [[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i] MR_deleteEntity];
+                //And delete it from the ModifiedRecords
+                ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i];
+                [mr MR_deleteEntity];
+            }
+        }
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    }
+    else{
+        DDLogWarn(@"%@ %@ - DeleteRecords returned an unknown value", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    }
     return @{};
 }
 

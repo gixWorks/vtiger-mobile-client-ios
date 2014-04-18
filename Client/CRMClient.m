@@ -392,9 +392,9 @@ static int kMinutesToRetrySave = 15;
     
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
-    NSString *token = syncToken.token;
+    NSString *token = syncToken.token == nil? @"" : syncToken.token;
     NSString *session = [CredentialsHelper getSession];
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session,  @"mode", token, @"syncToken", nil];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session,  @"session", token, @"syncToken", nil];
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
 }
 
@@ -404,13 +404,13 @@ static int kMinutesToRetrySave = 15;
     [self fetchUsersAndGroups];
 }
 
-- (void)syncCalendar
+- (void)syncCalendarRequestedByUser:(BOOL)requested
 {
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = kMinutesFromLastSync * 60;
-    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil) {
+    if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil || requested == YES) {
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar);
@@ -422,6 +422,11 @@ static int kMinutesToRetrySave = 15;
 
 - (void)resyncCalendar
 {
+    //Drop all from Calendar
+    [Activity MR_truncateAll];
+    //Remove all SyncTokens if any
+    [SyncToken MR_truncateAll];
+    
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     //Build parameters ignoring the synctoken
@@ -484,7 +489,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     //This goes through the table with records to update and delete and sends to server the requests
     //First the deleted ones
-    NSArray *deleted = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:@"DELETE"];
+    NSArray *deleted = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:kModifiedRecordActionDELETE];
     NSMutableArray *deletedIds = [[NSMutableArray alloc] init];
     for (ModifiedRecord *mr in deleted) {
         [deletedIds addObject:mr.crm_id];
@@ -496,7 +501,7 @@ static int kMinutesToRetrySave = 15;
     }
 
     //Then the updated ones
-    NSArray *updated = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:@"UPDATE"];
+    NSArray *updated = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:kModifiedRecordActionUPDATE];
     NSMutableArray *updated_records = [[NSMutableArray alloc] init];
     for (ModifiedRecord *mr in updated) {
         //TODO: FOR NOW CAN BE ONLY ACTIVITIES
@@ -564,6 +569,11 @@ static int kMinutesToRetrySave = 15;
   //TODO
 }
 
+- (void)cancelAllOperations
+{
+    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+}
+
 #pragma mark - Mass Records fetch (no sync)
 
 - (void)addRecordToFetchQueue:(NSString*)record_id
@@ -622,23 +632,28 @@ static int kMinutesToRetrySave = 15;
         //        });
     }
     else{
-        //There was an error in the HTTPClient, first check if it's a known code
-        //First I check if it's not [NSNull null]
-        if(![[[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"] isEqual:[NSNull null]])
-        {
-            //if it has an Error Code, means it was an error from the CRM and not a network error
-            NSNumber *errorCode = [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"];
-            if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
-                //THIS SUCKS! The user mistook the credentials!
-                //1- cancel all the operations
-                [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
-                //2- Send the notification that the login was not valid
+        @try {
+            //There was an error in the HTTPClient, first check if it's a known code
+            if([[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"] != nil)
+            {
+                //if it has an Error Code, means it was an error from the CRM and not a network error
+                NSNumber *errorCode = [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"code"];
+                if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
+                    //THIS SUCKS! The user mistook the credentials!
+                    //1- cancel all the operations
+                    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+                    //2- Send the notification that the login was not valid
+                }
+            }else{
+                //can be anything else
+                DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kErrorKey] );
+                NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey] };
+                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
             }
-        }else{
-            //can be anything else
-            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kErrorKey] );
-            NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey] };
-            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
         }
     }
 }
