@@ -226,7 +226,7 @@
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.crm_activitytype forKey:kCalendarFieldactivitytype];
-    if ([self.crm_contact_id length] > 0) {
+    if (self.crm_contact_id != nil) {
         //There's a related Contact
         [dict setObject:self.crm_contact_id forKey:kCalendarFieldcontact_id];
 //        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
@@ -239,7 +239,7 @@
     [dict setValue:self.crm_eventstatus forKey:kCalendarFieldeventstatus];
     [dict setValue:self.crm_location forKey:kCalendarFieldlocation];
     //    [dict setObject:self.crm_notime forKey:kCalendarFieldnotime]; //skip for the moment
-    if ([self.crm_parent_id length] > 0) {
+    if (self.crm_parent_id != nil) {
         //There is a related record (not a Contact, for Contacts there is "contact_id")
         [dict setObject:self.crm_parent_id forKey:kCalendarFieldparent_id];
 //        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];

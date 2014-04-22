@@ -33,6 +33,9 @@ NSString* const kCRMActivityCallMeetingStatusNotHeld = @"Not Held";
 NSString* const kModifiedRecordActionDELETE = @"DELETE";
 NSString* const kModifiedRecordActionUPDATE = @"UPDATE";
 
+NSString *const kCalendarPrivate = @"PRIVATE";
+NSString *const kCalendarPublic = @"PUBLIC";
+
 @implementation CRMConstants
 
 @end

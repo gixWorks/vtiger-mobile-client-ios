@@ -31,6 +31,9 @@ extern NSString* const kCRMActivityCallMeetingStatusNotHeld;
 extern NSString* const kModifiedRecordActionDELETE;
 extern NSString* const kModifiedRecordActionUPDATE;
 
+extern NSString *const kCalendarPrivate;
+extern NSString *const kCalendarPublic;
+
 @interface CRMConstants : NSObject
 
 @end
