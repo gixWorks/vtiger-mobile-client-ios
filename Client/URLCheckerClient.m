@@ -95,8 +95,8 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     
     if (httpResponse.statusCode != 200) {
         //Something is wrong with the url provided by the server
-        NSLog(@"%@ %@ The server is not available (Response code %d)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), httpResponse.statusCode);
-        NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %d)", httpResponse.statusCode];
+        NSLog(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
+        NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
         [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate];
     }
     else

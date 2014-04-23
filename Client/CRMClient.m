@@ -668,10 +668,15 @@ static int kMinutesToRetrySave = 15;
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseLoginResult];
     }
     else{
+        @try {
         //There was an error in the HTTPClient
         DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"message"]);
         NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey][@"message"] };
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:userInfo];
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        }
     }
 }
 
@@ -685,7 +690,7 @@ static int kMinutesToRetrySave = 15;
             //login result was parsed, which means that modules have been created
             NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
             NSInteger count = [Module MR_countOfEntitiesWithPredicate:p];
-            DDLogDebug(@"%d modules to Describe found in current Service", count);
+            DDLogDebug(@"%ld modules to Describe found in current Service", (long)count);
             NSArray *modules = [Module MR_findAllWithPredicate:p inContext:[NSManagedObjectContext MR_defaultContext]];
             countOfDescribes = count;
             receivedDescribes = 0;
@@ -720,9 +725,14 @@ static int kMinutesToRetrySave = 15;
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:parseResult];
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        }
     }
 }
 
@@ -861,9 +871,14 @@ static int kMinutesToRetrySave = 15;
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:parseResult];
     }
     else{
-        //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
+        @try {
+            //There was an error in the HTTPClient
+            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[notification userInfo]];
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        }
     }
 }
 
