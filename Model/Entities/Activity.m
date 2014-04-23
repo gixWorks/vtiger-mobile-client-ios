@@ -39,7 +39,7 @@
     if (count > 0) {
         instance = [Activity MR_findFirstByAttribute:@"crm_id" withValue:record_id];
         NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
-        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
         NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
         if ([time_modified compare:instance.crm_time_created] == NSOrderedSame) {
 #if DEBUG
@@ -221,7 +221,7 @@
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
     [timeFormat setDateFormat:@"HH:mm:ss"];
     NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
-    [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
     
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
