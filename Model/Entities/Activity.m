@@ -121,6 +121,7 @@
             self.crm_location = [dict objectForKey:kCalendarFieldlocation];
             self.crm_priority = [dict objectForKey:kCalendarFieldtaskpriority];
             self.crm_recurringtype = [dict objectForKey:kCalendarFieldrecurringtype];
+            self.crm_reminder_time = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldreminder_time]];
             self.crm_due_date =  due_date;
             self.crm_duration_hours = duration_hours;
             self.crm_duration_minutes = duration_minutes;
@@ -254,6 +255,7 @@
     [dict setValue:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
     [dict setValue:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
     [dict setValue:self.crm_visibility forKey:kCalendarFieldvisibility];
+    [dict setValue:[numberFormatter stringFromNumber:self.crm_reminder_time] forKey:kCalendarFieldreminder_time];
     
     if (isNewRecord == NO) {
         [dict setObject:self.crm_id forKey:kCalendarFieldid];

@@ -24,6 +24,7 @@ extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *crm_parent_type;
 	__unsafe_unretained NSString *crm_priority;
 	__unsafe_unretained NSString *crm_recurringtype;
+	__unsafe_unretained NSString *crm_reminder_time;
 	__unsafe_unretained NSString *crm_sendnotification;
 	__unsafe_unretained NSString *crm_subject;
 	__unsafe_unretained NSString *crm_time_created;
@@ -46,6 +47,7 @@ extern const struct ActivityFetchedProperties {
 } ActivityFetchedProperties;
 
 @class Service;
+
 
 
 
@@ -284,6 +286,20 @@ extern const struct ActivityFetchedProperties {
 
 
 //- (BOOL)validateCrm_recurringtype:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* crm_reminder_time;
+
+
+
+@property int16_t crm_reminder_timeValue;
+- (int16_t)crm_reminder_timeValue;
+- (void)setCrm_reminder_timeValue:(int16_t)value_;
+
+//- (BOOL)validateCrm_reminder_time:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -538,6 +554,15 @@ extern const struct ActivityFetchedProperties {
 
 - (NSString*)primitiveCrm_recurringtype;
 - (void)setPrimitiveCrm_recurringtype:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveCrm_reminder_time;
+- (void)setPrimitiveCrm_reminder_time:(NSNumber*)value;
+
+- (int16_t)primitiveCrm_reminder_timeValue;
+- (void)setPrimitiveCrm_reminder_timeValue:(int16_t)value_;
 
 
 

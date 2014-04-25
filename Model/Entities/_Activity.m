@@ -23,6 +23,7 @@ const struct ActivityAttributes ActivityAttributes = {
 	.crm_parent_type = @"crm_parent_type",
 	.crm_priority = @"crm_priority",
 	.crm_recurringtype = @"crm_recurringtype",
+	.crm_reminder_time = @"crm_reminder_time",
 	.crm_sendnotification = @"crm_sendnotification",
 	.crm_subject = @"crm_subject",
 	.crm_time_created = @"crm_time_created",
@@ -77,6 +78,11 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 	}
 	if ([key isEqualToString:@"crm_duration_minutesValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_duration_minutes"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"crm_reminder_timeValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"crm_reminder_time"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -258,6 +264,32 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 
 @dynamic crm_recurringtype;
 
+
+
+
+
+
+@dynamic crm_reminder_time;
+
+
+
+- (int16_t)crm_reminder_timeValue {
+	NSNumber *result = [self crm_reminder_time];
+	return [result shortValue];
+}
+
+- (void)setCrm_reminder_timeValue:(int16_t)value_ {
+	[self setCrm_reminder_time:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitiveCrm_reminder_timeValue {
+	NSNumber *result = [self primitiveCrm_reminder_time];
+	return [result shortValue];
+}
+
+- (void)setPrimitiveCrm_reminder_timeValue:(int16_t)value_ {
+	[self setPrimitiveCrm_reminder_time:[NSNumber numberWithShort:value_]];
+}
 
 
 

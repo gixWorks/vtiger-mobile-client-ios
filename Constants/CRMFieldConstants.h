@@ -88,6 +88,7 @@
 #define kCalendarFieldduration_minutes  @"duration_minutes"
 #define kCalendarFieldlocation  @"location"
 #define kCalendarFielddescription  @"description"
+#define kCalendarFieldreminder_time @"reminder_time"
 
 //Contacts
 #define kContactFieldId  @"id"

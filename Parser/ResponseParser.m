@@ -173,7 +173,7 @@
             if ([module isEqualToString:kVTModuleCalendar]) {
                 returnedRecord = [Activity modelObjectWithDictionary:entityFields];
                 //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
-                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: (Activity*)returnedRecord, kNotificationUserInfoInterval: @30}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: (Activity*)returnedRecord}];
             }
             else if([module isEqualToString:kVTModuleAccounts]){
                 returnedRecord = [Account modelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -320,7 +320,7 @@
             
             //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
             if (a != nil) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: a, kNotificationUserInfoInterval: @30}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: a}];
             }
 
         }   //end main loop
@@ -695,7 +695,8 @@
         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
     }
     else{
-        
+        //TODO: we should not get here!
+        return @{@"error" : @"Unknown error when saving new record!"};
     }
     return  @{};
 }
