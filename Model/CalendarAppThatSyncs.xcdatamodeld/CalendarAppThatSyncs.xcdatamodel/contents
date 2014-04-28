@@ -283,13 +283,13 @@
         <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Contact" inverseName="service" inverseEntity="Contact" syncable="YES"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Document" inverseName="service" inverseEntity="Document" syncable="YES"/>
         <relationship name="groups" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Group" inverseName="service" inverseEntity="Group" syncable="YES"/>
-        <relationship name="leads" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Lead" inverseName="service" inverseEntity="Lead" syncable="YES"/>
+        <relationship name="leads" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Lead" inverseName="service" inverseEntity="Lead" syncable="YES"/>
         <relationship name="modules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Module" inverseName="service" inverseEntity="Module" syncable="YES"/>
-        <relationship name="potentials" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Potential" inverseName="service" inverseEntity="Potential" syncable="YES"/>
-        <relationship name="products" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Product" inverseName="service" inverseEntity="Product" syncable="YES"/>
+        <relationship name="potentials" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Potential" inverseName="service" inverseEntity="Potential" syncable="YES"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="service" inverseEntity="Product" syncable="YES"/>
         <relationship name="syncs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Sync" inverseName="service" inverseEntity="Sync" syncable="YES"/>
-        <relationship name="synctokens" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="SyncToken" inverseName="service" inverseEntity="SyncToken" syncable="YES"/>
-        <relationship name="tickets" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Ticket" inverseName="service" inverseEntity="Ticket" syncable="YES"/>
+        <relationship name="synctokens" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SyncToken" inverseName="service" inverseEntity="SyncToken" syncable="YES"/>
+        <relationship name="tickets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Ticket" inverseName="service" inverseEntity="Ticket" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="User" inverseName="service" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Sync" representedClassName="Sync" syncable="YES">
@@ -349,7 +349,7 @@
         <element name="Module" positionX="-234" positionY="585" width="128" height="150"/>
         <element name="Potential" positionX="567" positionY="141" width="128" height="345"/>
         <element name="Product" positionX="403" positionY="72" width="128" height="390"/>
-        <element name="Service" positionX="99" positionY="380" width="128" height="358"/>
+        <element name="Service" positionX="99" positionY="380" width="128" height="360"/>
         <element name="Sync" positionX="-63" positionY="81" width="128" height="150"/>
         <element name="SyncToken" positionX="88" positionY="99" width="128" height="105"/>
         <element name="Ticket" positionX="9" positionY="855" width="128" height="330"/>

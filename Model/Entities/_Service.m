@@ -238,6 +238,15 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 @dynamic leads;
 
 	
+- (NSMutableSet*)leadsSet {
+	[self willAccessValueForKey:@"leads"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"leads"];
+  
+	[self didAccessValueForKey:@"leads"];
+	return result;
+}
+	
 
 @dynamic modules;
 
@@ -255,9 +264,27 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 @dynamic potentials;
 
 	
+- (NSMutableSet*)potentialsSet {
+	[self willAccessValueForKey:@"potentials"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"potentials"];
+  
+	[self didAccessValueForKey:@"potentials"];
+	return result;
+}
+	
 
 @dynamic products;
 
+	
+- (NSMutableSet*)productsSet {
+	[self willAccessValueForKey:@"products"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"products"];
+  
+	[self didAccessValueForKey:@"products"];
+	return result;
+}
 	
 
 @dynamic syncs;
@@ -276,9 +303,27 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 @dynamic synctokens;
 
 	
+- (NSMutableSet*)synctokensSet {
+	[self willAccessValueForKey:@"synctokens"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"synctokens"];
+  
+	[self didAccessValueForKey:@"synctokens"];
+	return result;
+}
+	
 
 @dynamic tickets;
 
+	
+- (NSMutableSet*)ticketsSet {
+	[self willAccessValueForKey:@"tickets"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"tickets"];
+  
+	[self didAccessValueForKey:@"tickets"];
+	return result;
+}
 	
 
 @dynamic users;

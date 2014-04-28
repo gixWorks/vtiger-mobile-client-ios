@@ -193,9 +193,9 @@ extern const struct ServiceFetchedProperties {
 
 
 
-@property (nonatomic, strong) Lead *leads;
+@property (nonatomic, strong) NSSet *leads;
 
-//- (BOOL)validateLeads:(id*)value_ error:(NSError**)error_;
+- (NSMutableSet*)leadsSet;
 
 
 
@@ -207,16 +207,16 @@ extern const struct ServiceFetchedProperties {
 
 
 
-@property (nonatomic, strong) Potential *potentials;
+@property (nonatomic, strong) NSSet *potentials;
 
-//- (BOOL)validatePotentials:(id*)value_ error:(NSError**)error_;
-
-
+- (NSMutableSet*)potentialsSet;
 
 
-@property (nonatomic, strong) Product *products;
 
-//- (BOOL)validateProducts:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSSet *products;
+
+- (NSMutableSet*)productsSet;
 
 
 
@@ -228,16 +228,16 @@ extern const struct ServiceFetchedProperties {
 
 
 
-@property (nonatomic, strong) SyncToken *synctokens;
+@property (nonatomic, strong) NSSet *synctokens;
 
-//- (BOOL)validateSynctokens:(id*)value_ error:(NSError**)error_;
-
-
+- (NSMutableSet*)synctokensSet;
 
 
-@property (nonatomic, strong) Ticket *tickets;
 
-//- (BOOL)validateTickets:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSSet *tickets;
+
+- (NSMutableSet*)ticketsSet;
 
 
 
@@ -279,15 +279,40 @@ extern const struct ServiceFetchedProperties {
 - (void)addGroupsObject:(Group*)value_;
 - (void)removeGroupsObject:(Group*)value_;
 
+- (void)addLeads:(NSSet*)value_;
+- (void)removeLeads:(NSSet*)value_;
+- (void)addLeadsObject:(Lead*)value_;
+- (void)removeLeadsObject:(Lead*)value_;
+
 - (void)addModules:(NSSet*)value_;
 - (void)removeModules:(NSSet*)value_;
 - (void)addModulesObject:(Module*)value_;
 - (void)removeModulesObject:(Module*)value_;
 
+- (void)addPotentials:(NSSet*)value_;
+- (void)removePotentials:(NSSet*)value_;
+- (void)addPotentialsObject:(Potential*)value_;
+- (void)removePotentialsObject:(Potential*)value_;
+
+- (void)addProducts:(NSSet*)value_;
+- (void)removeProducts:(NSSet*)value_;
+- (void)addProductsObject:(Product*)value_;
+- (void)removeProductsObject:(Product*)value_;
+
 - (void)addSyncs:(NSSet*)value_;
 - (void)removeSyncs:(NSSet*)value_;
 - (void)addSyncsObject:(Sync*)value_;
 - (void)removeSyncsObject:(Sync*)value_;
+
+- (void)addSynctokens:(NSSet*)value_;
+- (void)removeSynctokens:(NSSet*)value_;
+- (void)addSynctokensObject:(SyncToken*)value_;
+- (void)removeSynctokensObject:(SyncToken*)value_;
+
+- (void)addTickets:(NSSet*)value_;
+- (void)removeTickets:(NSSet*)value_;
+- (void)addTicketsObject:(Ticket*)value_;
+- (void)removeTicketsObject:(Ticket*)value_;
 
 - (void)addUsers:(NSSet*)value_;
 - (void)removeUsers:(NSSet*)value_;
@@ -379,8 +404,8 @@ extern const struct ServiceFetchedProperties {
 
 
 
-- (Lead*)primitiveLeads;
-- (void)setPrimitiveLeads:(Lead*)value;
+- (NSMutableSet*)primitiveLeads;
+- (void)setPrimitiveLeads:(NSMutableSet*)value;
 
 
 
@@ -389,13 +414,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
-- (Potential*)primitivePotentials;
-- (void)setPrimitivePotentials:(Potential*)value;
+- (NSMutableSet*)primitivePotentials;
+- (void)setPrimitivePotentials:(NSMutableSet*)value;
 
 
 
-- (Product*)primitiveProducts;
-- (void)setPrimitiveProducts:(Product*)value;
+- (NSMutableSet*)primitiveProducts;
+- (void)setPrimitiveProducts:(NSMutableSet*)value;
 
 
 
@@ -404,13 +429,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
-- (SyncToken*)primitiveSynctokens;
-- (void)setPrimitiveSynctokens:(SyncToken*)value;
+- (NSMutableSet*)primitiveSynctokens;
+- (void)setPrimitiveSynctokens:(NSMutableSet*)value;
 
 
 
-- (Ticket*)primitiveTickets;
-- (void)setPrimitiveTickets:(Ticket*)value;
+- (NSMutableSet*)primitiveTickets;
+- (void)setPrimitiveTickets:(NSMutableSet*)value;
 
 
 
