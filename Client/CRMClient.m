@@ -394,7 +394,7 @@ static int kMinutesToRetrySave = 15;
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token == nil? @"" : syncToken.token;
     NSString *session = [CredentialsHelper getSession];
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", module, @"module", session,  @"_session", token, @"syncToken", nil];
+    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", session, @"_session", module, @"module", token, @"syncToken", page, @"page", nil];
     [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
 }
 
