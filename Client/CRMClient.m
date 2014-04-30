@@ -508,8 +508,11 @@ static int kMinutesToRetrySave = 15;
         NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_id = %@ AND service = %@ AND my_deleted != %@", mr.crm_id, [Service getActive], @YES];
         Activity *a = [Activity MR_findFirstWithPredicate:p];
         if(a != nil){
-            [updated_records addObject:[a crmRepresentation]];
             NSDictionary *r = [a crmRepresentation];
+            if (r == nil) {
+                DDLogError(@"%@ %@ CRMRepresentation is nil for Activity %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), a.crm_id);
+            }
+            [updated_records addObject:r];
             //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
             NSString *notificationName = [NSString stringWithFormat:@"%@%@%@",kClientHasFinishedSaveRecord, kNotificationSeparator, a.crm_id];
             NSString *valuesString = [r gw_jsonStringWithPrettyPrint:NO];
@@ -703,10 +706,16 @@ static int kMinutesToRetrySave = 15;
         //Don't notify yet. Notification will be sent when all Describe operations are over
     }
     else{
+        @try {
+            NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey][@"message"] };
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
+        }
+        @catch (NSException *exception) {
+            NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey] };
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
+        }
         //There was an error in the HTTPClient
-        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kErrorKey] objectForKey:@"message"]);
-        NSDictionary *userInfo = @{kErrorKey : [notification userInfo][kClientNotificationErrorKey][@"message"] };
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSetupLogin object:self userInfo:userInfo];
+        DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kErrorKey] );
     }
 }
 
