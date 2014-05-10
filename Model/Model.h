@@ -31,5 +31,6 @@
 #import "Product.h"
 #import "Ticket.h"
 #import "CRMField.h"
+#import "EnabledModules.h"
 
 #endif

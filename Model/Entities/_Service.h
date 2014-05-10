@@ -18,8 +18,10 @@ extern const struct ServiceAttributes {
 extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *accounts;
 	__unsafe_unretained NSString *activities;
+	__unsafe_unretained NSString *comments;
 	__unsafe_unretained NSString *contacts;
 	__unsafe_unretained NSString *documents;
+	__unsafe_unretained NSString *enabledModules;
 	__unsafe_unretained NSString *groups;
 	__unsafe_unretained NSString *leads;
 	__unsafe_unretained NSString *modules;
@@ -36,8 +38,10 @@ extern const struct ServiceFetchedProperties {
 
 @class Account;
 @class Activity;
+@class NSManagedObject;
 @class Contact;
 @class Document;
+@class EnabledModules;
 @class Group;
 @class Lead;
 @class Module;
@@ -172,6 +176,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *comments;
+
+- (NSMutableSet*)commentsSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *contacts;
 
 - (NSMutableSet*)contactsSet;
@@ -182,6 +193,13 @@ extern const struct ServiceFetchedProperties {
 @property (nonatomic, strong) NSSet *documents;
 
 - (NSMutableSet*)documentsSet;
+
+
+
+
+@property (nonatomic, strong) NSSet *enabledModules;
+
+- (NSMutableSet*)enabledModulesSet;
 
 
 
@@ -264,6 +282,11 @@ extern const struct ServiceFetchedProperties {
 - (void)addActivitiesObject:(Activity*)value_;
 - (void)removeActivitiesObject:(Activity*)value_;
 
+- (void)addComments:(NSSet*)value_;
+- (void)removeComments:(NSSet*)value_;
+- (void)addCommentsObject:(NSManagedObject*)value_;
+- (void)removeCommentsObject:(NSManagedObject*)value_;
+
 - (void)addContacts:(NSSet*)value_;
 - (void)removeContacts:(NSSet*)value_;
 - (void)addContactsObject:(Contact*)value_;
@@ -273,6 +296,11 @@ extern const struct ServiceFetchedProperties {
 - (void)removeDocuments:(NSSet*)value_;
 - (void)addDocumentsObject:(Document*)value_;
 - (void)removeDocumentsObject:(Document*)value_;
+
+- (void)addEnabledModules:(NSSet*)value_;
+- (void)removeEnabledModules:(NSSet*)value_;
+- (void)addEnabledModulesObject:(EnabledModules*)value_;
+- (void)removeEnabledModulesObject:(EnabledModules*)value_;
 
 - (void)addGroups:(NSSet*)value_;
 - (void)removeGroups:(NSSet*)value_;
@@ -389,6 +417,11 @@ extern const struct ServiceFetchedProperties {
 
 
 
+- (NSMutableSet*)primitiveComments;
+- (void)setPrimitiveComments:(NSMutableSet*)value;
+
+
+
 - (NSMutableSet*)primitiveContacts;
 - (void)setPrimitiveContacts:(NSMutableSet*)value;
 
@@ -396,6 +429,11 @@ extern const struct ServiceFetchedProperties {
 
 - (NSMutableSet*)primitiveDocuments;
 - (void)setPrimitiveDocuments:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveEnabledModules;
+- (void)setPrimitiveEnabledModules:(NSMutableSet*)value;
 
 
 

@@ -36,4 +36,6 @@ extern NSString *const kCalendarPublic;
 
 @interface CRMConstants : NSObject
 
++ (NSArray*)allModules;
+
 @end

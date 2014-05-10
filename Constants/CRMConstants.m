@@ -7,6 +7,7 @@
 //
 
 #import "CRMConstants.h"
+#import "CRMFieldConstants.h"
 
 //Error Key
 NSString* const kErrorKey = @"error";
@@ -37,5 +38,10 @@ NSString *const kCalendarPrivate = @"PRIVATE";
 NSString *const kCalendarPublic = @"PUBLIC";
 
 @implementation CRMConstants
+
++ (NSArray*)allModules
+{
+    return @[kVTModuleCalendar, kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads, kVTModuleHelpDesk, kVTModuleGroups, kVTModuleProducts, kVTModulePotentials, kVTModuleDocuments];
+}
 
 @end

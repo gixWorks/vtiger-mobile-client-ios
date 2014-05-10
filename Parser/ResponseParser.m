@@ -14,6 +14,7 @@
 #import "CredentialsHelper.h"
 #import "CRMFieldConstants.h"
 #import "CRMConstants.h"
+#import "ParserResult.h"
 
 @interface ResponseParser ()
 
