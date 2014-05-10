@@ -217,7 +217,7 @@
 #define kTicketFieldTicketNo  @"ticket_no"
 #define kTicketFieldParentId  @"parent_id"
 #define kTicketFieldProduct  @"product_id"
-#define kTicketFieldTitle  @"title"
+#define kTicketFieldTitle  @"ticket_title"
 
 //Fields
 #define kCRMFieldName @"name"
