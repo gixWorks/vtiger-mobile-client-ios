@@ -7,6 +7,7 @@ const struct TicketAttributes TicketAttributes = {
 	.crm_assigned_user_id = @"crm_assigned_user_id",
 	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_days = @"crm_days",
+	.crm_description = @"crm_description",
 	.crm_hours = @"crm_hours",
 	.crm_id = @"crm_id",
 	.crm_parent_id = @"crm_parent_id",
@@ -14,6 +15,7 @@ const struct TicketAttributes TicketAttributes = {
 	.crm_parent_type = @"crm_parent_type",
 	.crm_product_id = @"crm_product_id",
 	.crm_product_name = @"crm_product_name",
+	.crm_solution = @"crm_solution",
 	.crm_ticket_no = @"crm_ticket_no",
 	.crm_ticketcategory = @"crm_ticketcategory",
 	.crm_ticketpriority = @"crm_ticketpriority",
@@ -22,6 +24,7 @@ const struct TicketAttributes TicketAttributes = {
 	.crm_tickettitle = @"crm_tickettitle",
 	.crm_time_created = @"crm_time_created",
 	.crm_time_modified = @"crm_time_modified",
+	.my_custom_fields = @"my_custom_fields",
 };
 
 const struct TicketRelationships TicketRelationships = {
@@ -114,6 +117,13 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 
 
 
+@dynamic crm_description;
+
+
+
+
+
+
 @dynamic crm_hours;
 
 
@@ -182,6 +192,13 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 
 
 
+@dynamic crm_solution;
+
+
+
+
+
+
 @dynamic crm_ticket_no;
 
 
@@ -232,6 +249,13 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 
 
 @dynamic crm_time_modified;
+
+
+
+
+
+
+@dynamic my_custom_fields;
 
 
 

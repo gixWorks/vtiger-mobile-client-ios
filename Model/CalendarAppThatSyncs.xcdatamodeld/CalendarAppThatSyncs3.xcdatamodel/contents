@@ -330,6 +330,7 @@
         <attribute name="crm_assigned_user_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_assigned_user_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_days" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="crm_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_hours" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_parent_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -337,6 +338,7 @@
         <attribute name="crm_parent_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_product_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_product_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_solution" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_ticket_no" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_ticketcategory" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_ticketpriority" optional="YES" attributeType="String" syncable="YES"/>
@@ -345,6 +347,7 @@
         <attribute name="crm_tickettitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="tickets" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
@@ -373,7 +376,7 @@
         <element name="Service" positionX="99" positionY="380" width="128" height="390"/>
         <element name="Sync" positionX="-63" positionY="81" width="128" height="150"/>
         <element name="SyncToken" positionX="88" positionY="99" width="128" height="105"/>
-        <element name="Ticket" positionX="9" positionY="855" width="128" height="330"/>
+        <element name="Ticket" positionX="9" positionY="855" width="128" height="373"/>
         <element name="User" positionX="567" positionY="614" width="128" height="88"/>
     </elements>
 </model>

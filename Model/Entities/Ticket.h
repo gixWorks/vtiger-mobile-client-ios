@@ -2,6 +2,6 @@
 
 @interface Ticket : _Ticket {}
 
-+ (Ticket *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (Ticket *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary*)cfields;
 
 @end

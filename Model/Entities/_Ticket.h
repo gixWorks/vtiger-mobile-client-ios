@@ -8,6 +8,7 @@ extern const struct TicketAttributes {
 	__unsafe_unretained NSString *crm_assigned_user_id;
 	__unsafe_unretained NSString *crm_assigned_user_name;
 	__unsafe_unretained NSString *crm_days;
+	__unsafe_unretained NSString *crm_description;
 	__unsafe_unretained NSString *crm_hours;
 	__unsafe_unretained NSString *crm_id;
 	__unsafe_unretained NSString *crm_parent_id;
@@ -15,6 +16,7 @@ extern const struct TicketAttributes {
 	__unsafe_unretained NSString *crm_parent_type;
 	__unsafe_unretained NSString *crm_product_id;
 	__unsafe_unretained NSString *crm_product_name;
+	__unsafe_unretained NSString *crm_solution;
 	__unsafe_unretained NSString *crm_ticket_no;
 	__unsafe_unretained NSString *crm_ticketcategory;
 	__unsafe_unretained NSString *crm_ticketpriority;
@@ -23,6 +25,7 @@ extern const struct TicketAttributes {
 	__unsafe_unretained NSString *crm_tickettitle;
 	__unsafe_unretained NSString *crm_time_created;
 	__unsafe_unretained NSString *crm_time_modified;
+	__unsafe_unretained NSString *my_custom_fields;
 } TicketAttributes;
 
 extern const struct TicketRelationships {
@@ -33,6 +36,9 @@ extern const struct TicketFetchedProperties {
 } TicketFetchedProperties;
 
 @class Service;
+
+
+
 
 
 
@@ -95,6 +101,16 @@ extern const struct TicketFetchedProperties {
 - (void)setCrm_daysValue:(int16_t)value_;
 
 //- (BOOL)validateCrm_days:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* crm_description;
+
+
+
+//- (BOOL)validateCrm_description:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -169,6 +185,16 @@ extern const struct TicketFetchedProperties {
 
 
 //- (BOOL)validateCrm_product_name:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* crm_solution;
+
+
+
+//- (BOOL)validateCrm_solution:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -254,6 +280,16 @@ extern const struct TicketFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSData* my_custom_fields;
+
+
+
+//- (BOOL)validateMy_custom_fields:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) Service *service;
 
 //- (BOOL)validateService:(id*)value_ error:(NSError**)error_;
@@ -288,6 +324,12 @@ extern const struct TicketFetchedProperties {
 
 - (int16_t)primitiveCrm_daysValue;
 - (void)setPrimitiveCrm_daysValue:(int16_t)value_;
+
+
+
+
+- (NSString*)primitiveCrm_description;
+- (void)setPrimitiveCrm_description:(NSString*)value;
 
 
 
@@ -337,6 +379,12 @@ extern const struct TicketFetchedProperties {
 
 
 
+- (NSString*)primitiveCrm_solution;
+- (void)setPrimitiveCrm_solution:(NSString*)value;
+
+
+
+
 - (NSString*)primitiveCrm_ticket_no;
 - (void)setPrimitiveCrm_ticket_no:(NSString*)value;
 
@@ -381,6 +429,12 @@ extern const struct TicketFetchedProperties {
 
 - (NSDate*)primitiveCrm_time_modified;
 - (void)setPrimitiveCrm_time_modified:(NSDate*)value;
+
+
+
+
+- (NSData*)primitiveMy_custom_fields;
+- (void)setPrimitiveMy_custom_fields:(NSData*)value;
 
 
 

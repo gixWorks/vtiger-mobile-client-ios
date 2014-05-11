@@ -12,7 +12,7 @@
 
 @implementation Ticket
 
-+ (Ticket *)modelObjectWithDictionary:(NSDictionary *)dict
++ (Ticket *)modelObjectWithDictionary:(NSDictionary *)dict customFields:(NSDictionary *)cfields
 {
     NSString *record_id = [dict objectForKey:kTicketFieldId];
     Ticket *instance;
@@ -62,6 +62,8 @@
         instance.crm_ticketseverity = [dict objectForKey:kTicketFieldSeverity];
         instance.crm_ticketstatus = [dict objectForKey:kTicketFieldStatus];
         instance.crm_tickettitle = [dict objectForKey:kTicketFieldTitle];
+        instance.crm_description = [dict objectForKey:kTicketFieldDescription];
+        instance.crm_solution = [dict objectForKey:kTicketFieldSolution];
         
         //Decode and load the parent record (Account or Contact)
         NSDictionary *parent_record = [dict objectForKey:kTicketFieldParentId];
@@ -78,6 +80,15 @@
             instance.crm_product_name = [product objectForKey:@"label"];
             [[CRMClient sharedInstance] addRecordToFetchQueue:instance.crm_product_id];
             //            [[CRMClient sharedInstance] fetchRecord:instance.my_relatedrecordid andAssociateToRecord:instance];
+        }
+        
+        //Custom fields
+        NSError *cfieldsError;
+        if(cfields != nil) {
+            instance.my_custom_fields = [NSJSONSerialization dataWithJSONObject:cfields options:NSJSONWritingPrettyPrinted error:&cfieldsError];
+            if (cfieldsError != nil) {
+                NSLog(@"Entity: %@ Error in custom fields: %@", instance.crm_id, [cfieldsError description]);
+            }
         }
         
         //Add the relationship with the current service

@@ -189,7 +189,7 @@
                 returnedRecord = [Potential modelObjectWithDictionary:entityFields];
             }
             else if([module isEqualToString:kVTModuleHelpDesk]){
-                returnedRecord = [Ticket modelObjectWithDictionary:entityFields];
+                returnedRecord = [Ticket modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if([module isEqualToString:kVTModuleProducts]){
                 returnedRecord = [Product modelObjectWithDictionary:entityFields];
@@ -399,7 +399,7 @@
             returnedRecord = [Potential modelObjectWithDictionary:record];
         }
         else if([module isEqualToString:kVTModuleHelpDesk]){
-            returnedRecord = [Ticket modelObjectWithDictionary:record];
+            returnedRecord = [Ticket modelObjectWithDictionary:record customFields:nil];
         }
         else if([module isEqualToString:kVTModuleProducts]){
             returnedRecord = [Product modelObjectWithDictionary:record];
@@ -486,7 +486,7 @@
             returnedRecord = [Potential modelObjectWithDictionary:entityFields];
         }
         else if([module isEqualToString:kVTModuleHelpDesk]){
-            returnedRecord = [Ticket modelObjectWithDictionary:entityFields];
+            returnedRecord = [Ticket modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
         else if([module isEqualToString:kVTModuleProducts]){
             returnedRecord = [Product modelObjectWithDictionary:entityFields];
@@ -569,7 +569,7 @@
                 [Potential modelObjectWithDictionary:entityFields];
             }
             else if ([module isEqualToString:kVTModuleHelpDesk]) {
-                [Ticket modelObjectWithDictionary:entityFields];
+                [Ticket modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleProducts]) {
                 [Product modelObjectWithDictionary:entityFields];
