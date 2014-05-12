@@ -194,6 +194,9 @@
             else if([module isEqualToString:kVTModuleProducts]){
                 returnedRecord = [Product modelObjectWithDictionary:entityFields];
             }
+            else if([module isEqualToString:kVTModuleCampaigns]){
+                returnedRecord = [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+            }
             else{
                 NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
                 return  userInfo;
@@ -404,6 +407,9 @@
         else if([module isEqualToString:kVTModuleProducts]){
             returnedRecord = [Product modelObjectWithDictionary:record];
         }
+        else if([module isEqualToString:kVTModuleCampaigns]){
+            returnedRecord = [Campaign modelObjectWithDictionary:record customFields:nil];
+        }
         else{
             NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
             return  userInfo;
@@ -491,6 +497,9 @@
         else if([module isEqualToString:kVTModuleProducts]){
             returnedRecord = [Product modelObjectWithDictionary:entityFields];
         }
+        else if([module isEqualToString:kVTModuleCampaigns]){
+            returnedRecord = [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+        }
         else{
             NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
             return  userInfo;
@@ -573,6 +582,9 @@
             }
             else if ([module isEqualToString:kVTModuleProducts]) {
                 [Product modelObjectWithDictionary:entityFields];
+            }
+            else if([module isEqualToString:kVTModuleCampaigns]){
+                [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleDocuments]) {
                 //TODO: DOCUMENT MODEL!!!!

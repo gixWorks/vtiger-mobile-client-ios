@@ -11,6 +11,7 @@ extern const struct PotentialAttributes {
 	__unsafe_unretained NSString *crm_campaign_id;
 	__unsafe_unretained NSString *crm_campaign_name;
 	__unsafe_unretained NSString *crm_closingdate;
+	__unsafe_unretained NSString *crm_description;
 	__unsafe_unretained NSString *crm_id;
 	__unsafe_unretained NSString *crm_leadsource;
 	__unsafe_unretained NSString *crm_nextstep;
@@ -24,6 +25,7 @@ extern const struct PotentialAttributes {
 	__unsafe_unretained NSString *crm_sales_stage;
 	__unsafe_unretained NSString *crm_time_created;
 	__unsafe_unretained NSString *crm_time_modified;
+	__unsafe_unretained NSString *my_custom_fields;
 } PotentialAttributes;
 
 extern const struct PotentialRelationships {
@@ -34,6 +36,8 @@ extern const struct PotentialFetchedProperties {
 } PotentialFetchedProperties;
 
 @class Service;
+
+
 
 
 
@@ -123,6 +127,16 @@ extern const struct PotentialFetchedProperties {
 
 
 //- (BOOL)validateCrm_closingdate:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* crm_description;
+
+
+
+//- (BOOL)validateCrm_description:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -262,6 +276,16 @@ extern const struct PotentialFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSData* my_custom_fields;
+
+
+
+//- (BOOL)validateMy_custom_fields:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) Service *service;
 
 //- (BOOL)validateService:(id*)value_ error:(NSError**)error_;
@@ -311,6 +335,12 @@ extern const struct PotentialFetchedProperties {
 
 - (NSDate*)primitiveCrm_closingdate;
 - (void)setPrimitiveCrm_closingdate:(NSDate*)value;
+
+
+
+
+- (NSString*)primitiveCrm_description;
+- (void)setPrimitiveCrm_description:(NSString*)value;
 
 
 
@@ -392,6 +422,12 @@ extern const struct PotentialFetchedProperties {
 
 - (NSDate*)primitiveCrm_time_modified;
 - (void)setPrimitiveCrm_time_modified:(NSDate*)value;
+
+
+
+
+- (NSData*)primitiveMy_custom_fields;
+- (void)setPrimitiveMy_custom_fields:(NSData*)value;
 
 
 

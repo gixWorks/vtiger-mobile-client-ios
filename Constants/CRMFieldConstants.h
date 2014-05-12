@@ -25,6 +25,7 @@
 #define kVTModuleUsers  @"Users"
 #define kVTModuleGroups  @"Groups"
 #define kVTModuleDocuments @"Documents"
+#define kVTModuleCampaigns @"Campaigns"
 
 //Accounts
 #define kAccountFieldaccountname    @"accountname"
@@ -173,15 +174,16 @@
 #define kPotentialsFieldAssignedUserName  @"assigned_user_name"
 #define kPotentialsFieldCampaignId  @"campaignid"
 //#define kPotentialsFieldCampaignName  @"campaign_name"
-#define kPotentialsFieldClosingDate  @"closing_date"
-#define kPotentialsFieldLeadSource  @"lead_source"
-#define kPotentialsFieldNextStep  @"next_step"
+#define kPotentialsFieldClosingDate  @"closingdate"
+#define kPotentialsFieldLeadSource  @"leadsource"
+#define kPotentialsFieldNextStep  @"nextstep"
 #define kPotentialsFieldOpportunityType  @"opportunity_type"
 #define kPotentialsFieldPotentialNo  @"potential_no"
 #define kPotentialsFieldPotentialName  @"potentialname"
 #define kPotentialsFieldProbability  @"probability"
 #define kPotentialsFieldRelatedTo  @"related_to"
 #define kPotentialsFieldSalesStage  @"sales_stage"
+#define kPotentialsFieldDescription @"description"
 
 //Products
 #define kProductFieldId  @"id"
@@ -203,6 +205,7 @@
 #define kProductFieldProductSheet  @"productsheet"
 #define kProductFieldSerialNo  @"serial_no"
 #define kProductFieldGlacct  @"glacct" //GL  General Ledger
+#define kProductFieldDescription @"description"
 
 //Ticket
 #define kTicketFieldId  @"id"
@@ -220,6 +223,21 @@
 #define kTicketFieldTitle  @"ticket_title"
 #define kTicketFieldDescription @"description"
 #define kTicketFieldSolution @"solution"
+
+//Campaigns
+#define kCampaignFieldId @"id"
+#define kCampaignFieldAssignedto @"assigned_user_id"
+#define kCampaignName @"campaignname"
+#define kCampaignCampaignNo @"campaign_no"
+#define kCampaignStatus @"campaignstatus"
+#define kCampaignType @"campaigntype"
+#define kCampaignProductId @"product_id"
+#define kCampaignTargetaudience @"targetaudience"
+#define kCampaignClosingdate @"closingdate"
+#define kCampaignSponsor @"sponsor"
+#define kCampaignTargetSize @"targetsize"
+#define kCampaignNumsent @"numsent"
+#define kCampaignDescription @"description"
 
 //Fields
 #define kCRMFieldName @"name"

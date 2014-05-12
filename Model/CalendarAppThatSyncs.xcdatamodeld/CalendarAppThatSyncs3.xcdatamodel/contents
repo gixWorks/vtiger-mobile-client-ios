@@ -83,6 +83,27 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Account" predicateString="crm_id = self.activity_relatedrecordid"/>
         </fetchedProperty>
     </entity>
+    <entity name="Campaign" representedClassName="Campaign" syncable="YES">
+        <attribute name="crm_assigned_user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_assigned_user_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_campaign_no" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_campaignname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_campaignstatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_campaigntype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_closingdate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_numsent" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="crm_product_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_product_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_sponsor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_targetaudience" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_targetsize" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="crm_time_created" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_time_modified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="campaigns" inverseEntity="Service" syncable="YES"/>
+    </entity>
     <entity name="Contact" representedClassName="Contact" syncable="YES">
         <attribute name="crm_account_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_account_name" optional="YES" attributeType="String" syncable="YES"/>
@@ -246,6 +267,7 @@
         <attribute name="crm_campaign_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_campaign_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_closingdate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="crm_description" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="crm_leadsource" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_nextstep" optional="YES" attributeType="String" syncable="YES"/>
@@ -259,6 +281,7 @@
         <attribute name="crm_sales_stage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_time_created" attributeType="Date" syncable="YES"/>
         <attribute name="crm_time_modified" attributeType="Date" syncable="YES"/>
+        <attribute name="my_custom_fields" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="potentials" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="Product" representedClassName="Product" syncable="YES">
@@ -297,6 +320,7 @@
         <attribute name="crm_username" attributeType="String" minValueString="1" syncable="YES"/>
         <relationship name="accounts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Account" inverseName="service" inverseEntity="Account" syncable="YES"/>
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Activity" inverseName="service" inverseEntity="Activity" syncable="YES"/>
+        <relationship name="campaigns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Campaign" inverseName="service" inverseEntity="Campaign" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CRMComment" inverseName="service" inverseEntity="CRMComment" syncable="YES"/>
         <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Contact" inverseName="service" inverseEntity="Contact" syncable="YES"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Document" inverseName="service" inverseEntity="Document" syncable="YES"/>
@@ -371,12 +395,13 @@
         <element name="LeadAddress" positionX="-344" positionY="873" width="128" height="150"/>
         <element name="ModifiedRecord" positionX="-227" positionY="1071" width="128" height="90"/>
         <element name="Module" positionX="-234" positionY="585" width="128" height="150"/>
-        <element name="Potential" positionX="567" positionY="141" width="128" height="345"/>
+        <element name="Potential" positionX="567" positionY="141" width="128" height="373"/>
         <element name="Product" positionX="403" positionY="72" width="128" height="390"/>
-        <element name="Service" positionX="99" positionY="380" width="128" height="390"/>
+        <element name="Service" positionX="99" positionY="380" width="128" height="403"/>
         <element name="Sync" positionX="-63" positionY="81" width="128" height="150"/>
         <element name="SyncToken" positionX="88" positionY="99" width="128" height="105"/>
         <element name="Ticket" positionX="9" positionY="855" width="128" height="373"/>
         <element name="User" positionX="567" positionY="614" width="128" height="88"/>
+        <element name="Campaign" positionX="-180" positionY="225" width="128" height="328"/>
     </elements>
 </model>

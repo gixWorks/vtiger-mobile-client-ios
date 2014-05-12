@@ -10,6 +10,7 @@ const struct PotentialAttributes PotentialAttributes = {
 	.crm_campaign_id = @"crm_campaign_id",
 	.crm_campaign_name = @"crm_campaign_name",
 	.crm_closingdate = @"crm_closingdate",
+	.crm_description = @"crm_description",
 	.crm_id = @"crm_id",
 	.crm_leadsource = @"crm_leadsource",
 	.crm_nextstep = @"crm_nextstep",
@@ -23,6 +24,7 @@ const struct PotentialAttributes PotentialAttributes = {
 	.crm_sales_stage = @"crm_sales_stage",
 	.crm_time_created = @"crm_time_created",
 	.crm_time_modified = @"crm_time_modified",
+	.my_custom_fields = @"my_custom_fields",
 };
 
 const struct PotentialRelationships PotentialRelationships = {
@@ -106,6 +108,13 @@ const struct PotentialFetchedProperties PotentialFetchedProperties = {
 
 
 @dynamic crm_closingdate;
+
+
+
+
+
+
+@dynamic crm_description;
 
 
 
@@ -216,6 +225,13 @@ const struct PotentialFetchedProperties PotentialFetchedProperties = {
 
 
 @dynamic crm_time_modified;
+
+
+
+
+
+
+@dynamic my_custom_fields;
 
 
 

@@ -17,6 +17,7 @@ const struct ServiceAttributes ServiceAttributes = {
 const struct ServiceRelationships ServiceRelationships = {
 	.accounts = @"accounts",
 	.activities = @"activities",
+	.campaigns = @"campaigns",
 	.comments = @"comments",
 	.contacts = @"contacts",
 	.documents = @"documents",
@@ -194,6 +195,19 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"activities"];
   
 	[self didAccessValueForKey:@"activities"];
+	return result;
+}
+	
+
+@dynamic campaigns;
+
+	
+- (NSMutableSet*)campaignsSet {
+	[self willAccessValueForKey:@"campaigns"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"campaigns"];
+  
+	[self didAccessValueForKey:@"campaigns"];
 	return result;
 }
 	

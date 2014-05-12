@@ -32,5 +32,6 @@
 #import "Ticket.h"
 #import "CRMField.h"
 #import "EnabledModules.h"
+#import "Campaign.h"
 
 #endif

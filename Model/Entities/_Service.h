@@ -18,6 +18,7 @@ extern const struct ServiceAttributes {
 extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *accounts;
 	__unsafe_unretained NSString *activities;
+	__unsafe_unretained NSString *campaigns;
 	__unsafe_unretained NSString *comments;
 	__unsafe_unretained NSString *contacts;
 	__unsafe_unretained NSString *documents;
@@ -38,6 +39,7 @@ extern const struct ServiceFetchedProperties {
 
 @class Account;
 @class Activity;
+@class Campaign;
 @class NSManagedObject;
 @class Contact;
 @class Document;
@@ -176,6 +178,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *campaigns;
+
+- (NSMutableSet*)campaignsSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *comments;
 
 - (NSMutableSet*)commentsSet;
@@ -281,6 +290,11 @@ extern const struct ServiceFetchedProperties {
 - (void)removeActivities:(NSSet*)value_;
 - (void)addActivitiesObject:(Activity*)value_;
 - (void)removeActivitiesObject:(Activity*)value_;
+
+- (void)addCampaigns:(NSSet*)value_;
+- (void)removeCampaigns:(NSSet*)value_;
+- (void)addCampaignsObject:(Campaign*)value_;
+- (void)removeCampaignsObject:(Campaign*)value_;
 
 - (void)addComments:(NSSet*)value_;
 - (void)removeComments:(NSSet*)value_;
@@ -414,6 +428,11 @@ extern const struct ServiceFetchedProperties {
 
 - (NSMutableSet*)primitiveActivities;
 - (void)setPrimitiveActivities:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveCampaigns;
+- (void)setPrimitiveCampaigns:(NSMutableSet*)value;
 
 
 

@@ -63,6 +63,8 @@
         instance.crm_potentialname = [dict objectForKey:kPotentialsFieldPotentialName];
         instance.crm_potential_no = [dict objectForKey:kPotentialsFieldPotentialNo];
         instance.crm_probability = [numberFormatter numberFromString:[dict objectForKey:kPotentialsFieldProbability]];
+        instance.crm_description = [dict objectForKey:kPotentialsFieldDescription];
+        
         NSDictionary *related_record = [dict objectForKey:kPotentialsFieldRelatedTo];
         if ([[related_record objectForKey:@"value"] length] > 0) {
             instance.crm_related_to_id = [related_record objectForKey:@"value"];
