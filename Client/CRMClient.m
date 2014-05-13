@@ -436,9 +436,10 @@ static int kMinutesToRetrySave = 15;
 - (void)resyncCalendar
 {
     //Drop all from Calendar
-    [Activity MR_truncateAll];
-    //Remove all SyncTokens if any
-    [SyncToken MR_truncateAll];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
+    [Activity MR_deleteAllMatchingPredicate:p];
+    //Remove all SyncTokens if any. Deleting this will also delete all syncTokens for other modules
+    [SyncToken MR_deleteAllMatchingPredicate:p];
     
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
