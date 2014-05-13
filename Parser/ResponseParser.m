@@ -528,7 +528,7 @@
         BOOL success = [[JSON objectForKey:@"success"] boolValue];
         NSArray *records = [JSON valueForKeyPath:@"result.records"];
 #if DEBUG
-        NSLog(@"%@ parsing %d records for module %@", NSStringFromSelector(_cmd), [records count], module);
+        NSLog(@"%@ parsing %lu records for module %@", NSStringFromSelector(_cmd), (unsigned long)[records count], module);
 #endif
         
         if (success != YES) {
