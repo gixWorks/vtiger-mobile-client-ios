@@ -452,18 +452,18 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncCalendarFromPage:(NSNumber*)page
 {
-    //custom hockeyapp
-    NSString *log = [NSString stringWithFormat:@"Package: PACKAGE NAME \nVersion: VERSION\nOS: OS VERSIONManufacturer: DEVICE OEM\nModel: DEVICE MODEL\nDate: DATETIME"];
-    
-    NSDictionary *hockeyParams = @{@"log" : log, @"description" : NSStringFromSelector(_cmd)};
-    NSString *url = [NSString stringWithFormat:@"https://rink.hockeyapp.net/api/2/apps/%@/crashes/upload", kHockeyAppIdentifier];
-    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:url]];
-    [client postPath:@"" parameters:hockeyParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Posted OK");
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error posting Hockey Crash");
-    }];
-    //End custom hockey
+    //TODO: find out how to send custom crash log
+//    NSString *log = [NSString stringWithFormat:@"Package: PACKAGE NAME \nVersion: VERSION\nOS: OS VERSIONManufacturer: DEVICE OEM\nModel: DEVICE MODEL\nDate: DATETIME"];
+//    
+//    NSDictionary *hockeyParams = @{@"log" : log, @"description" : NSStringFromSelector(_cmd)};
+//    NSString *url = [NSString stringWithFormat:@"https://rink.hockeyapp.net/api/2/apps/%@/crashes/upload", kHockeyAppIdentifier];
+//    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:url]];
+//    [client postPath:@"" parameters:hockeyParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSLog(@"Posted OK");
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error posting Hockey Crash");
+//    }];
+    //End custom crash
     
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
