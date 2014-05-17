@@ -33,5 +33,6 @@
 #import "CRMField.h"
 #import "EnabledModules.h"
 #import "Campaign.h"
+#import "CRMErrorMessage.h"
 
 #endif

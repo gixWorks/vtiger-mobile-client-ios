@@ -23,6 +23,7 @@ extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *contacts;
 	__unsafe_unretained NSString *documents;
 	__unsafe_unretained NSString *enabledModules;
+	__unsafe_unretained NSString *errorMessages;
 	__unsafe_unretained NSString *groups;
 	__unsafe_unretained NSString *leads;
 	__unsafe_unretained NSString *modules;
@@ -44,6 +45,7 @@ extern const struct ServiceFetchedProperties {
 @class Contact;
 @class Document;
 @class EnabledModules;
+@class CRMErrorMessage;
 @class Group;
 @class Lead;
 @class Module;
@@ -213,6 +215,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *errorMessages;
+
+- (NSMutableSet*)errorMessagesSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *groups;
 
 - (NSMutableSet*)groupsSet;
@@ -315,6 +324,11 @@ extern const struct ServiceFetchedProperties {
 - (void)removeEnabledModules:(NSSet*)value_;
 - (void)addEnabledModulesObject:(EnabledModules*)value_;
 - (void)removeEnabledModulesObject:(EnabledModules*)value_;
+
+- (void)addErrorMessages:(NSSet*)value_;
+- (void)removeErrorMessages:(NSSet*)value_;
+- (void)addErrorMessagesObject:(CRMErrorMessage*)value_;
+- (void)removeErrorMessagesObject:(CRMErrorMessage*)value_;
 
 - (void)addGroups:(NSSet*)value_;
 - (void)removeGroups:(NSSet*)value_;
@@ -453,6 +467,11 @@ extern const struct ServiceFetchedProperties {
 
 - (NSMutableSet*)primitiveEnabledModules;
 - (void)setPrimitiveEnabledModules:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveErrorMessages;
+- (void)setPrimitiveErrorMessages:(NSMutableSet*)value;
 
 
 

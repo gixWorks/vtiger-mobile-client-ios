@@ -20,6 +20,7 @@ extern NSString* const kManagerHasFinishedFetchRecord;
 extern NSString* const kManagerHasFinishedFetchRecordWithGrouping;
 extern NSString* const kManagerHasFinishedFetchRecordsWithGrouping;
 extern NSString* const kManagerErrorUserHasUnvalidCredentials;
+extern NSString* const kManagerReportedError;
 
 extern NSString* const kManagerHasStartedSyncCalendar;
 

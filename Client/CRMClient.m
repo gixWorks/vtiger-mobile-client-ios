@@ -34,6 +34,7 @@ NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinis
 NSString* const kManagerHasFinishedRelatedRecordsWithGrouping = @"kManagerHasFinishedRelatedRecordsWithGrouping";
 
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
+NSString* const kManagerReportedError = @"kManagerReportedError";
 
 NSString* const kManagerHasStartedSync = @"kManagerHasStartedSync";
 NSString* const kManagerHasStartedSyncCalendar = @"kManagerHasStartedSyncCalendar";
@@ -991,6 +992,8 @@ static int kMinutesToRetrySave = 15;
     @try {
         if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
             DDLogDebug(@"Save was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            [CRMErrorMessage addErrorMessageWithMessage:[[notification userInfo] objectForKey:kClientNotificationErrorKey]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerReportedError object:nil];
             //we will retry
             double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
