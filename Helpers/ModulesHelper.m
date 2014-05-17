@@ -7,6 +7,7 @@
 //
 
 #import "ModulesHelper.h"
+#import "CRMConstants.h"
 #import "CRMFieldConstants.h"
 
 @implementation ModulesHelper
@@ -72,10 +73,10 @@
 
 + (NSString *)moduleIdForCalendarRecordType:(NSString *)calendarRecordType
 {
-    if ([calendarRecordType isEqualToString:@"Call"] || [calendarRecordType isEqualToString:@"Meeting"]) {
+    if ([calendarRecordType isEqualToString:kCRMActivityTypeCall] || [calendarRecordType isEqualToString:kCRMActivityTypeMeeting]) {
         return @"18";
     }
-    else if ([calendarRecordType isEqualToString:@"Task"]){
+    else if ([calendarRecordType isEqualToString:kCRMActivityTypeTask]){
         return @"1";
     }
     return nil;

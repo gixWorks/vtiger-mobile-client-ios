@@ -3,6 +3,7 @@
 #import "ModulesHelper.h"
 #import "GWPreferencesHelper.h"
 #import "CRMFieldConstants.h"
+#import "CRMConstants.h"
 
 
 @interface Activity ()
@@ -125,7 +126,7 @@
             self.crm_due_date =  due_date;
             self.crm_duration_hours = duration_hours;
             self.crm_duration_minutes = duration_minutes;
-            if ([self.crm_activitytype isEqualToString:@"Task"]) {
+            if ([self.crm_activitytype isEqualToString:kCRMActivityTypeTask]) {
                 self.crm_eventstatus = [dict objectForKey:kCalendarFieldtaskstatus];
             }
             else{
@@ -237,7 +238,12 @@
     [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
     [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_hours] forKey:kCalendarFieldduration_hours];
     [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_minutes] forKey:kCalendarFieldduration_minutes];
-    [dict setValue:self.crm_eventstatus forKey:kCalendarFieldeventstatus];
+    if ([self.crm_activitytype isEqualToString:kCRMActivityTypeTask]) {
+        [dict setValue:self.crm_eventstatus forKey:kCalendarFieldtaskstatus];
+    }
+    else{
+        [dict setValue:self.crm_eventstatus forKey:kCalendarFieldeventstatus];
+    }
     [dict setValue:self.crm_location forKey:kCalendarFieldlocation];
     //    [dict setObject:self.crm_notime forKey:kCalendarFieldnotime]; //skip for the moment
     if (self.crm_parent_id != nil) {
