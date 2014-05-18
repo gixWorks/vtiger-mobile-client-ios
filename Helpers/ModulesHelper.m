@@ -45,7 +45,7 @@
     else{
         if ([m isEqualToString:@"18"]) {  //Ugly because ID of some modules are not synced through vTiger
             Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:record];
-            return NSLocalizedString(a.crm_activitytype, @"This contains the crm_activitytype field");
+            return NSLocalizedString(([NSString stringWithFormat:@"%@",a.crm_activitytype]), @"This contains the crm_activitytype field"); //Task, Call or Meeting
         }
     }
     return nil;
@@ -61,7 +61,12 @@
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
     Module *module = [Module MR_findFirstWithPredicate:p];
-    return module.crm_label;
+    if(module != nil){
+        return module.crm_label;
+    }
+    else{
+        return moduleName;
+    }
 }
 
 + (NSString*)moduleIdForModuleName:(NSString*)moduleName
