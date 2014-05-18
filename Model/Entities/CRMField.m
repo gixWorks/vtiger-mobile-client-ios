@@ -1,5 +1,6 @@
 #import "CRMField.h"
 #import "CRMFieldConstants.h"
+#import "CRMFieldPicklistValue.h"
 
 @interface CRMField ()
 
@@ -31,12 +32,22 @@
     }else{
         instance.crm_uitype =  [dict objectForKey:kCRMFielduitype] == nil? nil : [[dict objectForKey:kCRMFielduitype] stringValue];
     }
-    if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklistValues"]) {
+    if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklist"]) {
         NSError *jsonError;
-        instance.crm_type = @"picklistValues";
-        instance.crm_options = [NSJSONSerialization dataWithJSONObject:[dict objectForKey:kCRMFieldtype] options:0 error:&jsonError];
+        instance.crm_type = @"picklist";
+        instance.crm_options = [NSJSONSerialization dataWithJSONObject:[dict objectForKey:@"picklistValues"] options:0 error:&jsonError];
         if (jsonError!=nil) {
             DDLogError(@"%@ %@ error parsing picklist values for field %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), fieldName);
+        }
+        else{
+            NSArray *picklistValues = [[dict objectForKey:kCRMFieldtype] objectForKey:@"picklistValues"];
+            for (NSDictionary *picklistValue in picklistValues) {
+                CRMFieldPicklistValue *pv = [CRMFieldPicklistValue MR_createEntity];
+                pv.crm_label = [picklistValue objectForKey:@"label"];
+                pv.crm_value = [picklistValue objectForKey:@"value"];
+                pv.field = instance;
+            }
+
         }
     }
     else{
