@@ -35,7 +35,7 @@
     if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklist"]) {
         NSError *jsonError;
         instance.crm_type = @"picklist";
-        instance.crm_options = [NSJSONSerialization dataWithJSONObject:[dict objectForKey:@"picklistValues"] options:0 error:&jsonError];
+        instance.crm_options = [NSJSONSerialization dataWithJSONObject:[[dict objectForKey:@"type"] objectForKey:@"picklistValues"] options:0 error:&jsonError];
         if (jsonError!=nil) {
             DDLogError(@"%@ %@ error parsing picklist values for field %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), fieldName);
         }
