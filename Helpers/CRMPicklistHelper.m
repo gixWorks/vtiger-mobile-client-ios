@@ -74,4 +74,41 @@
       [GWActivitySelectItem itemWithLabel:NSLocalizedString(@"Public", @"Public Activity Type Label") value:@"Public"]];
 }
 
++ (NSString*)localizedValueForActivityStatus:(NSString*)value activityType:(NSString*)activityType
+{
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], kVTModuleCalendar];
+    Module *crmmodule = [Module MR_findFirstWithPredicate:p];
+    CRMField *field;
+    //Get the correct field depending on the calendar type Task or Meeting/Call
+    if ([activityType isEqualToString:kCRMActivityTypeTask]) {
+        field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, kCalendarFieldtaskstatus]];
+    }
+    else{
+        field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, kCalendarFieldeventstatus]];
+    }
+    for (CRMFieldPicklistValue *picklistValue in field.picklist_values) {
+        if([picklistValue.crm_value isEqualToString:value])
+        {
+            return picklistValue.crm_label;
+        }
+    }
+    //Otherwise return the default value
+    return value;
+}
+
++ (NSString*)localizedValueForActivityVisibility:(NSString*)value
+{
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], kVTModuleCalendar];
+    Module *crmmodule = [Module MR_findFirstWithPredicate:p];
+    CRMField *field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, kCalendarFieldvisibility]];
+    for (CRMFieldPicklistValue *picklistValue in field.picklist_values) {
+        if([picklistValue.crm_value isEqualToString:value])
+        {
+            return picklistValue.crm_label;
+        }
+    }
+    //Otherwise return the default value
+    return value;
+}
+
 @end

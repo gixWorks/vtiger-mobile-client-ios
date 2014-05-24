@@ -25,4 +25,23 @@
  */
 + (NSArray*)picklistValuesForActivityVisibility;
 
+/**
+ *  Translates the status of the activity to the localized label
+ *
+ *  @param value        the English value of the Status
+ *  @param activityType the type of activity, either Task Call or Meeting
+ *
+ *  @return The localized value of the Status
+ */
++ (NSString*)localizedValueForActivityStatus:(NSString*)value activityType:(NSString*)activityType;
+
+/**
+ *  Translates the visibility to the localized label
+ *
+ *  @param value the visibility constant kPrivate or kPublic
+ *
+ *  @return The localized value of the Visibility
+ */
++ (NSString*)localizedValueForActivityVisibility:(NSString*)value;
+
 @end

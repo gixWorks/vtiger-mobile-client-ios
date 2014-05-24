@@ -12,7 +12,9 @@
 #import "GWNotificationNames.h"
 
 
-//
+//THIS WHOLE CLASS IS WORK IN PROGRESS //GM 2014-05-24
+
+
 NSString* kNotificationResponseBodyKey = @"responseBody";
 
 @implementation NotificationsHandler
