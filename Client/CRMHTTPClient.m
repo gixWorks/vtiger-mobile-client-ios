@@ -48,16 +48,6 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 
 @implementation CRMHTTPClient
 
-+(CRMHTTPClient *)sharedInstance {
-    static dispatch_once_t pred;
-    static CRMHTTPClient *shared = nil;
-    dispatch_once(&pred, ^{
-        NSString *u = [Service getActiveServiceUrl];
-        shared = [[CRMHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:u]];
-    });
-    return shared;
-}
-
 - (id) initWithBaseURL:(NSURL *)url {
     self = [super initWithBaseURL:url];
     if (self){

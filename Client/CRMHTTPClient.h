@@ -37,8 +37,6 @@ extern NSInteger const kErrorCodeLoginRequired;
 
 @interface CRMHTTPClient : AFHTTPClient
 
-+ (CRMHTTPClient*)sharedInstance;
-
 - (void)executeOperationWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;
 - (void)executeOperationWithoutLoginWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;
 

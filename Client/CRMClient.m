@@ -71,7 +71,9 @@ static int kMinutesToRetrySave = 15;
 }
 
 @property (nonatomic, strong) NSMutableDictionary* recordsToFetch;
-@property (nonatomic, strong) NSMutableArray* describeErrors; //TODO: also this is quite ugly. Find a qay to manage the queue of operations
+@property (nonatomic, strong) NSMutableArray* describeErrors; //TODO: also this is quite ugly. Find a way to manage the queue of operations
+
+@property (nonatomic, strong) CRMHTTPClient *crmHttpClient; //This is the AFNetworking AFHTTPClient
 
 //Private Interface
 - (void)relatedRecordsWithGrouping:(NSString*)record relatedModule:(NSString*)module;
@@ -93,6 +95,10 @@ static int kMinutesToRetrySave = 15;
 {
     self = [super init];
     if (self) {
+        
+        NSURL *url = [NSURL URLWithString:[Service getActiveServiceUrl]];
+        if(url)
+            _crmHttpClient = [[CRMHTTPClient alloc] initWithBaseURL:url];
         
         _recordsToFetch = [[NSMutableDictionary alloc] init]; //or load from disk if "save" file is there
         
@@ -289,7 +295,7 @@ static int kMinutesToRetrySave = 15;
 
 - (BOOL)checkReachability
 {
-    CRMHTTPClient *c = [CRMHTTPClient sharedInstance];
+    CRMHTTPClient *c = [[CRMHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:[Service getActiveServiceUrl]]];
     NSInteger reachable = [c networkReachabilityStatus];
     if (reachable == AFNetworkReachabilityStatusReachableViaWiFi || reachable == AFNetworkReachabilityStatusReachableViaWWAN)   {
         return YES;
@@ -305,7 +311,7 @@ static int kMinutesToRetrySave = 15;
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLogin,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting Login operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
+    [_crmHttpClient executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLogin];
 }
 
 - (void)loginAndSyncModules
@@ -314,29 +320,30 @@ static int kMinutesToRetrySave = 15;
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting LoginAndSync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
+    [_crmHttpClient executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginAndFetchModules];
 }
 
 - (void)loginSetup
 {
-    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+    [[_crmHttpClient operationQueue] cancelAllOperations];
     NSString *username = [Service getActiveServiceUsername];
     NSString *password = [CredentialsHelper getPassword];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationLoginAndFetchModules,@"_operation", username, @"username", password, @"password", nil];
     DDLogDebug(@"%@ %@ Starting %@ operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kOperationLoginAndFetchModules   );
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSetupLogin:) name:@"finishedLoginSetup" object:nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
+    [_crmHttpClient executeOperationWithoutLoginWithParameters:parameters notificationName:@"finishedLoginSetup"];
 }
 
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password
 {
+    _crmHttpClient = [[CRMHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:[Service getActiveServiceUrl]]];
     //Used when testing if username and password are correct during login
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 kOperationLogin,@"_operation",
                                 username, @"username",
                                 password, @"password",
                                 nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
+    [_crmHttpClient executeOperationWithoutLoginWithParameters:parameters notificationName:kClientHasFinishedLoginWithoutSave];
 }
 
 - (void)listModuleRecords:(NSString*)module
@@ -347,7 +354,7 @@ static int kMinutesToRetrySave = 15;
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationListModuleRecords,@"_operation", module, @"module", session, @"_session", nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+    [_crmHttpClient executeOperationWithParameters:params notificationName:notificationName];
 }
 
 - (void)executeQuery:(NSString*)query module:(NSString*)module
@@ -363,7 +370,7 @@ static int kMinutesToRetrySave = 15;
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationQuery,@"_operation", query, @"query", session, @"_session", page, @"page", nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+    [_crmHttpClient executeOperationWithParameters:params notificationName:notificationName];
 }
 
 - (void)syncModules
@@ -409,7 +416,7 @@ static int kMinutesToRetrySave = 15;
     NSString *token = syncToken.token == nil? @"" : syncToken.token;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", session, @"_session", module, @"module", token, @"syncToken", kSyncModePUBLIC, @"mode", page, @"page", nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:notificationName];
+    [_crmHttpClient executeOperationWithParameters:params notificationName:notificationName];
 }
 
 - (void)syncCalendarAndUsers
@@ -447,7 +454,7 @@ static int kMinutesToRetrySave = 15;
     //Build parameters ignoring the synctoken
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+    [_crmHttpClient executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
 }
 
 - (void)syncCalendarFromPage:(NSNumber*)page
@@ -470,7 +477,7 @@ static int kMinutesToRetrySave = 15;
     NSString *token = syncToken.token;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", token, @"syncToken", page, @"page", nil];
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+    [_crmHttpClient executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
     
 }
 
@@ -480,7 +487,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDescribe,@"_operation", session, @"_session", module, @"module",  nil];
     
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
+    [_crmHttpClient executeOperationWithParameters:parameters notificationName:kClientHasFinishedDescribe];
 }
 
 - (void)fetchRecord:(NSString*)record
@@ -488,7 +495,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecord,@"_operation", session, @"_session", record, @"record",  nil];
     DDLogDebug(@"%@ %@ Starting FetchRecord: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
+    [_crmHttpClient executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecord];
 }
 
 - (void)relatedRecordsWithGrouping:(NSString*)record relatedModule:(NSString*)module
@@ -499,7 +506,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationRelatedRecordsWithGrouping,@"_operation", session, @"_session", record, @"record", module, @"relatedmodule",  nil];
     DDLogDebug(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
+    [_crmHttpClient executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
 - (void)fetchRecordWithGrouping:(NSString*)record notificationName:(NSString*)notificationName
@@ -509,7 +516,7 @@ static int kMinutesToRetrySave = 15;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
     DDLogDebug(@"%@ %@ Starting FetchRecordWithGrouping: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record);
-    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:httpNotificationName];
+    [_crmHttpClient executeOperationWithParameters:parameters notificationName:httpNotificationName];
 }
 
 - (void)saveChangesToServer
@@ -525,7 +532,7 @@ static int kMinutesToRetrySave = 15;
     if ([deletedIds count] > 0) {
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
         DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
-        [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
+        [_crmHttpClient executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
     }
 
     //Then the updated ones
@@ -551,7 +558,7 @@ static int kMinutesToRetrySave = 15;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleClientFinishedSaveRecord:) name:notificationName object:nil];
-                [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+                [_crmHttpClient executeOperationWithParameters:parameters notificationName:notificationName];
             });
         }
         else{
@@ -585,7 +592,7 @@ static int kMinutesToRetrySave = 15;
 ////    NSString *module_id = [[record componentsSeparatedByString:@"x"] objectAtIndex:0];
 //    NSString *session = [[AppState sharedInstance] session];
 //    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordWithGrouping,@"_operation", session, @"_session", record, @"record",  nil];
-//    [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:notificationName];
+//    [_crmHttpClient executeOperationWithParameters:parameters notificationName:notificationName];
 //
 //}
 
@@ -602,7 +609,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)cancelAllOperations
 {
-    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+    [[_crmHttpClient operationQueue] cancelAllOperations];
 }
 
 #pragma mark - Mass Records fetch (no sync)
@@ -642,7 +649,7 @@ static int kMinutesToRetrySave = 15;
         
         NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationFetchRecordsWithGrouping,@"_operation", module, @"module", queueString, @"ids", session, @"_session", @"", @"alertid", nil];
         DDLogDebug(@"%@ %@ Processing fetch queue for module :%@ IDs: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, queueString);
-        [[CRMHTTPClient sharedInstance] executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
+        [_crmHttpClient executeOperationWithParameters:parameters notificationName:kClientHasFinishedFetchRecordsWithGrouping];
     }
 }
 
@@ -672,7 +679,7 @@ static int kMinutesToRetrySave = 15;
                 if ([errorCode integerValue] == kErrorCodeAuthenticationFailed) {
                     //THIS SUCKS! The user mistook the credentials!
                     //1- cancel all the operations
-                    [[[CRMHTTPClient sharedInstance] operationQueue] cancelAllOperations];
+                    [[_crmHttpClient operationQueue] cancelAllOperations];
                     //2- Send the notification that the login was not valid
                 }
             }else{
