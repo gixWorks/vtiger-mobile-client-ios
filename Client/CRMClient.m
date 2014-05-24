@@ -375,12 +375,17 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncModules
 {
-    [self syncModule:kVTModuleAccounts];
-    [self syncModule:kVTModuleContacts];
-    [self syncModule:kVTModuleLeads];
-    [self syncModule:kVTModuleCampaigns];
-    [self syncModule:kVTModuleHelpDesk];
-    [self syncModule:kVTModulePotentials];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL sync = [defaults boolForKey:@"contactical_sync_all_records"];
+
+    if (sync == YES) {
+        [self syncModule:kVTModuleAccounts];
+        [self syncModule:kVTModuleContacts];
+        [self syncModule:kVTModuleLeads];
+        [self syncModule:kVTModuleCampaigns];
+        [self syncModule:kVTModuleHelpDesk];
+        [self syncModule:kVTModulePotentials];
+    }
 }
 
 - (void)syncModule:(NSString*)module
