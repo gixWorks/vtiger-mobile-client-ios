@@ -34,5 +34,6 @@
 #import "EnabledModules.h"
 #import "Campaign.h"
 #import "CRMErrorMessage.h"
+#import "GWLocation.h"
 
 #endif

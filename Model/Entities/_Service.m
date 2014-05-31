@@ -24,6 +24,7 @@ const struct ServiceRelationships ServiceRelationships = {
 	.enabledModules = @"enabledModules",
 	.errorMessages = @"errorMessages",
 	.groups = @"groups",
+	.history_locations = @"history_locations",
 	.leads = @"leads",
 	.modules = @"modules",
 	.potentials = @"potentials",
@@ -287,6 +288,19 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"groups"];
   
 	[self didAccessValueForKey:@"groups"];
+	return result;
+}
+	
+
+@dynamic history_locations;
+
+	
+- (NSMutableSet*)history_locationsSet {
+	[self willAccessValueForKey:@"history_locations"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"history_locations"];
+  
+	[self didAccessValueForKey:@"history_locations"];
 	return result;
 }
 	

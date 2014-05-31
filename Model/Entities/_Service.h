@@ -25,6 +25,7 @@ extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *enabledModules;
 	__unsafe_unretained NSString *errorMessages;
 	__unsafe_unretained NSString *groups;
+	__unsafe_unretained NSString *history_locations;
 	__unsafe_unretained NSString *leads;
 	__unsafe_unretained NSString *modules;
 	__unsafe_unretained NSString *potentials;
@@ -47,6 +48,7 @@ extern const struct ServiceFetchedProperties {
 @class EnabledModules;
 @class CRMErrorMessage;
 @class Group;
+@class GWLocation;
 @class Lead;
 @class Module;
 @class Potential;
@@ -229,6 +231,13 @@ extern const struct ServiceFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *history_locations;
+
+- (NSMutableSet*)history_locationsSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *leads;
 
 - (NSMutableSet*)leadsSet;
@@ -334,6 +343,11 @@ extern const struct ServiceFetchedProperties {
 - (void)removeGroups:(NSSet*)value_;
 - (void)addGroupsObject:(Group*)value_;
 - (void)removeGroupsObject:(Group*)value_;
+
+- (void)addHistory_locations:(NSSet*)value_;
+- (void)removeHistory_locations:(NSSet*)value_;
+- (void)addHistory_locationsObject:(GWLocation*)value_;
+- (void)removeHistory_locationsObject:(GWLocation*)value_;
 
 - (void)addLeads:(NSSet*)value_;
 - (void)removeLeads:(NSSet*)value_;
@@ -477,6 +491,11 @@ extern const struct ServiceFetchedProperties {
 
 - (NSMutableSet*)primitiveGroups;
 - (void)setPrimitiveGroups:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveHistory_locations;
+- (void)setPrimitiveHistory_locations:(NSMutableSet*)value;
 
 
 
