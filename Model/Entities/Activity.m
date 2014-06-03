@@ -122,7 +122,9 @@
             self.crm_location = [dict objectForKey:kCalendarFieldlocation];
             self.crm_priority = [dict objectForKey:kCalendarFieldtaskpriority];
             self.crm_recurringtype = [dict objectForKey:kCalendarFieldrecurringtype];
-            self.crm_reminder_time = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldreminder_time]];
+            if ([dict objectForKey:kCalendarFieldreminder_time] != nil) {
+                self.crm_reminder_time = [numberFormatter numberFromString:[dict objectForKey:kCalendarFieldreminder_time]]; //!!! When we save a record in Vtiger 5.3.0 for some reasons the reminder_time is not saved. This is to avoid overwriting a reminder_time specified locally with a nil value coming from the CRM. (This honors the choice of the user)
+            }
             self.crm_due_date =  due_date;
             self.crm_duration_hours = duration_hours;
             self.crm_duration_minutes = duration_minutes;
@@ -261,7 +263,7 @@
     [dict setValue:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
     [dict setValue:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
     [dict setValue:self.crm_visibility forKey:kCalendarFieldvisibility];
-    [dict setValue:[numberFormatter stringFromNumber:self.crm_reminder_time] forKey:kCalendarFieldreminder_time];
+    [dict setValue:self.crm_reminder_time forKey:kCalendarFieldreminder_time];
     
     if (isNewRecord == NO) {
         [dict setObject:self.crm_id forKey:kCalendarFieldid];
