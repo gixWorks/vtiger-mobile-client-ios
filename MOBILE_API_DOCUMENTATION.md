@@ -393,12 +393,13 @@ Parameters:
 
 Allowed values for `module`:
 
-* Calendar
-* Leads
-* Accounts
-* Contacts
-* HelpDesk
-* Potentials
+ * Calendar 
+ * Leads
+ * Accounts
+ * Contacts
+ * HelpDesk
+ * Potentials
+ * Campaigns
 
 Example of return result:
 
@@ -843,7 +844,7 @@ Example of return result:
 
 Performs a sync of records for specified modules, returning the updated and deleted records since last sync. (Identified by syncToken parameter)
 
-IMPORTANT: syncModuleRecords does not display custom fields (apparently)
+*IMPORTANT*: syncModuleRecords does not display custom fields (apparently)
 
 Parameters:
 
@@ -881,17 +882,18 @@ Parameters:
 
 Allowed values for `module`:
 
-* Calendar
-* Leads
-* Accounts
-* Contacts
-* HelpDesk
-* Potentials
+ * Calendar
+ * Leads
+ * Accounts
+ * Contacts
+ * HelpDesk
+ * Potentials
+ * Campaigns
 
 Allowed values for `mode`:
 
-* PRIVATE
-* PUBLIC
+ * PRIVATE
+ * PUBLIC
 
 `Page` can be empty.
 
@@ -1250,7 +1252,7 @@ Allowed values for `mode`:
 
 Fetches a single record. Fields are laid out in a simple key:value association, and all additional keys (such as uitype, label) are skipped. 
 
-IMPORTANT: fetchRecord fetches Custom Fields correctly, but does not display a label for them.
+**IMPORTANT**: fetchRecord fetches Custom Fields correctly, but does not display a label for them.
 
 Parameters:
 
@@ -1842,13 +1844,23 @@ Allowed values for `module`:
 
 Example of JSON String to set in the `values` parameter: 
 
-`{"date_start":"2014-01-18", "due_date": "2014-01-18", "start_time":"14:44","activitytype":"Call","location":"Overhoeksplein 2, Amsterdam","subject":"Call Smith", "assigned_user_id" : "19x1","taskstatus":"Planned","visibility":"Private"}`
+    {
+      "date_start": "2014-01-18",
+      "due_date": "2014-01-18",
+      "start_time": "14:44",
+      "activitytype": "Call",
+      "location": "Overhoeksplein 2, Amsterdam",
+      "subject": "Call Smith",
+      "assigned_user_id": "19x1",
+      "taskstatus": "Planned",
+      "visibility": "Private"
+    }
 
-Note the absence of "id" because we want to create new record
+Note the absence of "id" because we want to create a new record.
 
-For setting the assigned user, The id must be in the form of moduleid x entityid 
+For setting the assigned user, The id must be in the form of `moduleid x entityid`.
 
-Record must be in the form module_idXrecord_id such as 1x1151
+Record must be in the form `module_idXrecord_id` such as `1x1151`.
 
 Example of successful response:  (basically returns the entire record created)
 
@@ -2224,12 +2236,18 @@ Example of successful response:  (basically returns the entire record created)
 
 Example of error:
 
-`{"success":false,"error":{"code":"MANDATORY_FIELDS_MISSING","message":"assigned_user_id does not have a value"}}`
+    {
+      "success": false,
+      "error": {
+        "code": "MANDATORY_FIELDS_MISSING",
+        "message": "assigned_user_id does not have a value"
+      }
+    }
 
 ## Module-specific considerations
 
 ### Contacts
-Contacts have a picture field available, but it can be accessed only through the web interface and its content (e.g. the file name) are not retrieved either by the webservice.php or any operation such as `syncModuleRecords`.
+Contacts have a picture field available, but it can be accessed only through the web interface and its content (e.g. the file name) are not retrieved either by the `webservice.php` or any operation such as `syncModuleRecords`.
 When displaying the fields as grouped, a "block" contains the file information but the array is actually empty, even when a contact picture is uploaded.
 
     {
