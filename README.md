@@ -7,9 +7,9 @@ My analysis and exploration of vTiger Mobile API is published at this GitHub pag
 
 **Please note that this library is still under heavy development**
 
-I am currently using it for the iOS app [ContactiCal](http://www.contactic.al), that you can try it for free in Beta by signing up [here](http://eepurl.com/SyR6b)!
+I am currently using it for the iOS app [ContactiCal](http://www.contactic.al), that can be downloaded on the [App Store](https://itunes.apple.com/nl/app/contactical-for-vtiger-crm/id879934819?l=en&mt=8)!
 
 
 ## License
 
-This project is released under an MIT Licence. 
+This project is released under [MIT Licence](http://opensource.org/licenses/MIT). 
