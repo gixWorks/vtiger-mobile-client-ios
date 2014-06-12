@@ -60,9 +60,9 @@ Modules follow the following rules:
 
 ## Details of Operations
 
-NOTE: Looks like all operations support more parameters than the ones that are needed. Parameters such as `action`, `file` and `search` can be left out and what happens is that php.log will display *Notice*-level errors. Depending on the php.ini configuration, this can clutter the log file. 
+*NOTE*: Looks like all operations support more parameters than the ones that are needed. Parameters such as `action`, `file` and `search` can be left out and what happens is that `php.log` will display *Notice*-level errors. Depending on the `php.ini` configuration, this can clutter the log file. 
 
-Operations described in this documento:
+Operations described in this document:
 
  - [login](#login)
  - [loginAndFetchModules](#loginAndFetchModules)
