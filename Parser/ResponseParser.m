@@ -114,7 +114,7 @@
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+        DDLogError(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
         [parseResult setObject:[exception description] forKey:kErrorKey];
     }
     return parseResult;

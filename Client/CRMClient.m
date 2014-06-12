@@ -696,18 +696,7 @@ static int kMinutesToRetrySave = 15;
 
         }
         @catch (NSException *exception) {
-            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
-            //custom hockeyapp
-            NSDictionary *hockeyParams = @{@"description" : [exception description]};
-            NSString *url = [NSString stringWithFormat:@"https://rink.hockeyapp.net/api/2/apps/%@/crashes/upload", kHockeyAppIdentifier];
-            AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:url]];
-            [client postPath:@"" parameters:hockeyParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"Posted OK");
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"Error posting Hockey Crash");
-            }];
-            //End custom hockey
-            
+            DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);            
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:[notification userInfo]];
         }
     }
