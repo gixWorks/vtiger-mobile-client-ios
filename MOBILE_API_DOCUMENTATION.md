@@ -39,47 +39,41 @@ Modules follow the following rules:
 
 ## Dump of operations from php files
 
-`'login'                   => array('file' => '/api/ws/Login.php', 'class' => 'Mobile_WS_Login'),`
-
-`		'loginAndFetchModules'    => array('file' => '/api/ws/LoginAndFetchModules.php', 'class' => 'Mobile_WS_LoginAndFetchModules'),`
-
-`		'fetchModuleFilters'      => array('file' => '/api/ws/FetchModuleFilters.php'  , 'class' => 'Mobile_WS_FetchModuleFilters'),`
-
-`		'filterDetailsWithCount'  => array('file' => '/api/ws/FilterDetailsWithCount.php', 'class' => 'Mobile_WS_FilterDetailsWithCount'),`
-
-`		'fetchAllAlerts'          => array('file' => '/api/ws/FetchAllAlerts.php', 'class' => 'Mobile_WS_FetchAllAlerts'),`
-
-`		'alertDetailsWithMessage' => array('file' => '/api/ws/AlertDetailsWithMessage.php', 'class' => 'Mobile_WS_AlertDetailsWithMessage'),`
-
-`		'listModuleRecords'       => array('file' => '/api/ws/ListModuleRecords.php', 'class' => 'Mobile_WS_ListModuleRecords'),`
-
-`		'fetchRecord'             => array('file' => '/api/ws/FetchRecord.php', 'class' => 'Mobile_WS_FetchRecord'),`
-
-`		'fetchRecordWithGrouping' => array('file' => '/api/ws/FetchRecordWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordWithGrouping'),`
-
-`		'fetchRecordsWithGrouping' => array('file' => '/api/ws/FetchRecordsWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordsWithGrouping'),`
-
-`		'describe'                => array('file' => '/api/ws/Describe.php', 'class' => 'Mobile_WS_Describe'),`
-
-`		'saveRecord'              => array('file' => '/api/ws/SaveRecord.php', 'class' => 'Mobile_WS_SaveRecord'),`
-
-`		'syncModuleRecords'       => array('file' => '/api/ws/SyncModuleRecords.php', 'class' => 'Mobile_WS_SyncModuleRecords'),`
-
-`		'query'                   => array('file' => '/api/ws/Query.php', 'class' => 'Mobile_WS_Query'),`
-
-`		'queryWithGrouping'       => array('file' => '/api/ws/QueryWithGrouping.php', 'class' => 'Mobile_WS_QueryWithGrouping'),`
-
-`		'relatedRecordsWithGrouping' => array('file' => '/api/ws/RelatedRecordsWithGrouping.php', 'class' => 'Mobile_WS_RelatedRecordsWithGrouping'),`
-
-`		'deleteRecords'              => array('file' => '/api/ws/DeleteRecords.php', 'class' => 'Mobile_WS_DeleteRecords'),`
-
-`		'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),`
+ - 'login'                   => array('file' => '/api/ws/Login.php', 'class' => 'Mobile_WS_Login'),
+ - 'loginAndFetchModules'    => array('file' => '/api/ws/LoginAndFetchModules.php', 'class' => 'Mobile_WS_LoginAndFetchModules'),
+ - 'fetchModuleFilters'      => array('file' => '/api/ws/FetchModuleFilters.php'  , 'class' => 'Mobile_WS_FetchModuleFilters'),
+ - 'filterDetailsWithCount'  => array('file' => '/api/ws/FilterDetailsWithCount.php', 'class' => 'Mobile_WS_FilterDetailsWithCount'),
+ - 'fetchAllAlerts'          => array('file' => '/api/ws/FetchAllAlerts.php', 'class' => 'Mobile_WS_FetchAllAlerts'),
+ - 'alertDetailsWithMessage' => array('file' => '/api/ws/AlertDetailsWithMessage.php', 'class' => 'Mobile_WS_AlertDetailsWithMessage'),
+ - 'listModuleRecords'       => array('file' => '/api/ws/ListModuleRecords.php', 'class' => 'Mobile_WS_ListModuleRecords'),
+ - 'fetchRecord'             => array('file' => '/api/ws/FetchRecord.php', 'class' => 'Mobile_WS_FetchRecord'),
+ - 'fetchRecordWithGrouping' => array('file' => '/api/ws/FetchRecordWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordWithGrouping'),
+ - 'fetchRecordsWithGrouping' => array('file' => '/api/ws/FetchRecordsWithGrouping.php', 'class' => 'Mobile_WS_FetchRecordsWithGrouping'),
+ - 'describe'                => array('file' => '/api/ws/Describe.php', 'class' => 'Mobile_WS_Describe'),
+ - 'saveRecord'              => array('file' => '/api/ws/SaveRecord.php', 'class' => 'Mobile_WS_SaveRecord'),
+ - 'syncModuleRecords'       => array('file' => '/api/ws/SyncModuleRecords.php', 'class' => 'Mobile_WS_SyncModuleRecords'),
+ - 'query'                   => array('file' => '/api/ws/Query.php', 'class' => 'Mobile_WS_Query'),
+ - 'queryWithGrouping'       => array('file' => '/api/ws/QueryWithGrouping.php', 'class' => 'Mobile_WS_QueryWithGrouping'),
+ - 'relatedRecordsWithGrouping' => array('file' => '/api/ws/RelatedRecordsWithGrouping.php', 'class' => 'Mobile_WS_RelatedRecordsWithGrouping'),
+ - 'deleteRecords'              => array('file' => '/api/ws/DeleteRecords.php', 'class' => 'Mobile_WS_DeleteRecords'),
+ - 'addRecordComment'           => array('file' => '/api/ws/AddRecordComment.php', 'class' => 'Mobile_WS_AddRecordComment'),
 
 ## Details of Operations
 
 NOTE: Looks like all operations support more parameters than the ones that are needed. Parameters such as `action`, `file` and `search` can be left out and what happens is that php.log will display *Notice*-level errors. Depending on the php.ini configuration, this can clutter the log file. 
 
-### login
+Operations described in this documento:
+
+ - [login](#login)
+ - [loginAndFetchModules](#loginAndFetchModules)
+ - [describe](#describe)
+ - [syncModuleRecords](#syncModuleRecords)
+ - [fetchRecord](#fetchRecord)
+ - [fetchRecordWithGrouping](#fetchRecordWithGrouping)
+ - [fetchRecordsWithGrouping](#fetchRecordsWithGrouping) 
+ - [saveRecord](#saveRecord)
+
+### <a name=#login"></a>login
 
 Params:
 
@@ -122,7 +116,7 @@ Response:
     }
 
 
-### loginAndFetchModules
+### <a name=#loginAndFetchModules"></a>loginAndFetchModules
 
 It’s used by the mobile web client to display a list of modules to the user after the login is successful. It’s also useful to check if a module is enabled or not. 
 
@@ -351,7 +345,7 @@ Response:
     }
 
 
-### Describe
+### <a name=#describe"></a>describe
 
 Describe queries the API for a specified module and returns its configuration.
 
@@ -840,7 +834,7 @@ Example of return result:
     }
     }
 
-### syncModuleRecords
+### <a name=#syncModuleRecords"></a>syncModuleRecords
 
 Performs a sync of records for specified modules, returning the updated and deleted records since last sync. (Identified by syncToken parameter)
 
@@ -1248,7 +1242,7 @@ Allowed values for `mode`:
     }
     }
 
-### fetchRecord
+### <a name=#fetchRecord"></a>fetchRecord
 
 Fetches a single record. Fields are laid out in a simple key:value association, and all additional keys (such as uitype, label) are skipped. 
 
@@ -1338,7 +1332,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
     }
 
 
-### fetchRecordWithGrouping
+### <a name=#fetchRecordWithGrouping"></a>fetchRecordWithGrouping
 
 Fetches a single record and returns fields with the complete representation containing uitype, label (translated), value and name. 
 
@@ -1373,10 +1367,6 @@ Parameters:
   </tr>
 </table>
 
-
-Allowed values for `module`:
-
-* Calendar
 
 Record must be in the form module_idXrecord_id such as 1x1151
 
@@ -1565,7 +1555,7 @@ Record must be in the form module_idXrecord_id such as 1x1151
     }
     }
 
-### fetchRecordsWithGrouping
+### <a name=#fetchRecordsWithGrouping"></a>fetchRecordsWithGrouping
 
 Fetches an array of records and returns fields with the complete representation containing uitype, label (translated), value and name. Custom fields are fetched.
 
@@ -1800,7 +1790,7 @@ Records must be in the form module_idXrecord_id, such as 1x1151, and the `ids` p
     }
 
 
-### saveRecord
+### <a name=#saveRecord"></a>saveRecord
 
 Updates or creates a record, depending whether the record id is set or not. 
 
