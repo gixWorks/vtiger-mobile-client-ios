@@ -259,6 +259,7 @@
                 token.token = nextSyncToken;
                 token.module = module;
                 token.datetime = [NSDate date];
+                token.service = [Service getActive];
                 [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
             }
         }
