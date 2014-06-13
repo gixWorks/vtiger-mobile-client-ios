@@ -291,7 +291,7 @@
 #endif
         if (success != YES) {
             NSDictionary *error = [JSON objectForKey:kErrorKey];
-            return [NSDictionary dictionaryWithObjectsAndKeys:error, kErrorKey, nil];
+            return [NSDictionary dictionaryWithObjectsAndKeys:@(YES), @"syncHasFinished",error, kErrorKey, nil];
         }
         
         //1- Do something with the synctoken, save it in AppData
@@ -346,25 +346,55 @@
             saveError = error;
         }];
         
+        BOOL syncHasFinished = YES;
         //G- if nextPage != 0 means that we have another page of records to sync
         if (nextPage != 0) {
             [[CRMClient sharedInstance] syncCalendarFromPage:[NSNumber numberWithInteger:nextPage]];
+            syncHasFinished = NO;
         }
         else{
             //H- If Save went OK, set the next synctoken
             if (saveError == nil) {
-                SyncToken *token = [SyncToken MR_createEntity];
-                token.token = nextSyncToken;
-                token.module = kVTModuleCalendar;
-                token.datetime = [NSDate date];
-                [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+                SyncToken *lastSyncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
+                NSString *lastUsedToken = lastSyncToken.token == nil? @"" : lastSyncToken.token;
+                
+                if (![nextSyncToken isEqualToString:lastUsedToken] && ([deletedRecords count] != 0 || [updatedRecords count] != 0)) {
+                    //If nextSyncToken != "" then it means that there were some records in the current result. In case there were no record updated, Vtiger returns the same syncToken that was sent previously
+                    //Since Vtiger does not return the right nextPage number, we need to address this issue and try to increase the nextPage number and sync again
+                    SyncToken *token = [SyncToken MR_createEntity];
+                    token.token = nextSyncToken;
+                    token.module = kVTModuleCalendar;
+                    token.datetime = [NSDate date];
+                    token.service = [Service getActive];
+                    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+                    
+                    if (nextPage == 0) {
+                        //We need to try to increase the pageNumber
+                        [CRMClient sharedInstance].calendarSyncPage +=1;
+                        [[CRMClient sharedInstance] syncCalendarFromPage:@([CRMClient sharedInstance].calendarSyncPage)];
+                        syncHasFinished = NO;
+                    }
+                }
+                else if ([nextSyncToken isEqualToString:lastUsedToken] && [deletedRecords count] == 0 && [updatedRecords count] == 0)
+                {
+                    //TODO: have a look again with clear mind
+                    if (![nextSyncToken isEqualToString:@""]) {
+                        SyncToken *token = [SyncToken MR_createEntity];
+                        token.token = nextSyncToken;
+                        token.module = kVTModuleCalendar;
+                        token.datetime = [NSDate date];
+                        token.service = [Service getActive];
+                        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+                    }
+                }
+                //We should not get here
             }
         }
         
-        return [NSDictionary dictionaryWithObjectsAndKeys:saveError,kErrorKey, nil];
+        return [NSDictionary dictionaryWithObjectsAndKeys: @(syncHasFinished), @"syncHasFinished", saveError,kErrorKey,nil];
     }
     @catch (NSException *exception) {
-        return [NSDictionary dictionaryWithObject:[exception description] forKey:kErrorKey];
+        return [NSDictionary dictionaryWithObjectsAndKeys: @(YES), @"syncHasFinished",[exception description], kErrorKey, nil];
     }
 }
 

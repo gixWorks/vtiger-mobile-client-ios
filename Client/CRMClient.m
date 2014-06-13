@@ -437,6 +437,7 @@ static int kMinutesToRetrySave = 15;
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = kMinutesFromLastSync * 60;
     if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil || requested == YES) {
+        self.calendarSyncPage = 0;
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar);
@@ -448,6 +449,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)resyncCalendar
 {
+    self.calendarSyncPage = 0;
     //Drop all from Calendar
     NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
     [Activity MR_deleteAllMatchingPredicate:p];
@@ -464,22 +466,9 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncCalendarFromPage:(NSNumber*)page
 {
-    //TODO: find out how to send custom crash log
-//    NSString *log = [NSString stringWithFormat:@"Package: PACKAGE NAME \nVersion: VERSION\nOS: OS VERSIONManufacturer: DEVICE OEM\nModel: DEVICE MODEL\nDate: DATETIME"];
-//    
-//    NSDictionary *hockeyParams = @{@"log" : log, @"description" : NSStringFromSelector(_cmd)};
-//    NSString *url = [NSString stringWithFormat:@"https://rink.hockeyapp.net/api/2/apps/%@/crashes/upload", kHockeyAppIdentifier];
-//    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:url]];
-//    [client postPath:@"" parameters:hockeyParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"Posted OK");
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error posting Hockey Crash");
-//    }];
-    //End custom crash
-    
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
-    NSString *token = syncToken.token;
+    NSString *token = syncToken.token == nil? @"" : syncToken.token;
     NSString *session = [CredentialsHelper getSession];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", token, @"syncToken", page, @"page", nil];
     [_crmHttpClient executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
@@ -804,7 +793,9 @@ static int kMinutesToRetrySave = 15;
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
         [self processFetchQueue];
         [self syncModules]; //Dangerous! How long will it take??
-        [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+        if ([[parseResult objectForKey:@"syncHasFinished"] boolValue] == YES) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+        }
         //            });
         //        });
     }

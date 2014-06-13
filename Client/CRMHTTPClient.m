@@ -53,7 +53,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     if (self){
         [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
         [self registerHTTPOperationClass:[CRMLoginRequestOperation class]];
-        [[self operationQueue] setMaxConcurrentOperationCount:2];
+        [[self operationQueue] setMaxConcurrentOperationCount:1];
         self.defaultSSLPinningMode = AFSSLPinningModeCertificate;
     }
     return self;
@@ -105,7 +105,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     }
     
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
-    
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     CRMLoginRequestOperation *operation = [CRMLoginRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         
         
@@ -180,6 +180,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     }
     
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];
@@ -244,6 +245,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];

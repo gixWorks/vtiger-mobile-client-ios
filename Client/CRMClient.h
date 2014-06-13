@@ -26,6 +26,8 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 
 @interface CRMClient : NSObject <URLCheckerClientDelegate>
 
+@property (nonatomic, assign) NSInteger calendarSyncPage;
+
 + (CRMClient*)sharedInstance;
 
 /**
