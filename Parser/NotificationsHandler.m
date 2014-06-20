@@ -24,7 +24,7 @@ NSString* kNotificationResponseBodyKey = @"responseBody";
     //Check this is not deallocated
     NSArray *params = [[notification name] componentsSeparatedByString:kNotificationSeparator];
     NSString *module = [params objectAtIndex:2];
-    NSString *recordId = [params objectAtIndex:1];
+//    NSString *recordId = [params objectAtIndex:1];
     NSString *notificationName = [params objectAtIndex:0];
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     if ([[notification userInfo] objectForKey:kErrorKey]) {

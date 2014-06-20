@@ -4,6 +4,7 @@
 #import "GWPreferencesHelper.h"
 #import "CRMFieldConstants.h"
 #import "CRMConstants.h"
+#import "NSDate+GWUtilities.h"
 
 
 @interface Activity ()
@@ -86,6 +87,7 @@
                 end_time_string = [end_time_string stringByAppendingString:@":00"];
             }
             
+            //DateTime Created and Modified
             NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
             [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             NSDate *time_modified = [dateTimeFormat dateFromString:[dict objectForKey:kFieldModifiedTime]];
@@ -156,9 +158,16 @@
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
             
-            self.my_datetime_start = [cal dateFromComponents:comps];
+            self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
             NSTimeInterval duration = ( [self.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [self.crm_duration_minutes integerValue] * 60.0 );
-            self.my_datetime_end = [self.my_datetime_start dateByAddingTimeInterval:duration];
+            self.my_datetime_end = [[self.my_datetime_start dateByAddingTimeInterval:duration] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
+            self.my_timezone = [Service getActive].crm_timezone_server;
+            
+            //Set again the other fields now that we have time zone applied
+            self.crm_date_start = [self.my_datetime_start gw_DatePart];
+            self.crm_time_start = [self.my_datetime_start gw_TimePart];
+            self.crm_time_end = [self.my_datetime_end gw_TimePart];
+            
             
             //Now that we have end date, we check if we should actually sync it
             NSDate *syncBackTo = [GWPreferencesHelper getDateToSyncBackTo];
@@ -226,6 +235,11 @@
     [timeFormat setDateFormat:@"HH:mm:ss"];
     NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
     [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    
+    //Time Zone Conversion
+    self.crm_date_start = [[self.my_datetime_start gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_DatePart];
+    self.crm_time_start = [[self.my_datetime_start gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_TimePart];
+    self.crm_time_end = [[self.my_datetime_end gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_TimePart];
     
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];

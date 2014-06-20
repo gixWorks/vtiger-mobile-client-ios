@@ -35,6 +35,7 @@ const struct ActivityAttributes ActivityAttributes = {
 	.my_datetime_end = @"my_datetime_end",
 	.my_datetime_start = @"my_datetime_start",
 	.my_deleted = @"my_deleted",
+	.my_timezone = @"my_timezone",
 };
 
 const struct ActivityRelationships ActivityRelationships = {
@@ -386,6 +387,13 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 - (void)setPrimitiveMy_deletedValue:(BOOL)value_ {
 	[self setPrimitiveMy_deleted:[NSNumber numberWithBool:value_]];
 }
+
+
+
+
+
+@dynamic my_timezone;
+
 
 
 

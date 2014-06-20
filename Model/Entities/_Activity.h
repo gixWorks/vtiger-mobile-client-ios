@@ -36,6 +36,7 @@ extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *my_datetime_end;
 	__unsafe_unretained NSString *my_datetime_start;
 	__unsafe_unretained NSString *my_deleted;
+	__unsafe_unretained NSString *my_timezone;
 } ActivityAttributes;
 
 extern const struct ActivityRelationships {
@@ -47,6 +48,7 @@ extern const struct ActivityFetchedProperties {
 } ActivityFetchedProperties;
 
 @class Service;
+
 
 
 
@@ -419,6 +421,16 @@ extern const struct ActivityFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* my_timezone;
+
+
+
+//- (BOOL)validateMy_timezone:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) Service *service;
 
 //- (BOOL)validateService:(id*)value_ error:(NSError**)error_;
@@ -632,6 +644,12 @@ extern const struct ActivityFetchedProperties {
 
 - (BOOL)primitiveMy_deletedValue;
 - (void)setPrimitiveMy_deletedValue:(BOOL)value_;
+
+
+
+
+- (NSString*)primitiveMy_timezone;
+- (void)setPrimitiveMy_timezone:(NSString*)value;
 
 
 
