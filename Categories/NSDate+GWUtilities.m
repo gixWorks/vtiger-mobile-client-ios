@@ -20,7 +20,6 @@
     NSCalendar *cal = [NSCalendar currentCalendar];
     return [cal dateFromComponents:((^{
         NSDateComponents *comps =  [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:self];
-        
         [comps setTimeZone:tz];
         return comps;
     })())];
