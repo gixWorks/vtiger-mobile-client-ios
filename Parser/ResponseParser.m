@@ -271,7 +271,7 @@
     }
 }
 
-+ (NSDictionary*)parseCalendarSync:(NSDictionary *)JSON
++ (NSDictionary*)parseCalendarSync:(NSDictionary *)JSON requestParameters:(NSDictionary*)parameters
 {
     @try {
         BOOL success = [[JSON objectForKey:@"success"] boolValue];
@@ -355,8 +355,7 @@
         else{
             //H- If Save went OK, set the next synctoken
             if (saveError == nil) {
-                SyncToken *lastSyncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
-                NSString *lastUsedToken = lastSyncToken.token == nil? @"" : lastSyncToken.token;
+                NSString *lastUsedToken = [parameters objectForKey:@"syncToken"];
                 
                 if (![nextSyncToken isEqualToString:lastUsedToken] && ([deletedRecords count] != 0 || [updatedRecords count] != 0)) {
                     //If nextSyncToken != "" then it means that there were some records in the current result. In case there were no record updated, Vtiger returns the same syncToken that was sent previously
@@ -368,15 +367,13 @@
                     token.service = [Service getActive];
                     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
                     
-                    if (nextPage == 0) {
-                        //We need to try to increase the pageNumber
-                        [CRMClient sharedInstance].calendarSyncPage +=1;
-                        [[CRMClient sharedInstance] syncCalendarFromPage:@([CRMClient sharedInstance].calendarSyncPage)];
-                        syncHasFinished = NO;
-                    }
+                    //We increase the page from the previous request and try to sync more records
+                    [[CRMClient sharedInstance] syncCalendarFromPage:@([[parameters objectForKey:@"page"] integerValue]+1) token:lastUsedToken];
+                    syncHasFinished = NO;
                 }
                 else if ([nextSyncToken isEqualToString:lastUsedToken] && [deletedRecords count] == 0 && [updatedRecords count] == 0)
                 {
+                    //Sync is over
                     //TODO: have a look again with clear mind
                     if (![nextSyncToken isEqualToString:@""]) {
                         SyncToken *token = [SyncToken MR_createEntity];

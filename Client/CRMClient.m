@@ -437,7 +437,6 @@ static int kMinutesToRetrySave = 15;
     //If the date is > xx minutes since last sync
     NSTimeInterval interval = kMinutesFromLastSync * 60;
     if (abs([syncToken.datetime timeIntervalSinceNow]) > interval || syncToken == nil || requested == YES) {
-        self.calendarSyncPage = 0;
         [self syncCalendarFromPage:[NSNumber numberWithInt:0]];
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasStartedSyncCalendar object:self];
         DDLogDebug(@"%@ %@ Starting %@ Sync operation", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar);
@@ -449,7 +448,6 @@ static int kMinutesToRetrySave = 15;
 
 - (void)resyncCalendar
 {
-    self.calendarSyncPage = 0;
     //Drop all from Calendar
     NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
     [Activity MR_deleteAllMatchingPredicate:p];
@@ -469,10 +467,18 @@ static int kMinutesToRetrySave = 15;
     DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     NSString *token = syncToken.token == nil? @"" : syncToken.token;
+    [self syncCalendarFromPage:page token:token];
+}
+
+- (void)syncCalendarFromPage:(NSNumber*)page token:(NSString*)token
+{
+    DDLogVerbose(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSString *session = [CredentialsHelper getSession];
+    if (token == nil) {
+        token = @"";
+    }
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", token, @"syncToken", page, @"page", nil];
     [_crmHttpClient executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
-    
 }
 
 - (void)describeModule:(NSString*)module
@@ -785,17 +791,18 @@ static int kMinutesToRetrySave = 15;
         NSDictionary *JSON = [[notification userInfo] objectForKey:kClientNotificationResponseBodyKey];
         //        dispatch_queue_t myQueue = dispatch_queue_create("com.gixWorks.syncParseQueue", 0);
         //        dispatch_async(myQueue, ^{
-        NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON];
+        NSDictionary *parseResult = [ResponseParser parseCalendarSync:JSON requestParameters:[[notification userInfo] objectForKey:kClientNotificationParametersKey]];
         if ([parseResult objectForKey:kErrorKey] != nil)
         {
             DDLogWarn(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[parseResult objectForKey:kErrorKey] description]);
         }
         //            dispatch_async(dispatch_get_main_queue(), ^{
         //Sync is finished calendar records are parsed, it's time to process the Fetch Queue to fetch all the records that should be associated to the ones that were synced
-        [self processFetchQueue];
-        [self syncModules]; //Dangerous! How long will it take??
         if ([[parseResult objectForKey:@"syncHasFinished"] boolValue] == YES) {
+            [self processFetchQueue];
+            [self syncModules]; //Dangerous! How long will it take??
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+            
         }
         //            });
         //        });

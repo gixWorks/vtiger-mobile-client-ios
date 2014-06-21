@@ -26,8 +26,6 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 
 @interface CRMClient : NSObject <URLCheckerClientDelegate>
 
-@property (nonatomic, assign) NSInteger calendarSyncPage;
-
 + (CRMClient*)sharedInstance;
 
 /**
@@ -105,6 +103,14 @@ extern NSString* const kManagerHasStartedSyncCalendar;
  *  @param page the page number
  */
 - (void)syncCalendarFromPage:(NSNumber*)page;
+
+/**
+ *  Performs the syncModule operation for the Calendar starting from a specific page in the paginated records list and a specific token, to have more control on the token that is passed
+ *
+ *  @param page           the page parameter
+ *  @param token          the syncToken parameter
+ */
+- (void)syncCalendarFromPage:(NSNumber*)page token:(NSString*)token;
 
 /**
  *  Performs the describe operation for the specified module
