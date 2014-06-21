@@ -524,7 +524,8 @@ static int kMinutesToRetrySave = 15;
         [deletedIds addObject:mr.crm_id];
     }
     if ([deletedIds count] > 0) {
-        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deletedIds, @"records",  nil];
+        NSString *deleteIds_s = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:deletedIds options:0 error:nil] encoding:NSUTF8StringEncoding];
+        NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationDeleteRecords,@"_operation", session, @"_session", deleteIds_s, @"records",  nil];
         DDLogDebug(@"%@ %@ Starting DeleteRecords: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), deletedIds);
         [_crmHttpClient executeOperationWithParameters:parameters notificationName:kClientHasFinishedDeleteRecords];
     }
