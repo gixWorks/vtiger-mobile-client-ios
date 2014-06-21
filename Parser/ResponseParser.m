@@ -62,22 +62,22 @@
             
             
             //Get info about timezones for server and user
-            NSString *timezoneServer = [JSON valueForKeyPath:@"result.crm_tz"];
-            if (timezoneServer == nil) {
+            NSString *timezoneServer = [JSON valueForKeyPath:@"result.login.crm_tz"];
+            if ([timezoneServer isKindOfClass:[NSNull class]]) {
                 timezoneServer = [[NSTimeZone defaultTimeZone] name];
             }
             else{
-                NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneServer];
+                NSTimeZone *tz = [NSTimeZone timeZoneWithName:timezoneServer];
                 timezoneServer = [tz name];
             }
             [parseResult setObject:timezoneServer forKey:@"crm_tz"];
             
-            NSString *timezoneUser = [JSON valueForKeyPath:@"result.user_tz"];
-            if (timezoneUser == nil) {
+            NSString *timezoneUser = [JSON valueForKeyPath:@"result.login.user_tz"];
+            if ([timezoneUser isKindOfClass:[NSNull class]]) {
                 timezoneUser = [[NSTimeZone defaultTimeZone] name];
             }
             else{
-                NSTimeZone *tz = [NSTimeZone timeZoneWithAbbreviation:timezoneUser];
+                NSTimeZone *tz = [NSTimeZone timeZoneWithName:timezoneUser];
                 timezoneUser = [tz name];
             }
             [parseResult setObject:timezoneUser forKey:@"user_tz"];
