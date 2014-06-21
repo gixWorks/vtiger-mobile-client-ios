@@ -160,7 +160,7 @@
             
             self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
             NSTimeInterval duration = ( [self.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [self.crm_duration_minutes integerValue] * 60.0 );
-            self.my_datetime_end = [[self.my_datetime_start dateByAddingTimeInterval:duration] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
+            self.my_datetime_end = [self.my_datetime_start dateByAddingTimeInterval:duration];
             self.my_timezone = [Service getActive].crm_timezone_server;
             
             //Set again the other fields now that we have time zone applied
@@ -236,22 +236,15 @@
     NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
     [dateTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
     
-    //Time Zone Conversion
-    self.crm_date_start = [[self.my_datetime_start gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_DatePart];
-    self.crm_time_start = [[self.my_datetime_start gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_TimePart];
-    self.crm_time_end = [[self.my_datetime_end gw_convertToTimeZone:[Service getActive].crm_timezone_server] gw_TimePart];
-    
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:self.crm_activitytype forKey:kCalendarFieldactivitytype];
     if (self.crm_contact_id != nil) {
         //There's a related Contact
         [dict setObject:self.crm_contact_id forKey:kCalendarFieldcontact_id];
-//        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
+        //        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
     }
-    [dict setValue:[dateFormat stringFromDate:self.crm_date_start] forKey:kCalendarFielddate_start];
     [dict setValue:self.crm_description forKey:kCalendarFielddescription];
-    [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
     [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_hours] forKey:kCalendarFieldduration_hours];
     [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_minutes] forKey:kCalendarFieldduration_minutes];
     if ([self.crm_activitytype isEqualToString:kCRMActivityTypeTask]) {
@@ -265,7 +258,7 @@
     if (self.crm_parent_id != nil) {
         //There is a related record (not a Contact, for Contacts there is "contact_id")
         [dict setObject:self.crm_parent_id forKey:kCalendarFieldparent_id];
-//        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
+        //        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
     }
     [dict setValue:self.crm_recurringtype forKey:kCalendarFieldrecurringtype];
     //    [dict setObject:self.crm_remindertime forKey:kCalendarFieldreminder_time]; //skip for the moment
@@ -274,8 +267,46 @@
     //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
     //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
     //    [dict setObject:self.crm_priority forKey:kCalendarFieldtaskpriority];
-    [dict setValue:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
-    [dict setValue:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
+    
+    
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server]];
+    [timeFormat setTimeZone:[NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server]];
+    [dict setValue:[dateFormat stringFromDate:self.my_datetime_start] forKey:kCalendarFielddate_start];
+    [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
+    [dict setValue:[timeFormat stringFromDate:self.my_datetime_end] forKey:kCalendarFieldtime_end];
+    [dict setValue:[timeFormat stringFromDate:self.my_datetime_start] forKey:kCalendarFieldtime_start];
+    
+    
+    //    //Time Zone Conversion
+    //    NSTimeZone *activityTimeZone = [NSTimeZone timeZoneWithName:self.my_timezone];
+    //    NSTimeZone *serverTimeZone = [NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server];
+    //    if([activityTimeZone secondsFromGMT] != [serverTimeZone secondsFromGMT]){
+    //
+    //        NSInteger offset1 = [activityTimeZone secondsFromGMTForDate: self.my_datetime_start];
+    //        NSInteger offset2 = [serverTimeZone secondsFromGMTForDate: self.my_datetime_end];
+    //
+    //        NSDate *adjusted_dateTimeStart = [self.my_datetime_start dateByAddingTimeInterval:(offset1 - offset2)];
+    //        NSDate *adjusted_dateTimeEnd = [self.my_datetime_end dateByAddingTimeInterval:(offset1 - offset2)];
+    //        NSDate *adjusted_due_date = [self.crm_due_date dateByAddingTimeInterval:(offset1 - offset2)];
+    //
+    //        NSDate *adjusted_date_start = [adjusted_dateTimeStart gw_DatePart];
+    //        NSDate *adjusted_time_start = [adjusted_dateTimeStart gw_TimePart];
+    //        adjusted_due_date = [adjusted_due_date gw_DatePart];
+    //        NSDate *adjusted_time_end = [adjusted_dateTimeEnd gw_TimePart];
+    //
+    //        [dict setValue:[dateFormat stringFromDate:adjusted_date_start] forKey:kCalendarFielddate_start];
+    //        [dict setValue:[dateFormat stringFromDate:adjusted_due_date] forKey:kCalendarFielddue_date];
+    //        [dict setValue:[timeFormat stringFromDate:adjusted_time_end] forKey:kCalendarFieldtime_end];
+    //        [dict setValue:[timeFormat stringFromDate:adjusted_time_start] forKey:kCalendarFieldtime_start];
+    //
+    //// Previously
+    ////        [dict setValue:[dateFormat stringFromDate:self.crm_date_start] forKey:kCalendarFielddate_start];
+    ////        [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
+    ////        [dict setValue:[timeFormat stringFromDate:self.crm_time_end] forKey:kCalendarFieldtime_end];
+    ////        [dict setValue:[timeFormat stringFromDate:self.crm_time_start] forKey:kCalendarFieldtime_start];
+    //
+    //    }
+    
     [dict setValue:self.crm_visibility forKey:kCalendarFieldvisibility];
     [dict setValue:self.crm_reminder_time forKey:kCalendarFieldreminder_time];
     
@@ -284,11 +315,11 @@
     }
     if ([self.crm_assigned_user_id length] > 0) {
         [dict setObject:self.crm_assigned_user_id forKey:kCalendarFieldassigned_user_id];
-//        [dict setObject:@{ @"value" : self.crm_assigned_user_id, @"label" : self.crm_assigned_user_name } forKey:kCalendarFieldassigned_user_id];
+        //        [dict setObject:@{ @"value" : self.crm_assigned_user_id, @"label" : self.crm_assigned_user_name } forKey:kCalendarFieldassigned_user_id];
     }
-
     
-    return [dict copy]; //We return the immutable copy because dict is mutable. 
+    
+    return [dict copy]; //We return the immutable copy because dict is mutable.
 }
 
 - (NSDictionary *)proxyForJson
