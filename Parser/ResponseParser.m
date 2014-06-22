@@ -68,7 +68,13 @@
             }
             else{
                 NSTimeZone *tz = [NSTimeZone timeZoneWithName:timezoneServer];
-                timezoneServer = [tz name];
+                if(tz != nil){
+                    timezoneServer = [tz name];
+                }
+                else{
+                    timezoneServer = [[NSTimeZone defaultTimeZone] name];
+                    [parseResult setObject:timezoneServer forKey:@"crm_tz_assumed"];
+                }
             }
             [parseResult setObject:timezoneServer forKey:@"crm_tz"];
             
