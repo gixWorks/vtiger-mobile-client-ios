@@ -27,6 +27,9 @@ NSString* const kCRMActivityTaskStatusPendingInput = @"Pending Input";
 NSString* const kCRMActivityTaskStatusDeferred = @"Deferred";
 NSString* const kCRMActivityTaskStatusPlanned = @"Planned";
 
+NSString *const kCRMActivityVisibilityPublic = @"Public";
+NSString *const kCRMActivityVisibilityPrivate = @"Private";
+
 NSString* const kCRMActivityCallMeetingStatusPlanned = @"Planned";
 NSString* const kCRMActivityCallMeetingStatusHeld = @"Held";
 NSString* const kCRMActivityCallMeetingStatusNotHeld = @"Not Held";

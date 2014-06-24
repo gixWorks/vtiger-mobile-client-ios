@@ -23,6 +23,9 @@ extern NSString* const kCRMActivityTaskStatusPendingInput;
 extern NSString* const kCRMActivityTaskStatusDeferred;
 extern NSString* const kCRMActivityTaskStatusPlanned;
 
+extern NSString *const kCRMActivityVisibilityPublic;
+extern NSString *const kCRMActivityVisibilityPrivate;
+
 extern NSString* const kCRMActivityCallMeetingStatusPlanned;
 extern NSString* const kCRMActivityCallMeetingStatusHeld;
 extern NSString* const kCRMActivityCallMeetingStatusNotHeld;
