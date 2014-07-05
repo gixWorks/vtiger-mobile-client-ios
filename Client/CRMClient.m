@@ -479,6 +479,7 @@ static int kMinutesToRetrySave = 15;
     }
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSyncModuleRecords,@"_operation", kVTModuleCalendar, @"module", session, @"_session", kSyncModePUBLIC, @"mode", token, @"syncToken", page, @"page", nil];
     [_crmHttpClient executeOperationWithParameters:params notificationName:kClientHasFinishedSyncCalendar];
+    [Sync GW_createSyncWithDate:[NSDate date] module:kVTModuleCalendar token:token];
 }
 
 - (void)describeModule:(NSString*)module
@@ -801,7 +802,17 @@ static int kMinutesToRetrySave = 15;
         if ([[parseResult objectForKey:@"syncHasFinished"] boolValue] == YES) {
             [self processFetchQueue];
             [self syncModules]; //Dangerous! How long will it take??
-            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:parseResult];
+            
+            //How many changed records?
+            NSDate *recent = [[NSDate date] dateByAddingTimeInterval:-(30)]; //Last 30 secs
+            NSPredicate *syncPredicate = [NSPredicate predicateWithFormat:@"syncdate >= %@ AND syncmodule = %@ AND service = %@",recent, kVTModuleCalendar, [Service getActive]];
+            NSNumber *modifiedRecords = @(0);
+            for (Sync *s in [Sync MR_findAllWithPredicate:syncPredicate]) {
+                modifiedRecords = @([[s syncrecordsdeleted] integerValue] + [[s syncrecordsupdated] integerValue] + [modifiedRecords integerValue]);
+            }
+            NSMutableDictionary *userInfo = [parseResult mutableCopy];
+            [userInfo setObject:modifiedRecords forKey:@"modifiedRecords"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:userInfo];
             
         }
         //            });

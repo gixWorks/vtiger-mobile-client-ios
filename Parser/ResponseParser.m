@@ -353,6 +353,7 @@
         }];
         
         BOOL syncHasFinished = YES;
+        NSString *lastUsedToken = [parameters objectForKey:@"syncToken"];
         //G- if nextPage != 0 means that we have another page of records to sync
         if (nextPage != 0) {
             [[CRMClient sharedInstance] syncCalendarFromPage:[NSNumber numberWithInteger:nextPage]];
@@ -361,8 +362,6 @@
         else{
             //H- If Save went OK, set the next synctoken
             if (saveError == nil) {
-                NSString *lastUsedToken = [parameters objectForKey:@"syncToken"];
-                
                 if (![nextSyncToken isEqualToString:lastUsedToken] && ([deletedRecords count] != 0 || [updatedRecords count] != 0)) {
                     //If nextSyncToken != "" then it means that there were some records in the current result. In case there were no record updated, Vtiger returns the same syncToken that was sent previously
                     //Since Vtiger does not return the right nextPage number, we need to address this issue and try to increase the nextPage number and sync again
@@ -393,7 +392,7 @@
                 //We should not get here
             }
         }
-        
+        [Sync GW_updateFinishedSyncIdentifiedByToken:lastUsedToken andModule:kVTModuleCalendar deletedRecords:[deletedRecords count] updatedRecords:[updatedRecords count] success:success];
         return [NSDictionary dictionaryWithObjectsAndKeys: @(syncHasFinished), @"syncHasFinished", saveError,kErrorKey,nil];
     }
     @catch (NSException *exception) {
