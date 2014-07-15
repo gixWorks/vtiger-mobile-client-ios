@@ -717,6 +717,7 @@ static int kMinutesToRetrySave = 15;
         }
         @catch (NSException *exception) {
             DDLogError(@"%@ %@ Error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+            [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedLogin object:self userInfo:@{kErrorKey : [[notification userInfo] objectForKey:kErrorKey]}];
         }
     }
 }
@@ -822,9 +823,11 @@ static int kMinutesToRetrySave = 15;
         //There was an error in the HTTPClient
         @try {
             DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            [CRMErrorMessage addErrorMessageWithMessage:[[notification userInfo] objectForKey:kClientNotificationErrorKey]];
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:[notification userInfo]];
         }
         @catch (NSException *exception) {
+            [CRMErrorMessage addErrorMessageWithMessage:[exception description]];
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedSyncCalendar object:self userInfo:@{kErrorKey: [exception description]}];
         }
     }
