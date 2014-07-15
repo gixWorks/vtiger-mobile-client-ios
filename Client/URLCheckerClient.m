@@ -52,7 +52,39 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+    NSLog(@"AuthenticationMethod: %@", protectionSpace.authenticationMethod);
+    return ([protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust ] ||
+            [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]);
+}
+
+OSStatus extractIdentityAndTrust(CFDataRef inP12data, SecIdentityRef *identity, SecTrustRef *trust)
+{
+    OSStatus securityError = errSecSuccess;
+    
+    CFStringRef password = CFSTR("!!!PASSWORD!!!!!!!");
+    const void *keys[] = { kSecImportExportPassphrase };
+    const void *values[] = { password };
+    
+    CFDictionaryRef options = CFDictionaryCreate(NULL, keys, values, 1, NULL, NULL);
+    
+    CFArrayRef items = CFArrayCreate(NULL, 0, 0, NULL);
+    securityError = SecPKCS12Import(inP12data, options, &items);
+    
+    if (securityError == 0) {
+        CFDictionaryRef myIdentityAndTrust = CFArrayGetValueAtIndex(items, 0);
+        const void *tempIdentity = NULL;
+        tempIdentity = CFDictionaryGetValue(myIdentityAndTrust, kSecImportItemIdentity);
+        *identity = (SecIdentityRef)tempIdentity;
+        const void *tempTrust = NULL;
+        tempTrust = CFDictionaryGetValue(myIdentityAndTrust, kSecImportItemTrust);
+        *trust = (SecTrustRef)tempTrust;
+    }
+    
+    if (options) {
+        CFRelease(options);
+    }
+    
+    return securityError;
 }
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
@@ -77,7 +109,52 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
                 [challenge.sender cancelAuthenticationChallenge:challenge];
             }
         }
-    } else {
+    }
+    else if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]){
+        //Client Certificate
+        NSLog(@"Client Certificate requested");
+        
+#if TARGET_IPHONE_SIMULATOR
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"gmaggini" ofType:@"p12"];
+#else
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *path = [NSString stringWithFormat:@"%@/%@", documentsDirectory ,@"gmaggini.p12"];
+#endif
+
+        NSData *p12data = [NSData dataWithContentsOfFile:path];
+        CFDataRef inP12data = (__bridge CFDataRef)p12data;
+        
+        SecIdentityRef myIdentity;
+        SecTrustRef myTrust;
+        OSStatus status =  extractIdentityAndTrust(inP12data, &myIdentity, &myTrust);
+        NSLog(@"status: %d", (int)status);
+        SecCertificateRef myCertificate;
+        SecIdentityCopyCertificate(myIdentity, &myCertificate);
+        const void *certs[] = { myCertificate };
+        CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+        
+        NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistencePermanent];
+        
+        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        
+        
+        
+//        SecIdentityRef identity = [KeychainUtilities retrieveIdentityWithPersistentRef:self.accountCertKeychainRef];
+//        
+//        NSURLCredential* credential = [CertificateUtilities getCredentialFromCert:identity];
+//        
+//        if ( credential == nil )
+//        {
+//            [[challenge sender] cancelAuthenticationChallenge:challenge];
+//        }
+//        else
+//        {
+//            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+//        }
+        
+    }
+    else {
         [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
     }
 }
