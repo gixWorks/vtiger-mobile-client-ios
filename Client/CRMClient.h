@@ -66,7 +66,7 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 - (void)loginWithUsername:(NSString*)username password:(NSString*)password;
 
 /**
- *  Syncs the Calendar and Users
+ *  Syncs the Calendar and Users. It first removes all records in the database for Calendar for the currently active service before performing a complete sync.
  */
 - (void)syncCalendarAndUsers;
 
