@@ -13,6 +13,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 @interface URLCheckerClient ()
 {
     BOOL using_invalid_certificate;
+    BOOL requested_client_certificate;
 }
 
 @end
@@ -41,6 +42,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         self.URLCheckerClientDelegate = delegate;
         self.url = urlToTest;
         using_invalid_certificate = NO; //we start without self-signed certificate
+        requested_client_certificate = NO; //we assume the server has not (yet) requested client certificate
     }
     return self;
 }
@@ -163,22 +165,35 @@ OSStatus extractIdentityAndTrust(CFDataRef inP12data, SecIdentityRef *identity, 
 {
     connection = nil;
     DDLogDebug(@"%@ %@ connection failed with error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url invalid_certificate:using_invalid_certificate];
+    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     
-    if (httpResponse.statusCode != 200) {
+    if (httpResponse.statusCode >= 500) {
         //Something is wrong with the url provided by the server
         DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+    }
+    else if (httpResponse.statusCode == 403)
+    {
+        //Unauthorized (could be due to client certificate)
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+    }
+    else if(httpResponse.statusCode == 200)
+    {
+        //Everything OK - the best outcome
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
     else
     {
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate];
+        //any other error
+        DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
+        NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
 }
 

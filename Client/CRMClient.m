@@ -257,7 +257,7 @@ static int kMinutesToRetrySave = 15;
         return NO;
 }
 
-- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl invalid_certificate:(BOOL)invalid_certificate
+- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl invalid_certificate:(BOOL)invalid_certificate requestedClientCertificate:(BOOL)requested_client_certificate
 {
     if (error != nil) {
         //There was an error when trying to reach the URL
@@ -284,7 +284,7 @@ static int kMinutesToRetrySave = 15;
         //There was no error, means the check resulted successful and we post the notification
         NSString *u = [[testedUrl absoluteString] stringByReplacingOccurrencesOfString:@"api.php" withString:@""];
         testedUrl = [NSURL URLWithString:u];
-        NSDictionary *userInfo = @{@"url" : testedUrl, @"invalid_certificate" : @(invalid_certificate)};
+        NSDictionary *userInfo = @{@"url" : testedUrl, @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                             object:self
                                                           userInfo:userInfo
