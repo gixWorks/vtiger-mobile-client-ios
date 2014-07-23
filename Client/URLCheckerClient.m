@@ -63,6 +63,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
+    NSLog(@"AuthenticationMethod: %@", challenge.protectionSpace.authenticationMethod);
     if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         
         // Verify certificate:
@@ -91,13 +92,13 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         //Client Certificate
         NSLog(@"Client Certificate requested");
         
-        if (_certificateData == nil) {
+        if ([_certificateData length] == 0) {
             //This will fail
             [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         }
         else{
             //we have a identity reference to work with
-            NSLog(@"Here's the data: %@", _certificateData);
+            NSLog(@"We have data: %@", _certificateData);
             SecIdentityRef myIdentity = identityForPersistentRef((__bridge CFDataRef)(_certificateData));
             
             //New initialization
@@ -152,7 +153,7 @@ SecIdentityRef identityForPersistentRef(CFDataRef persistent_ref)
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
         [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
-    else if (httpResponse.statusCode == 403)
+    else if (httpResponse.statusCode == 403) // && requested_client_certificate == YES)
     {
         //Unauthorized (could be due to client certificate)
         NSString *err = [NSString stringWithFormat:@"Unauthorized (Response code %ld)", (long)httpResponse.statusCode];

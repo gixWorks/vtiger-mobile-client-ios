@@ -13,6 +13,15 @@
 
 @implementation ServiceHelper
 
+
++ (void)createNewServiceWithServerURL:(NSURL *)url Username:(NSString *)username userid:(NSString *)userid password:(NSString *)password serverTimeZone:(NSString *)serverTimeZone userTimeZone:(NSString *)userTimeZone onDemand:(BOOL)onDemand certificateRef:(NSData *)certificateRef
+{
+    [ServiceHelper createNewServiceWithServerURL:url Username:username userid:userid password:password serverTimeZone:serverTimeZone userTimeZone:userTimeZone onDemand:onDemand];
+    Service *s = [Service getActive];
+    s.crm_client_certificate_data = certificateRef;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfWithCompletion:nil];
+}
+
 + (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand
 {
     //Delete all services eventually there

@@ -78,6 +78,21 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     [self loginAndExecuteSelector:nil withObject:nil withObject:nil];
 }
 
+SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
+{
+    CFTypeRef   identity_ref     = NULL;
+    const void *keys[] =   { kSecClass, kSecReturnRef,  kSecValuePersistentRef };
+    const void *values[] = { kSecClassIdentity, kCFBooleanTrue, persistent_ref };
+    CFDictionaryRef dict = CFDictionaryCreate(NULL, keys, values,
+                                              3, NULL, NULL);
+    SecItemCopyMatching(dict, &identity_ref);
+    
+    if (dict)
+        CFRelease(dict);
+    
+    return (SecIdentityRef)identity_ref;
+}
+
 #pragma mark - Network methods
 
 /*
@@ -105,23 +120,22 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     }
     
     void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
-        NSLog(@"AuthenticationChallenge");
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"AuthenticationChallenge Client Certificate");
             
-//        NSString *thePath = [[NSBundle mainBundle] pathForResource:@"client" ofType:@"pfx"];
-//        NSData *PKCS12Data = [[NSData alloc] initWithContentsOfFile:thePath];
-//        CFDataRef inPKCS12Data = (__bridge CFDataRef)PKCS12Data;
-//        SecIdentityRef identity;
-//        
-//        [self extractIdentity:inPKCS12Data :&identity];
-//        
-//        SecCertificateRef certificate = NULL;
-//        SecIdentityCopyCertificate (identity, &certificate);
-//        
-//        const void *certs[] = {certificate};
-//        CFArrayRef certArray = CFArrayCreate(kCFAllocatorDefault, certs, 1, NULL);
-//        
-//        NSURLCredential *credential = [NSURLCredential credentialWithIdentity:identity certificates:(__bridge NSArray*)certArray persistence:NSURLCredentialPersistencePermanent];
-//        [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            
+        }
     };
     
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
@@ -200,6 +214,25 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         return;
     }
     
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"AuthenticationChallenge Client Certificate");
+            
+            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+
+        }
+    };
+    
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -251,6 +284,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
 }
 
@@ -265,6 +299,26 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if DEBUG
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
+    
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"AuthenticationChallenge Client Certificate");
+            
+            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            
+        }
+    };
+    
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -317,6 +371,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock]; 
     [self.operationQueue addOperation:operation];
 }
 
