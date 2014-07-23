@@ -54,39 +54,11 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+#if DEBUG
     NSLog(@"AuthenticationMethod: %@", protectionSpace.authenticationMethod);
+#endif
     return ([protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust ] ||
             [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]);
-}
-
-OSStatus extractIdentityAndTrust(CFDataRef inP12data, SecIdentityRef *identity, SecTrustRef *trust)
-{
-    OSStatus securityError = errSecSuccess;
-    
-    CFStringRef password = CFSTR("!!!PASSWORD!!!!!!!");
-    const void *keys[] = { kSecImportExportPassphrase };
-    const void *values[] = { password };
-    
-    CFDictionaryRef options = CFDictionaryCreate(NULL, keys, values, 1, NULL, NULL);
-    
-    CFArrayRef items = CFArrayCreate(NULL, 0, 0, NULL);
-    securityError = SecPKCS12Import(inP12data, options, &items);
-    
-    if (securityError == 0) {
-        CFDictionaryRef myIdentityAndTrust = CFArrayGetValueAtIndex(items, 0);
-        const void *tempIdentity = NULL;
-        tempIdentity = CFDictionaryGetValue(myIdentityAndTrust, kSecImportItemIdentity);
-        *identity = (SecIdentityRef)tempIdentity;
-        const void *tempTrust = NULL;
-        tempTrust = CFDictionaryGetValue(myIdentityAndTrust, kSecImportItemTrust);
-        *trust = (SecTrustRef)tempTrust;
-    }
-    
-    if (options) {
-        CFRelease(options);
-    }
-    
-    return securityError;
 }
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
@@ -113,59 +85,61 @@ OSStatus extractIdentityAndTrust(CFDataRef inP12data, SecIdentityRef *identity, 
         }
     }
     else if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]){
+        
+        requested_client_certificate = YES;
+        
         //Client Certificate
         NSLog(@"Client Certificate requested");
         
-#if TARGET_IPHONE_SIMULATOR
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"gmaggini" ofType:@"p12"];
-#else
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *path = [NSString stringWithFormat:@"%@/%@", documentsDirectory ,@"gmaggini.p12"];
-#endif
+        if (_certificateData == nil) {
+            //This will fail
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+        else{
+            //we have a identity reference to work with
+            NSLog(@"Here's the data: %@", _certificateData);
+            SecIdentityRef myIdentity = identityForPersistentRef((__bridge CFDataRef)(_certificateData));
+            
+            //New initialization
+            SecCertificateRef myCertificate;
 
-        NSData *p12data = [NSData dataWithContentsOfFile:path];
-        CFDataRef inP12data = (__bridge CFDataRef)p12data;
-        
-        SecIdentityRef myIdentity;
-        SecTrustRef myTrust;
-        OSStatus status =  extractIdentityAndTrust(inP12data, &myIdentity, &myTrust);
-        NSLog(@"status: %d", (int)status);
-        SecCertificateRef myCertificate;
-        SecIdentityCopyCertificate(myIdentity, &myCertificate);
-        const void *certs[] = { myCertificate };
-        CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
-        
-        NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistencePermanent];
-        
-        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-        
-        
-        
-//        SecIdentityRef identity = [KeychainUtilities retrieveIdentityWithPersistentRef:self.accountCertKeychainRef];
-//        
-//        NSURLCredential* credential = [CertificateUtilities getCredentialFromCert:identity];
-//        
-//        if ( credential == nil )
-//        {
-//            [[challenge sender] cancelAuthenticationChallenge:challenge];
-//        }
-//        else
-//        {
-//            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-//        }
-        
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+
+        }
+
     }
     else {
         [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
     }
 }
 
+
+SecIdentityRef identityForPersistentRef(CFDataRef persistent_ref)
+{
+    CFTypeRef   identity_ref     = NULL;
+    const void *keys[] =   { kSecClass, kSecReturnRef,  kSecValuePersistentRef };
+    const void *values[] = { kSecClassIdentity, kCFBooleanTrue, persistent_ref };
+    CFDictionaryRef dict = CFDictionaryCreate(NULL, keys, values,
+                                              3, NULL, NULL);
+    SecItemCopyMatching(dict, &identity_ref);
+    
+    if (dict)
+        CFRelease(dict);
+    
+    return (SecIdentityRef)identity_ref;
+}
+
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     connection = nil;
     DDLogDebug(@"%@ %@ connection failed with error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:self.url responseCode:-1 invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -176,24 +150,25 @@ OSStatus extractIdentityAndTrust(CFDataRef inP12data, SecIdentityRef *identity, 
         //Something is wrong with the url provided by the server
         DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
     else if (httpResponse.statusCode == 403)
     {
         //Unauthorized (could be due to client certificate)
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+        NSString *err = [NSString stringWithFormat:@"Unauthorized (Response code %ld)", (long)httpResponse.statusCode];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
     else if(httpResponse.statusCode == 200)
     {
         //Everything OK - the best outcome
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url responseCode:httpResponse.statusCode invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
     else
     {
         //any other error
         DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:using_invalid_certificate requestedClientCertificate:requested_client_certificate];
     }
 }
 

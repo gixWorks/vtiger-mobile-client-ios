@@ -104,6 +104,26 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         }
     }
     
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        NSLog(@"AuthenticationChallenge");
+            
+//        NSString *thePath = [[NSBundle mainBundle] pathForResource:@"client" ofType:@"pfx"];
+//        NSData *PKCS12Data = [[NSData alloc] initWithContentsOfFile:thePath];
+//        CFDataRef inPKCS12Data = (__bridge CFDataRef)PKCS12Data;
+//        SecIdentityRef identity;
+//        
+//        [self extractIdentity:inPKCS12Data :&identity];
+//        
+//        SecCertificateRef certificate = NULL;
+//        SecIdentityCopyCertificate (identity, &certificate);
+//        
+//        const void *certs[] = {certificate};
+//        CFArrayRef certArray = CFArrayCreate(kCFAllocatorDefault, certs, 1, NULL);
+//        
+//        NSURLCredential *credential = [NSURLCredential credentialWithIdentity:identity certificates:(__bridge NSArray*)certArray persistence:NSURLCredentialPersistencePermanent];
+//        [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+    };
+    
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     CRMLoginRequestOperation *operation = [CRMLoginRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -158,6 +178,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
 }
 

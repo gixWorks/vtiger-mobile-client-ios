@@ -13,6 +13,7 @@
 
 @property (nonatomic, weak) id<URLCheckerClientDelegate> URLCheckerClientDelegate;
 @property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) NSData *certificateData;
 
 - (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL*)urlToTest;
 - (void)startTestingReachability;

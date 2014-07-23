@@ -131,41 +131,6 @@ static int kMinutesToRetrySave = 15;
     //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kClientHasFinishedFetchRecordsWithGrouping object:nil];
 }
 
-//#pragma mark - Save and restore
-//
-//- (BOOL)save
-//{
-//    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//    NSString *filePath = [docsPath stringByAppendingPathComponent: @"Operations"];
-//    NSMutableData *data = [NSMutableData data];
-//    NSKeyedArchiver *encoder = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-//
-//    [encoder encodeObject:_recordsToFetch forKey:@"recordsToFetch"];
-//    [encoder finishEncoding];
-//
-//    BOOL result = [data writeToFile:filePath atomically:YES];
-//    [self addSkipBackupAttributeToItemAtURL:filePath]; //convert filePath to URL first
-//    return result;
-//}
-//
-//- (void)restore
-//{
-//    NSLog(@"RESTORE NETWORKOPERATIONSMANAGER!");
-//    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//    NSString *filePath = [docsPath stringByAppendingPathComponent: @"Operations"];
-//    NSMutableData *data = [[NSMutableData alloc] initWithContentsOfFile:filePath];
-//
-//    if (data){
-//        NSKeyedUnarchiver *decoder = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-//        _recordsToFetch = [decoder decodeObjectForKey:@"recordsToFetch"];
-//        [decoder finishDecoding];
-//    }
-//    else
-//    {
-//        NSLog(@"Data for restoring is NULL");
-//    }
-//
-//}
 
 /** Avoid to backup to iCloud
  @param URL the file URL
@@ -186,7 +151,7 @@ static int kMinutesToRetrySave = 15;
 
 #pragma mark - Actions
 
-- (void)checkURL:(NSString*)serverUrl
+- (void)checkURL:(NSString*)serverUrl withCertificateData:(NSData*)certificateData
 {
     //Check if the url entered is valid
     if (![self validateUrl:serverUrl]) {
@@ -233,9 +198,17 @@ static int kMinutesToRetrySave = 15;
     
     //We now send a request to URL, to check if it points to an existing resource (HTTP CODE = 200)
     URLCheckerClient *client =  [[URLCheckerClient alloc] initWithDelegate:self url:secureUserUrl];
+    client.certificateData = certificateData;
     [client startTestingReachability];
 }
 
+/**
+ *  Validates whether the URL is formally correct
+ *
+ *  @param candidate the candidate URL for checking
+ *
+ *  @return YES if the URL looks a proper URL, NO otherwise
+ */
 - (BOOL) validateUrl: (NSString *) candidate {
         NSUInteger length = [candidate length];
         // Empty strings should return NO
@@ -257,20 +230,28 @@ static int kMinutesToRetrySave = 15;
         return NO;
 }
 
-- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl invalid_certificate:(BOOL)invalid_certificate requestedClientCertificate:(BOOL)requested_client_certificate
+- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl responseCode:(NSInteger)responseCode invalid_certificate:(BOOL)invalid_certificate requestedClientCertificate:(BOOL)requested_client_certificate
 {
     if (error != nil) {
         //There was an error when trying to reach the URL
         if ([[testedUrl scheme] isEqualToString:@"http"]) {
             //if we were in http:// scheme, means that we totally failed the check
-            NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description]};
+            NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                                 object:self
-                                                              userInfo:userInfo
-             ];
+                                                              userInfo:userInfo];
             return;
         }
         else if([[testedUrl scheme] isEqualToString:@"https"]){
+            if (responseCode == 403) {
+                //If the response code was 403, we need a client certificate
+                NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
+                [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
+                                                                    object:self
+                                                                  userInfo:userInfo];
+                return;
+            }
+            
             //if it was a https:, we can still try http://
             NSURL *userUrl = [testedUrl GW_nonSecureURL];
             URLCheckerClient *client =  [[URLCheckerClient alloc] initWithDelegate:self url:userUrl];
