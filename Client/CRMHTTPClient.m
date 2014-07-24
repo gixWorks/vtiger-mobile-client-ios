@@ -9,6 +9,7 @@
 #import "CRMHTTPClient.h"
 #import "CredentialsHelper.h"
 #import "CRMLoginRequestOperation.h"
+#import "GWCertificatesHelper.h"
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
@@ -78,21 +79,6 @@ NSInteger const kErrorCodeLoginRequired = 1501;
     [self loginAndExecuteSelector:nil withObject:nil withObject:nil];
 }
 
-SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
-{
-    CFTypeRef   identity_ref     = NULL;
-    const void *keys[] =   { kSecClass, kSecReturnRef,  kSecValuePersistentRef };
-    const void *values[] = { kSecClassIdentity, kCFBooleanTrue, persistent_ref };
-    CFDictionaryRef dict = CFDictionaryCreate(NULL, keys, values,
-                                              3, NULL, NULL);
-    SecItemCopyMatching(dict, &identity_ref);
-    
-    if (dict)
-        CFRelease(dict);
-    
-    return (SecIdentityRef)identity_ref;
-}
-
 #pragma mark - Network methods
 
 /*
@@ -121,9 +107,15 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
     
     void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
         if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
-            NSLog(@"AuthenticationChallenge Client Certificate");
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
             
-            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
             
             //New initialization
             SecCertificateRef myCertificate;
@@ -222,9 +214,15 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
     
     void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
         if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
-            NSLog(@"AuthenticationChallenge Client Certificate");
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
             
-            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
             
             //New initialization
             SecCertificateRef myCertificate;
@@ -314,9 +312,15 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
     
     void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
         if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
-            NSLog(@"AuthenticationChallenge Client Certificate");
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
             
-            SecIdentityRef myIdentity = getidentityForPersistentRef((__bridge CFDataRef)([Service getActive].crm_client_certificate_data));
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
             
             //New initialization
             SecCertificateRef myCertificate;

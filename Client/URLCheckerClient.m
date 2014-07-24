@@ -7,6 +7,7 @@
 //
 
 #import "URLCheckerClient.h"
+#import "GWCertificatesHelper.h"
 
 static BOOL user_wants_to_trust_invalid_certificates = YES;
 
@@ -99,7 +100,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         else{
             //we have a identity reference to work with
             NSLog(@"We have data: %@", _certificateData);
-            SecIdentityRef myIdentity = identityForPersistentRef((__bridge CFDataRef)(_certificateData));
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:_certificateData];
             
             //New initialization
             SecCertificateRef myCertificate;
@@ -118,23 +119,6 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
     }
 }
-
-
-SecIdentityRef identityForPersistentRef(CFDataRef persistent_ref)
-{
-    CFTypeRef   identity_ref     = NULL;
-    const void *keys[] =   { kSecClass, kSecReturnRef,  kSecValuePersistentRef };
-    const void *values[] = { kSecClassIdentity, kCFBooleanTrue, persistent_ref };
-    CFDictionaryRef dict = CFDictionaryCreate(NULL, keys, values,
-                                              3, NULL, NULL);
-    SecItemCopyMatching(dict, &identity_ref);
-    
-    if (dict)
-        CFRelease(dict);
-    
-    return (SecIdentityRef)identity_ref;
-}
-
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
