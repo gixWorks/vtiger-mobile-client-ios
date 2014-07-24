@@ -136,6 +136,12 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
             
         }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
     };
     
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
@@ -231,6 +237,12 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
 
         }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
     };
     
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
@@ -316,6 +328,12 @@ SecIdentityRef getidentityForPersistentRef(CFDataRef persistent_ref)
             //
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
             
+        }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         }
     };
     
