@@ -78,8 +78,6 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    NSLog(@"%@ AuthenticationMethod: %@", NSStringFromClass([self class]), challenge.protectionSpace.authenticationMethod);
-    NSLog(@"%@ The checker client has certificate data length: %lu", NSStringFromClass([self class]), (unsigned long)[_certificateData length]);
     if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         
         // Verify the certificate sent from the server:
@@ -109,15 +107,15 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         _requested_client_certificate = YES;
         
         //Client Certificate
+#if DEBUG
         NSLog(@"%@ Client Certificate requested", NSStringFromClass([self class]));
-        
+#endif
         if ([_certificateData length] == 0) {
             //We have no certificate data. We perform default handling (this will fail)
             [challenge.sender cancelAuthenticationChallenge:challenge];
         }
         else{
             //we have a identity reference to work with
-            NSLog(@"We have data: %@", _certificateData);
             SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:_certificateData];
             
             //New initialization
