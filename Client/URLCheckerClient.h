@@ -12,10 +12,21 @@
 @interface URLCheckerClient : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 @property (nonatomic, weak) id<URLCheckerClientDelegate> URLCheckerClientDelegate;
-@property (nonatomic, strong) NSURL *url;
-@property (nonatomic, strong) NSData *certificateData;
 
-- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL*)urlToTest;
+/**
+ *  Instantiates the client
+ *
+ *  @param delegate  the delegate of the URL Checker Client
+ *  @param urlToTest CRM url to test
+ *  @param data      data containing certificate keychain reference
+ *
+ *  @return the URLCheckerClient
+ */
+- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL *)urlToTest certificateData:(NSData*)data;
+
+/**
+ *  Instantiates the NSURLRequest and starts the NSURLConnection
+ */
 - (void)startTestingReachability;
 
 @end
