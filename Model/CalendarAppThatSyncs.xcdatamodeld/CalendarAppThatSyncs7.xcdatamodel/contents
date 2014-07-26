@@ -324,6 +324,7 @@
     </entity>
     <entity name="Service" representedClassName="Service" syncable="YES">
         <attribute name="crm_active" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="crm_client_certificate_data" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="crm_crmondemand" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="crm_servicename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_timezone_server" optional="YES" attributeType="String" syncable="YES"/>
@@ -415,7 +416,7 @@
         <element name="Module" positionX="-234" positionY="585" width="128" height="150"/>
         <element name="Potential" positionX="567" positionY="141" width="128" height="373"/>
         <element name="Product" positionX="403" positionY="72" width="128" height="390"/>
-        <element name="Service" positionX="99" positionY="380" width="128" height="435"/>
+        <element name="Service" positionX="99" positionY="380" width="128" height="450"/>
         <element name="Sync" positionX="-63" positionY="81" width="128" height="150"/>
         <element name="SyncToken" positionX="88" positionY="99" width="128" height="105"/>
         <element name="Ticket" positionX="9" positionY="855" width="128" height="373"/>
