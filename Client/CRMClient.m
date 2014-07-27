@@ -248,9 +248,10 @@ static int kMinutesToRetrySave = 15;
 
 - (BOOL)checkReachability
 {
-    CRMHTTPClient *c = [[CRMHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:[Service getActiveServiceUrl]]];
-    NSInteger reachable = [c networkReachabilityStatus];
-    if (reachable == AFNetworkReachabilityStatusReachableViaWiFi || reachable == AFNetworkReachabilityStatusReachableViaWWAN)   {
+    NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com"];
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:testURL];
+    NSInteger reachable = [client networkReachabilityStatus];
+    if (reachable == AFNetworkReachabilityStatusReachableViaWiFi || reachable == AFNetworkReachabilityStatusReachableViaWWAN || reachable == AFNetworkReachabilityStatusUnknown)   {
         return YES;
     }
     else{
