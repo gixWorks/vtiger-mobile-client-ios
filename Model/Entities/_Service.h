@@ -6,6 +6,7 @@
 
 extern const struct ServiceAttributes {
 	__unsafe_unretained NSString *crm_active;
+	__unsafe_unretained NSString *crm_client_certificate_data;
 	__unsafe_unretained NSString *crm_crmondemand;
 	__unsafe_unretained NSString *crm_servicename;
 	__unsafe_unretained NSString *crm_timezone_server;
@@ -67,6 +68,7 @@ extern const struct ServiceFetchedProperties {
 
 
 
+
 @interface ServiceID : NSManagedObjectID {}
 @end
 
@@ -89,6 +91,16 @@ extern const struct ServiceFetchedProperties {
 - (void)setCrm_activeValue:(BOOL)value_;
 
 //- (BOOL)validateCrm_active:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSData* crm_client_certificate_data;
+
+
+
+//- (BOOL)validateCrm_client_certificate_data:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -399,6 +411,12 @@ extern const struct ServiceFetchedProperties {
 
 - (BOOL)primitiveCrm_activeValue;
 - (void)setPrimitiveCrm_activeValue:(BOOL)value_;
+
+
+
+
+- (NSData*)primitiveCrm_client_certificate_data;
+- (void)setPrimitiveCrm_client_certificate_data:(NSData*)value;
 
 
 

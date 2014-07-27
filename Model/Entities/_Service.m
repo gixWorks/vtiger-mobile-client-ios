@@ -5,6 +5,7 @@
 
 const struct ServiceAttributes ServiceAttributes = {
 	.crm_active = @"crm_active",
+	.crm_client_certificate_data = @"crm_client_certificate_data",
 	.crm_crmondemand = @"crm_crmondemand",
 	.crm_servicename = @"crm_servicename",
 	.crm_timezone_server = @"crm_timezone_server",
@@ -102,6 +103,13 @@ const struct ServiceFetchedProperties ServiceFetchedProperties = {
 - (void)setPrimitiveCrm_activeValue:(BOOL)value_ {
 	[self setPrimitiveCrm_active:[NSNumber numberWithBool:value_]];
 }
+
+
+
+
+
+@dynamic crm_client_certificate_data;
+
 
 
 

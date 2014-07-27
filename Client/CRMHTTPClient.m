@@ -9,6 +9,7 @@
 #import "CRMHTTPClient.h"
 #import "CredentialsHelper.h"
 #import "CRMLoginRequestOperation.h"
+#import "GWCertificatesHelper.h"
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";
@@ -104,6 +105,37 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         }
     }
     
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+            
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            
+        }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+    };
+    
     NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     CRMLoginRequestOperation *operation = [CRMLoginRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -158,6 +190,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
 }
 
@@ -178,6 +211,37 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
         return;
     }
+    
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+            
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+
+        }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+    };
     
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
@@ -230,6 +294,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
 }
 
@@ -244,6 +309,38 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if DEBUG
     NSLog(@"%@ %@ Parameters: %@ NotificationName %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters, notificationName);
 #endif
+    
+    void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
+        if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+            NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+            
+            if ([Service getActive].crm_client_certificate_data == nil) {
+                //If the data contained in the database is nil, perform default handling (it will fail) and return from block
+                [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+                return ;
+            }
+            
+            SecIdentityRef myIdentity = [GWCertificatesHelper gw_identityFromPersistentRef:[Service getActive].crm_client_certificate_data];
+            
+            //New initialization
+            SecCertificateRef myCertificate;
+            
+            SecIdentityCopyCertificate(myIdentity, &myCertificate);
+            const void *certs[] = { myCertificate };
+            CFArrayRef certsArray = CFArrayCreate(NULL, certs, 1, NULL);
+            NSURLCredential *credential = [NSURLCredential credentialWithIdentity:myIdentity certificates:(__bridge NSArray*)certsArray persistence:NSURLCredentialPersistenceNone];
+            //
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            
+        }
+        else if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+        }
+        else{
+            [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+    };
+    
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -296,6 +393,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 #if TARGET_IPHONE_SIMULATOR
     operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
 #endif
+    [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock]; 
     [self.operationQueue addOperation:operation];
 }
 

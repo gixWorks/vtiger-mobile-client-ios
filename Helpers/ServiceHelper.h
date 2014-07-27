@@ -22,6 +22,20 @@
  */
 + (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand;
 
+/**
+ *  Creates a new Service with the specified parameters
+ *
+ *  @param url            the URL
+ *  @param username       the username
+ *  @param userid         the user id
+ *  @param password       the user password
+ *  @param serverTimeZone the time zone for the server
+ *  @param userTimeZone   the time zone for the user
+ *  @param onDemand       indicates if it's onDemand (cloud) or on premise
+ *  @param certificateRef NSData containing the reference to client certificate in keychain
+ */
++ (void)createNewServiceWithServerURL:(NSURL*)url Username:(NSString*)username userid:(NSString*)userid password:(NSString*)password serverTimeZone:(NSString*)serverTimeZone userTimeZone:(NSString*)userTimeZone onDemand:(BOOL)onDemand certificateRef:(NSData*)certificateRef;
+
 /*
  Creates a new Service with the specified parameters without saving to persistent store
  
