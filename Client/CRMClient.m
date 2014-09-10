@@ -248,6 +248,8 @@ static int kMinutesToRetrySave = 15;
 
 - (BOOL)checkReachability
 {
+    //It's used only to veryfy if the device is connected, not if it can reach the server!
+    //Reachability uses only the server "root" and it's hard to extract from the URL we saved in the database.
     NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com"];
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:testURL];
     NSInteger reachable = [client networkReachabilityStatus];
