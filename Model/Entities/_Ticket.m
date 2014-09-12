@@ -31,9 +31,6 @@ const struct TicketRelationships TicketRelationships = {
 	.service = @"service",
 };
 
-const struct TicketFetchedProperties TicketFetchedProperties = {
-};
-
 @implementation TicketID
 @end
 
@@ -59,7 +56,7 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_daysValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_days"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -74,26 +71,11 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_assigned_user_id;
-
-
-
-
-
 
 @dynamic crm_assigned_user_name;
 
-
-
-
-
-
 @dynamic crm_days;
-
-
 
 - (int16_t)crm_daysValue {
 	NSNumber *result = [self crm_days];
@@ -113,20 +95,9 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 	[self setPrimitiveCrm_days:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_description;
 
-
-
-
-
-
 @dynamic crm_hours;
-
-
 
 - (int16_t)crm_hoursValue {
 	NSNumber *result = [self crm_hours];
@@ -146,129 +117,39 @@ const struct TicketFetchedProperties TicketFetchedProperties = {
 	[self setPrimitiveCrm_hours:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_id;
-
-
-
-
-
 
 @dynamic crm_parent_id;
 
-
-
-
-
-
 @dynamic crm_parent_name;
-
-
-
-
-
 
 @dynamic crm_parent_type;
 
-
-
-
-
-
 @dynamic crm_product_id;
-
-
-
-
-
 
 @dynamic crm_product_name;
 
-
-
-
-
-
 @dynamic crm_solution;
-
-
-
-
-
 
 @dynamic crm_ticket_no;
 
-
-
-
-
-
 @dynamic crm_ticketcategory;
-
-
-
-
-
 
 @dynamic crm_ticketpriority;
 
-
-
-
-
-
 @dynamic crm_ticketseverity;
-
-
-
-
-
 
 @dynamic crm_ticketstatus;
 
-
-
-
-
-
 @dynamic crm_tickettitle;
-
-
-
-
-
 
 @dynamic crm_time_created;
 
-
-
-
-
-
 @dynamic crm_time_modified;
-
-
-
-
-
 
 @dynamic my_custom_fields;
 
-
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

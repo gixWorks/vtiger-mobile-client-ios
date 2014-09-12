@@ -12,9 +12,6 @@ const struct GroupRelationships GroupRelationships = {
 	.service = @"service",
 };
 
-const struct GroupFetchedProperties GroupFetchedProperties = {
-};
-
 @implementation GroupID
 @end
 
@@ -40,35 +37,15 @@ const struct GroupFetchedProperties GroupFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_id;
-
-
-
-
-
 
 @dynamic crm_label;
 
-
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

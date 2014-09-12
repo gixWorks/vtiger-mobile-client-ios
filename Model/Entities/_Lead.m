@@ -36,9 +36,6 @@ const struct LeadRelationships LeadRelationships = {
 	.service = @"service",
 };
 
-const struct LeadFetchedProperties LeadFetchedProperties = {
-};
-
 @implementation LeadID
 @end
 
@@ -64,7 +61,7 @@ const struct LeadFetchedProperties LeadFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"lead_company_annualrevenueValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"lead_company_annualrevenue"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -79,47 +76,17 @@ const struct LeadFetchedProperties LeadFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_time_created;
-
-
-
-
-
 
 @dynamic crm_time_modified;
 
-
-
-
-
-
 @dynamic lead_assigned_user_id;
-
-
-
-
-
 
 @dynamic lead_assigned_user_name;
 
-
-
-
-
-
 @dynamic lead_company;
 
-
-
-
-
-
 @dynamic lead_company_annualrevenue;
-
-
 
 - (int16_t)lead_company_annualrevenueValue {
 	NSNumber *result = [self lead_company_annualrevenue];
@@ -139,20 +106,9 @@ const struct LeadFetchedProperties LeadFetchedProperties = {
 	[self setPrimitiveLead_company_annualrevenue:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic lead_company_industry;
 
-
-
-
-
-
 @dynamic lead_company_noofemployees;
-
-
 
 - (int16_t)lead_company_noofemployeesValue {
 	NSNumber *result = [self lead_company_noofemployees];
@@ -172,140 +128,43 @@ const struct LeadFetchedProperties LeadFetchedProperties = {
 	[self setPrimitiveLead_company_noofemployees:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic lead_company_website;
-
-
-
-
-
 
 @dynamic lead_description;
 
-
-
-
-
-
 @dynamic lead_designation;
-
-
-
-
-
 
 @dynamic lead_email;
 
-
-
-
-
-
 @dynamic lead_fax;
-
-
-
-
-
 
 @dynamic lead_firstname;
 
-
-
-
-
-
 @dynamic lead_lastname;
-
-
-
-
-
 
 @dynamic lead_lead_no;
 
-
-
-
-
-
 @dynamic lead_leadid;
-
-
-
-
-
 
 @dynamic lead_leadsource;
 
-
-
-
-
-
 @dynamic lead_leadstatus;
-
-
-
-
-
 
 @dynamic lead_mobile;
 
-
-
-
-
-
 @dynamic lead_phone;
-
-
-
-
-
 
 @dynamic lead_rating;
 
-
-
-
-
-
 @dynamic lead_salutationtype;
-
-
-
-
-
 
 @dynamic lead_yahooid;
 
-
-
-
-
-
 @dynamic my_custom_fields;
-
-
-
-
-
 
 @dynamic address;
 
-	
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

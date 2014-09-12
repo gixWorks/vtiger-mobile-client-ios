@@ -28,9 +28,6 @@ const struct CampaignRelationships CampaignRelationships = {
 	.service = @"service",
 };
 
-const struct CampaignFetchedProperties CampaignFetchedProperties = {
-};
-
 @implementation CampaignID
 @end
 
@@ -56,7 +53,7 @@ const struct CampaignFetchedProperties CampaignFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_numsentValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_numsent"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -71,75 +68,25 @@ const struct CampaignFetchedProperties CampaignFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_assigned_user_id;
-
-
-
-
-
 
 @dynamic crm_assigned_user_name;
 
-
-
-
-
-
 @dynamic crm_campaign_no;
-
-
-
-
-
 
 @dynamic crm_campaignname;
 
-
-
-
-
-
 @dynamic crm_campaignstatus;
-
-
-
-
-
 
 @dynamic crm_campaigntype;
 
-
-
-
-
-
 @dynamic crm_closingdate;
-
-
-
-
-
 
 @dynamic crm_description;
 
-
-
-
-
-
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_numsent;
-
-
 
 - (int16_t)crm_numsentValue {
 	NSNumber *result = [self crm_numsent];
@@ -159,41 +106,15 @@ const struct CampaignFetchedProperties CampaignFetchedProperties = {
 	[self setPrimitiveCrm_numsent:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_product_id;
-
-
-
-
-
 
 @dynamic crm_product_name;
 
-
-
-
-
-
 @dynamic crm_sponsor;
-
-
-
-
-
 
 @dynamic crm_targetaudience;
 
-
-
-
-
-
 @dynamic crm_targetsize;
-
-
 
 - (int16_t)crm_targetsizeValue {
 	NSNumber *result = [self crm_targetsize];
@@ -213,38 +134,13 @@ const struct CampaignFetchedProperties CampaignFetchedProperties = {
 	[self setPrimitiveCrm_targetsize:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_time_created;
-
-
-
-
-
 
 @dynamic crm_time_modified;
 
-
-
-
-
-
 @dynamic my_custom_fields;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

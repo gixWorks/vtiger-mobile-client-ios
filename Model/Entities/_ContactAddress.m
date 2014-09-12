@@ -22,9 +22,6 @@ const struct ContactAddressRelationships ContactAddressRelationships = {
 	.contact = @"contact",
 };
 
-const struct ContactAddressFetchedProperties ContactAddressFetchedProperties = {
-};
-
 @implementation ContactAddressID
 @end
 
@@ -50,105 +47,35 @@ const struct ContactAddressFetchedProperties ContactAddressFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_mailingcity;
-
-
-
-
-
 
 @dynamic crm_mailingcountry;
 
-
-
-
-
-
 @dynamic crm_mailingpobox;
-
-
-
-
-
 
 @dynamic crm_mailingstate;
 
-
-
-
-
-
 @dynamic crm_mailingstreet;
-
-
-
-
-
 
 @dynamic crm_mailingzip;
 
-
-
-
-
-
 @dynamic crm_othercity;
-
-
-
-
-
 
 @dynamic crm_othercountry;
 
-
-
-
-
-
 @dynamic crm_otherpobox;
-
-
-
-
-
 
 @dynamic crm_otherstate;
 
-
-
-
-
-
 @dynamic crm_otherstreet;
-
-
-
-
-
 
 @dynamic crm_otherzip;
 
-
-
-
-
-
 @dynamic contact;
 
-	
-
-
-
-
-
-
 @end
+

@@ -31,9 +31,6 @@ const struct PotentialRelationships PotentialRelationships = {
 	.service = @"service",
 };
 
-const struct PotentialFetchedProperties PotentialFetchedProperties = {
-};
-
 @implementation PotentialID
 @end
 
@@ -59,7 +56,7 @@ const struct PotentialFetchedProperties PotentialFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_probabilityValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_probability"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -69,103 +66,33 @@ const struct PotentialFetchedProperties PotentialFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_amount;
-
-
-
-
-
 
 @dynamic crm_assigned_user_id;
 
-
-
-
-
-
 @dynamic crm_assigned_user_name;
-
-
-
-
-
 
 @dynamic crm_campaign_id;
 
-
-
-
-
-
 @dynamic crm_campaign_name;
-
-
-
-
-
 
 @dynamic crm_closingdate;
 
-
-
-
-
-
 @dynamic crm_description;
-
-
-
-
-
 
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_leadsource;
-
-
-
-
-
 
 @dynamic crm_nextstep;
 
-
-
-
-
-
 @dynamic crm_opportunity_type;
-
-
-
-
-
 
 @dynamic crm_potential_no;
 
-
-
-
-
-
 @dynamic crm_potentialname;
 
-
-
-
-
-
 @dynamic crm_probability;
-
-
 
 - (float)crm_probabilityValue {
 	NSNumber *result = [self crm_probability];
@@ -185,66 +112,21 @@ const struct PotentialFetchedProperties PotentialFetchedProperties = {
 	[self setPrimitiveCrm_probability:[NSNumber numberWithFloat:value_]];
 }
 
-
-
-
-
 @dynamic crm_related_to_id;
-
-
-
-
-
 
 @dynamic crm_related_to_name;
 
-
-
-
-
-
 @dynamic crm_related_to_type;
-
-
-
-
-
 
 @dynamic crm_sales_stage;
 
-
-
-
-
-
 @dynamic crm_time_created;
-
-
-
-
-
 
 @dynamic crm_time_modified;
 
-
-
-
-
-
 @dynamic my_custom_fields;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

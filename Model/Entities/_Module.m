@@ -16,9 +16,6 @@ const struct ModuleRelationships ModuleRelationships = {
 	.service = @"service",
 };
 
-const struct ModuleFetchedProperties ModuleFetchedProperties = {
-};
-
 @implementation ModuleID
 @end
 
@@ -44,7 +41,7 @@ const struct ModuleFetchedProperties ModuleFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_isEntityValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_isEntity"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -54,19 +51,9 @@ const struct ModuleFetchedProperties ModuleFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_isEntity;
-
-
 
 - (BOOL)crm_isEntityValue {
 	NSNumber *result = [self crm_isEntity];
@@ -86,51 +73,24 @@ const struct ModuleFetchedProperties ModuleFetchedProperties = {
 	[self setPrimitiveCrm_isEntity:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic crm_label;
-
-
-
-
-
 
 @dynamic crm_name;
 
-
-
-
-
-
 @dynamic crm_singular;
-
-
-
-
-
 
 @dynamic fields;
 
-	
 - (NSMutableSet*)fieldsSet {
 	[self willAccessValueForKey:@"fields"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"fields"];
-  
+
 	[self didAccessValueForKey:@"fields"];
 	return result;
 }
-	
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

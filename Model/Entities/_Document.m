@@ -26,9 +26,6 @@ const struct DocumentRelationships DocumentRelationships = {
 	.service = @"service",
 };
 
-const struct DocumentFetchedProperties DocumentFetchedProperties = {
-};
-
 @implementation DocumentID
 @end
 
@@ -54,7 +51,7 @@ const struct DocumentFetchedProperties DocumentFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_filedownloadcountValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_filedownloadcount"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -69,26 +66,11 @@ const struct DocumentFetchedProperties DocumentFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_assigned_user_id;
-
-
-
-
-
 
 @dynamic crm_assigned_user_name;
 
-
-
-
-
-
 @dynamic crm_filedownloadcount;
-
-
 
 - (int32_t)crm_filedownloadcountValue {
 	NSNumber *result = [self crm_filedownloadcount];
@@ -108,20 +90,9 @@ const struct DocumentFetchedProperties DocumentFetchedProperties = {
 	[self setPrimitiveCrm_filedownloadcount:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic crm_filelocationtype;
 
-
-
-
-
-
 @dynamic crm_filesize;
-
-
 
 - (int32_t)crm_filesizeValue {
 	NSNumber *result = [self crm_filesize];
@@ -141,94 +112,29 @@ const struct DocumentFetchedProperties DocumentFetchedProperties = {
 	[self setPrimitiveCrm_filesize:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic crm_filestatus;
-
-
-
-
-
 
 @dynamic crm_filetype;
 
-
-
-
-
-
 @dynamic crm_fileversion;
-
-
-
-
-
 
 @dynamic crm_folder_id;
 
-
-
-
-
-
 @dynamic crm_folder_name;
-
-
-
-
-
 
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_note_content;
-
-
-
-
-
 
 @dynamic crm_note_no;
 
-
-
-
-
-
 @dynamic crm_note_title;
-
-
-
-
-
 
 @dynamic crm_time_created;
 
-
-
-
-
-
 @dynamic crm_time_modified;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

@@ -12,9 +12,6 @@ const struct CRMFieldPicklistValueRelationships CRMFieldPicklistValueRelationshi
 	.field = @"field",
 };
 
-const struct CRMFieldPicklistValueFetchedProperties CRMFieldPicklistValueFetchedProperties = {
-};
-
 @implementation CRMFieldPicklistValueID
 @end
 
@@ -40,35 +37,15 @@ const struct CRMFieldPicklistValueFetchedProperties CRMFieldPicklistValueFetched
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_label;
-
-
-
-
-
 
 @dynamic crm_value;
 
-
-
-
-
-
 @dynamic field;
 
-	
-
-
-
-
-
-
 @end
+

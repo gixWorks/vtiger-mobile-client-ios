@@ -22,9 +22,6 @@ const struct AccountAddressRelationships AccountAddressRelationships = {
 	.account = @"account",
 };
 
-const struct AccountAddressFetchedProperties AccountAddressFetchedProperties = {
-};
-
 @implementation AccountAddressID
 @end
 
@@ -50,105 +47,35 @@ const struct AccountAddressFetchedProperties AccountAddressFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_bill_city;
-
-
-
-
-
 
 @dynamic crm_bill_code;
 
-
-
-
-
-
 @dynamic crm_bill_country;
-
-
-
-
-
 
 @dynamic crm_bill_pobox;
 
-
-
-
-
-
 @dynamic crm_bill_state;
-
-
-
-
-
 
 @dynamic crm_bill_street;
 
-
-
-
-
-
 @dynamic crm_ship_city;
-
-
-
-
-
 
 @dynamic crm_ship_code;
 
-
-
-
-
-
 @dynamic crm_ship_country;
-
-
-
-
-
 
 @dynamic crm_ship_pobox;
 
-
-
-
-
-
 @dynamic crm_ship_state;
-
-
-
-
-
 
 @dynamic crm_ship_street;
 
-
-
-
-
-
 @dynamic account;
 
-	
-
-
-
-
-
-
 @end
+

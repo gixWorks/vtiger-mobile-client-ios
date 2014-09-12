@@ -38,9 +38,6 @@ const struct AccountRelationships AccountRelationships = {
 	.service = @"service",
 };
 
-const struct AccountFetchedProperties AccountFetchedProperties = {
-};
-
 @implementation AccountID
 @end
 
@@ -66,7 +63,7 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_annual_revenueValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_annual_revenue"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -91,33 +88,13 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_account_no;
-
-
-
-
-
 
 @dynamic crm_accountname;
 
-
-
-
-
-
 @dynamic crm_accounttype;
 
-
-
-
-
-
 @dynamic crm_annual_revenue;
-
-
 
 - (int16_t)crm_annual_revenueValue {
 	NSNumber *result = [self crm_annual_revenue];
@@ -137,48 +114,17 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 	[self setPrimitiveCrm_annual_revenue:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_assigned_user_id;
-
-
-
-
-
 
 @dynamic crm_assigned_user_name;
 
-
-
-
-
-
 @dynamic crm_description;
-
-
-
-
-
 
 @dynamic crm_email1;
 
-
-
-
-
-
 @dynamic crm_email2;
 
-
-
-
-
-
 @dynamic crm_emailoptout;
-
-
 
 - (BOOL)crm_emailoptoutValue {
 	NSNumber *result = [self crm_emailoptout];
@@ -198,13 +144,7 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 	[self setPrimitiveCrm_emailoptout:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic crm_employees;
-
-
 
 - (int16_t)crm_employeesValue {
 	NSNumber *result = [self crm_employees];
@@ -224,48 +164,17 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 	[self setPrimitiveCrm_employees:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic crm_fax;
-
-
-
-
-
 
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_industry;
-
-
-
-
-
 
 @dynamic crm_memberof_id;
 
-
-
-
-
-
 @dynamic crm_memberof_name;
 
-
-
-
-
-
 @dynamic crm_notify_owner;
-
-
 
 - (BOOL)crm_notify_ownerValue {
 	NSNumber *result = [self crm_notify_owner];
@@ -285,91 +194,29 @@ const struct AccountFetchedProperties AccountFetchedProperties = {
 	[self setPrimitiveCrm_notify_owner:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic crm_otherphone;
-
-
-
-
-
 
 @dynamic crm_ownership;
 
-
-
-
-
-
 @dynamic crm_phone;
-
-
-
-
-
 
 @dynamic crm_rating;
 
-
-
-
-
-
 @dynamic crm_siccode;
-
-
-
-
-
 
 @dynamic crm_tickersymbol;
 
-
-
-
-
-
 @dynamic crm_time_created;
-
-
-
-
-
 
 @dynamic crm_time_modified;
 
-
-
-
-
-
 @dynamic crm_website;
-
-
-
-
-
 
 @dynamic my_custom_fields;
 
-
-
-
-
-
 @dynamic address;
-
-	
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

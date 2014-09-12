@@ -14,9 +14,6 @@ const struct GWLocationRelationships GWLocationRelationships = {
 	.service = @"service",
 };
 
-const struct GWLocationFetchedProperties GWLocationFetchedProperties = {
-};
-
 @implementation GWLocationID
 @end
 
@@ -42,7 +39,7 @@ const struct GWLocationFetchedProperties GWLocationFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"gw_latitudeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"gw_latitude"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -57,19 +54,9 @@ const struct GWLocationFetchedProperties GWLocationFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic gw_address;
 
-
-
-
-
-
 @dynamic gw_latitude;
-
-
 
 - (double)gw_latitudeValue {
 	NSNumber *result = [self gw_latitude];
@@ -89,13 +76,7 @@ const struct GWLocationFetchedProperties GWLocationFetchedProperties = {
 	[self setPrimitiveGw_latitude:[NSNumber numberWithDouble:value_]];
 }
 
-
-
-
-
 @dynamic gw_longitude;
-
-
 
 - (double)gw_longitudeValue {
 	NSNumber *result = [self gw_longitude];
@@ -115,24 +96,9 @@ const struct GWLocationFetchedProperties GWLocationFetchedProperties = {
 	[self setPrimitiveGw_longitude:[NSNumber numberWithDouble:value_]];
 }
 
-
-
-
-
 @dynamic gw_name;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

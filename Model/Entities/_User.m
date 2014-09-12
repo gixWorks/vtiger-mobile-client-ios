@@ -12,9 +12,6 @@ const struct UserRelationships UserRelationships = {
 	.service = @"service",
 };
 
-const struct UserFetchedProperties UserFetchedProperties = {
-};
-
 @implementation UserID
 @end
 
@@ -40,35 +37,15 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_id;
-
-
-
-
-
 
 @dynamic crm_label;
 
-
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

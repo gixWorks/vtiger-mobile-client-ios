@@ -16,9 +16,6 @@ const struct LeadAddressRelationships LeadAddressRelationships = {
 	.lead = @"lead",
 };
 
-const struct LeadAddressFetchedProperties LeadAddressFetchedProperties = {
-};
-
 @implementation LeadAddressID
 @end
 
@@ -44,63 +41,23 @@ const struct LeadAddressFetchedProperties LeadAddressFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_city;
-
-
-
-
-
 
 @dynamic crm_code;
 
-
-
-
-
-
 @dynamic crm_country;
-
-
-
-
-
 
 @dynamic crm_pobox;
 
-
-
-
-
-
 @dynamic crm_state;
-
-
-
-
-
 
 @dynamic crm_street;
 
-
-
-
-
-
 @dynamic lead;
 
-	
-
-
-
-
-
-
 @end
+

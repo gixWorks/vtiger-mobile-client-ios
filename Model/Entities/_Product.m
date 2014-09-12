@@ -32,9 +32,6 @@ const struct ProductRelationships ProductRelationships = {
 	.service = @"service",
 };
 
-const struct ProductFetchedProperties ProductFetchedProperties = {
-};
-
 @implementation ProductID
 @end
 
@@ -60,7 +57,7 @@ const struct ProductFetchedProperties ProductFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_discontinuedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_discontinued"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -70,19 +67,9 @@ const struct ProductFetchedProperties ProductFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_description;
 
-
-
-
-
-
 @dynamic crm_discontinued;
-
-
 
 - (BOOL)crm_discontinuedValue {
 	NSNumber *result = [self crm_discontinued];
@@ -102,157 +89,47 @@ const struct ProductFetchedProperties ProductFetchedProperties = {
 	[self setPrimitiveCrm_discontinued:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic crm_glacct;
-
-
-
-
-
 
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_manufacturer;
-
-
-
-
-
 
 @dynamic crm_mfr_part_no;
 
-
-
-
-
-
 @dynamic crm_product_no;
-
-
-
-
-
 
 @dynamic crm_productcategory;
 
-
-
-
-
-
 @dynamic crm_productcode;
-
-
-
-
-
 
 @dynamic crm_productname;
 
-
-
-
-
-
 @dynamic crm_productsheet;
-
-
-
-
-
 
 @dynamic crm_sales_end_date;
 
-
-
-
-
-
 @dynamic crm_sales_start_date;
-
-
-
-
-
 
 @dynamic crm_serial_no;
 
-
-
-
-
-
 @dynamic crm_support_end_date;
-
-
-
-
-
 
 @dynamic crm_support_start_date;
 
-
-
-
-
-
 @dynamic crm_time_created;
-
-
-
-
-
 
 @dynamic crm_time_modified;
 
-
-
-
-
-
 @dynamic crm_vendor_id;
-
-
-
-
-
 
 @dynamic crm_vendor_name;
 
-
-
-
-
-
 @dynamic crm_vendor_part_no;
-
-
-
-
-
 
 @dynamic crm_website;
 
-
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

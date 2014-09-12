@@ -17,9 +17,6 @@ const struct CRMFieldRelationships CRMFieldRelationships = {
 	.picklist_values = @"picklist_values",
 };
 
-const struct CRMFieldFetchedProperties CRMFieldFetchedProperties = {
-};
-
 @implementation CRMFieldID
 @end
 
@@ -45,7 +42,7 @@ const struct CRMFieldFetchedProperties CRMFieldFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"crm_mandatoryValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"crm_mandatory"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -55,19 +52,9 @@ const struct CRMFieldFetchedProperties CRMFieldFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_label;
 
-
-
-
-
-
 @dynamic crm_mandatory;
-
-
 
 - (BOOL)crm_mandatoryValue {
 	NSNumber *result = [self crm_mandatory];
@@ -87,58 +74,26 @@ const struct CRMFieldFetchedProperties CRMFieldFetchedProperties = {
 	[self setPrimitiveCrm_mandatory:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic crm_name;
-
-
-
-
-
 
 @dynamic crm_options;
 
-
-
-
-
-
 @dynamic crm_type;
-
-
-
-
-
 
 @dynamic crm_uitype;
 
-
-
-
-
-
 @dynamic module;
-
-	
 
 @dynamic picklist_values;
 
-	
 - (NSMutableSet*)picklist_valuesSet {
 	[self willAccessValueForKey:@"picklist_values"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"picklist_values"];
-  
+
 	[self didAccessValueForKey:@"picklist_values"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+

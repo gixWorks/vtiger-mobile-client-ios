@@ -13,9 +13,6 @@ const struct SyncTokenRelationships SyncTokenRelationships = {
 	.service = @"service",
 };
 
-const struct SyncTokenFetchedProperties SyncTokenFetchedProperties = {
-};
-
 @implementation SyncTokenID
 @end
 
@@ -41,42 +38,17 @@ const struct SyncTokenFetchedProperties SyncTokenFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic datetime;
-
-
-
-
-
 
 @dynamic module;
 
-
-
-
-
-
 @dynamic token;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

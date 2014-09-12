@@ -16,9 +16,6 @@ const struct SyncRelationships SyncRelationships = {
 	.service = @"service",
 };
 
-const struct SyncFetchedProperties SyncFetchedProperties = {
-};
-
 @implementation SyncID
 @end
 
@@ -44,7 +41,7 @@ const struct SyncFetchedProperties SyncFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"syncrecordsdeletedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"syncrecordsdeleted"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -64,26 +61,11 @@ const struct SyncFetchedProperties SyncFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic syncdate;
-
-
-
-
-
 
 @dynamic syncmodule;
 
-
-
-
-
-
 @dynamic syncrecordsdeleted;
-
-
 
 - (int32_t)syncrecordsdeletedValue {
 	NSNumber *result = [self syncrecordsdeleted];
@@ -103,13 +85,7 @@ const struct SyncFetchedProperties SyncFetchedProperties = {
 	[self setPrimitiveSyncrecordsdeleted:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic syncrecordsupdated;
-
-
 
 - (int32_t)syncrecordsupdatedValue {
 	NSNumber *result = [self syncrecordsupdated];
@@ -129,13 +105,7 @@ const struct SyncFetchedProperties SyncFetchedProperties = {
 	[self setPrimitiveSyncrecordsupdated:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic syncsuccess;
-
-
 
 - (int32_t)syncsuccessValue {
 	NSNumber *result = [self syncsuccess];
@@ -155,24 +125,9 @@ const struct SyncFetchedProperties SyncFetchedProperties = {
 	[self setPrimitiveSyncsuccess:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic synctoken;
-
-
-
-
-
 
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

@@ -12,9 +12,6 @@ const struct EnabledModulesRelationships EnabledModulesRelationships = {
 	.service = @"service",
 };
 
-const struct EnabledModulesFetchedProperties EnabledModulesFetchedProperties = {
-};
-
 @implementation EnabledModulesID
 @end
 
@@ -40,7 +37,7 @@ const struct EnabledModulesFetchedProperties EnabledModulesFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"enabledValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"enabled"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -50,19 +47,9 @@ const struct EnabledModulesFetchedProperties EnabledModulesFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_name;
 
-
-
-
-
-
 @dynamic enabled;
-
-
 
 - (BOOL)enabledValue {
 	NSNumber *result = [self enabled];
@@ -82,17 +69,7 @@ const struct EnabledModulesFetchedProperties EnabledModulesFetchedProperties = {
 	[self setPrimitiveEnabled:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

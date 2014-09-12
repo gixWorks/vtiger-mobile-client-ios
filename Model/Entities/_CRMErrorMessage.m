@@ -12,9 +12,6 @@ const struct CRMErrorMessageRelationships CRMErrorMessageRelationships = {
 	.service = @"service",
 };
 
-const struct CRMErrorMessageFetchedProperties CRMErrorMessageFetchedProperties = {
-};
-
 @implementation CRMErrorMessageID
 @end
 
@@ -40,35 +37,15 @@ const struct CRMErrorMessageFetchedProperties CRMErrorMessageFetchedProperties =
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_message;
-
-
-
-
-
 
 @dynamic crm_timestamp;
 
-
-
-
-
-
 @dynamic service;
 
-	
-
-
-
-
-
-
 @end
+

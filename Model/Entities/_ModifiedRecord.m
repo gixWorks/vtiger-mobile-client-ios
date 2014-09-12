@@ -9,12 +9,6 @@ const struct ModifiedRecordAttributes ModifiedRecordAttributes = {
 	.crm_timestamp = @"crm_timestamp",
 };
 
-const struct ModifiedRecordRelationships ModifiedRecordRelationships = {
-};
-
-const struct ModifiedRecordFetchedProperties ModifiedRecordFetchedProperties = {
-};
-
 @implementation ModifiedRecordID
 @end
 
@@ -40,38 +34,15 @@ const struct ModifiedRecordFetchedProperties ModifiedRecordFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic crm_action;
-
-
-
-
-
 
 @dynamic crm_id;
 
-
-
-
-
-
 @dynamic crm_timestamp;
 
-
-
-
-
-
-
-
-
-
-
 @end
+
