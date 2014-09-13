@@ -1,4 +1,4 @@
-//
+	//
 //  Parser.m
 //  VTFunctionalitiesApp
 //
@@ -560,6 +560,9 @@
     @try {
         BOOL success = [[JSON objectForKey:@"success"] boolValue];
         NSArray *records = [JSON valueForKeyPath:@"result.records"];
+		if ([records isEqual:[NSNull null]] || records == nil) {
+			records = @[];
+		}
 #if DEBUG
         NSLog(@"%@ parsing %lu records for module %@", NSStringFromSelector(_cmd), (unsigned long)[records count], module);
 #endif
@@ -754,6 +757,11 @@
         return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
     }
     NSArray *records = [JSON valueForKeyPath:@"result.records"];
+
+	if([records isEqual:[NSNull null]] || records == nil){
+		//There were no records returned
+		records = @[];
+	}
     NSMutableArray *identifiers = [[NSMutableArray alloc] init];
     
     if ([module isEqualToString:kVTModuleUsers]) {
@@ -788,6 +796,10 @@
         return @{@"error" : [JSON valueForKeyPath:@"error.message"]};
     }
     NSArray *records = [JSON valueForKeyPath:@"result.records"];
+	
+	if ([records isEqual:[NSNull null]] || records == nil) {
+		records = @[];
+	}
     NSMutableArray *identifiers = [[NSMutableArray alloc] init];
     
     if ([module isEqualToString:kVTModuleGroups]) {
