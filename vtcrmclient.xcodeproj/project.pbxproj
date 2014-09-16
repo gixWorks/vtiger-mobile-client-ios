@@ -1,0 +1,1093 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AC0DD68719C8538B0044EE17 /* crmclient-vtiger.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD68619C8538B0044EE17 /* crmclient-vtiger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC0DD69119C8538C0044EE17 /* crmclient_vtigerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD69019C8538C0044EE17 /* crmclient_vtigerTests.m */; };
+		AC0DD74119C8543A0044EE17 /* GTMNSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD69B19C854390044EE17 /* GTMNSString+HTML.h */; };
+		AC0DD74219C8543A0044EE17 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD69C19C854390044EE17 /* GTMNSString+HTML.m */; };
+		AC0DD74319C8543A0044EE17 /* NSDate+GWUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD69D19C854390044EE17 /* NSDate+GWUtilities.h */; };
+		AC0DD74419C8543A0044EE17 /* NSDate+GWUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD69E19C854390044EE17 /* NSDate+GWUtilities.m */; };
+		AC0DD74519C8543A0044EE17 /* NSDictionary+GWJSONString.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD69F19C854390044EE17 /* NSDictionary+GWJSONString.h */; };
+		AC0DD74619C8543A0044EE17 /* NSDictionary+GWJSONString.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6A019C854390044EE17 /* NSDictionary+GWJSONString.m */; };
+		AC0DD74719C8543A0044EE17 /* CRMClient.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6A219C854390044EE17 /* CRMClient.h */; };
+		AC0DD74819C8543A0044EE17 /* CRMClient.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6A319C854390044EE17 /* CRMClient.m */; };
+		AC0DD74919C8543A0044EE17 /* CRMHTTPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6A419C854390044EE17 /* CRMHTTPClient.h */; };
+		AC0DD74A19C8543A0044EE17 /* CRMHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6A519C854390044EE17 /* CRMHTTPClient.m */; };
+		AC0DD74B19C8543A0044EE17 /* NSURL+GWAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6A619C854390044EE17 /* NSURL+GWAdditions.h */; };
+		AC0DD74C19C8543A0044EE17 /* NSURL+GWAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6A719C854390044EE17 /* NSURL+GWAdditions.m */; };
+		AC0DD74D19C8543A0044EE17 /* URLCheckerClient.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6A819C854390044EE17 /* URLCheckerClient.h */; };
+		AC0DD74E19C8543A0044EE17 /* URLCheckerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6A919C854390044EE17 /* URLCheckerClient.m */; };
+		AC0DD74F19C8543A0044EE17 /* CRMConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6AB19C854390044EE17 /* CRMConstants.h */; };
+		AC0DD75019C8543A0044EE17 /* CRMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6AC19C854390044EE17 /* CRMConstants.m */; };
+		AC0DD75119C8543A0044EE17 /* CRMFieldConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6AD19C854390044EE17 /* CRMFieldConstants.h */; };
+		AC0DD75219C8543A0044EE17 /* CRMFieldConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6AE19C854390044EE17 /* CRMFieldConstants.m */; };
+		AC0DD75319C8543A0044EE17 /* GWNotificationNames.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6AF19C854390044EE17 /* GWNotificationNames.h */; };
+		AC0DD75419C8543A0044EE17 /* GWNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6B019C854390044EE17 /* GWNotificationNames.m */; };
+		AC0DD75519C8543A0044EE17 /* CredentialsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6B219C854390044EE17 /* CredentialsHelper.h */; };
+		AC0DD75619C8543A0044EE17 /* CredentialsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6B319C854390044EE17 /* CredentialsHelper.m */; };
+		AC0DD75719C8543A0044EE17 /* CRMPicklistHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6B419C854390044EE17 /* CRMPicklistHelper.h */; };
+		AC0DD75819C8543A0044EE17 /* CRMPicklistHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6B519C854390044EE17 /* CRMPicklistHelper.m */; };
+		AC0DD75919C8543A0044EE17 /* CRMQueryHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6B619C854390044EE17 /* CRMQueryHelper.h */; };
+		AC0DD75A19C8543A0044EE17 /* CRMQueryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6B719C854390044EE17 /* CRMQueryHelper.m */; };
+		AC0DD75B19C8543A0044EE17 /* EnabledModulesHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6B819C854390044EE17 /* EnabledModulesHelper.h */; };
+		AC0DD75C19C8543A0044EE17 /* EnabledModulesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6B919C854390044EE17 /* EnabledModulesHelper.m */; };
+		AC0DD75D19C8543A0044EE17 /* ModuleFieldHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6BA19C854390044EE17 /* ModuleFieldHelper.h */; };
+		AC0DD75E19C8543A0044EE17 /* ModuleFieldHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6BB19C854390044EE17 /* ModuleFieldHelper.m */; };
+		AC0DD75F19C8543A0044EE17 /* ModulesHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6BC19C854390044EE17 /* ModulesHelper.h */; };
+		AC0DD76019C8543A0044EE17 /* ModulesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6BD19C854390044EE17 /* ModulesHelper.m */; };
+		AC0DD76119C8543A0044EE17 /* ServiceHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6BE19C854390044EE17 /* ServiceHelper.h */; };
+		AC0DD76219C8543A0044EE17 /* ServiceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6BF19C854390044EE17 /* ServiceHelper.m */; };
+		AC0DD76319C8543A0044EE17 /* UsersHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6C019C854390044EE17 /* UsersHelper.h */; };
+		AC0DD76419C8543A0044EE17 /* UsersHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6C119C854390044EE17 /* UsersHelper.m */; };
+		AC0DD76519C8543A0044EE17 /* APLImageToDataTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6C319C854390044EE17 /* APLImageToDataTransformer.h */; };
+		AC0DD76619C8543A0044EE17 /* APLImageToDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6C419C854390044EE17 /* APLImageToDataTransformer.m */; };
+		AC0DD76719C8543A0044EE17 /* CalendarAppThatSyncs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6C519C854390044EE17 /* CalendarAppThatSyncs.xcdatamodeld */; };
+		AC0DD76819C8543A0044EE17 /* _Account.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6CE19C854390044EE17 /* _Account.h */; };
+		AC0DD76919C8543A0044EE17 /* _Account.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6CF19C854390044EE17 /* _Account.m */; };
+		AC0DD76A19C8543A0044EE17 /* _AccountAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6D019C854390044EE17 /* _AccountAddress.h */; };
+		AC0DD76B19C8543A0044EE17 /* _AccountAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6D119C854390044EE17 /* _AccountAddress.m */; };
+		AC0DD76C19C8543A0044EE17 /* _Activity.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6D219C854390044EE17 /* _Activity.h */; };
+		AC0DD76D19C8543A0044EE17 /* _Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6D319C854390044EE17 /* _Activity.m */; };
+		AC0DD76E19C8543A0044EE17 /* _Campaign.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6D419C854390044EE17 /* _Campaign.h */; };
+		AC0DD76F19C8543A0044EE17 /* _Campaign.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6D519C854390044EE17 /* _Campaign.m */; };
+		AC0DD77019C8543A0044EE17 /* _Contact.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6D619C854390044EE17 /* _Contact.h */; };
+		AC0DD77119C8543A0044EE17 /* _Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6D719C854390044EE17 /* _Contact.m */; };
+		AC0DD77219C8543A0044EE17 /* _ContactAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6D819C854390044EE17 /* _ContactAddress.h */; };
+		AC0DD77319C8543A0044EE17 /* _ContactAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6D919C854390044EE17 /* _ContactAddress.m */; };
+		AC0DD77419C8543A0044EE17 /* _CRMErrorMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6DA19C854390044EE17 /* _CRMErrorMessage.h */; };
+		AC0DD77519C8543A0044EE17 /* _CRMErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6DB19C854390044EE17 /* _CRMErrorMessage.m */; };
+		AC0DD77619C8543A0044EE17 /* _CRMField.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6DC19C854390044EE17 /* _CRMField.h */; };
+		AC0DD77719C8543A0044EE17 /* _CRMField.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6DD19C854390044EE17 /* _CRMField.m */; };
+		AC0DD77819C8543A0044EE17 /* _CRMFieldPicklistValue.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6DE19C854390044EE17 /* _CRMFieldPicklistValue.h */; };
+		AC0DD77919C8543A0044EE17 /* _CRMFieldPicklistValue.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6DF19C854390044EE17 /* _CRMFieldPicklistValue.m */; };
+		AC0DD77A19C8543A0044EE17 /* _Document.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6E019C854390044EE17 /* _Document.h */; };
+		AC0DD77B19C8543A0044EE17 /* _Document.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6E119C854390044EE17 /* _Document.m */; };
+		AC0DD77C19C8543A0044EE17 /* _EnabledModules.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6E219C854390044EE17 /* _EnabledModules.h */; };
+		AC0DD77D19C8543A0044EE17 /* _EnabledModules.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6E319C854390044EE17 /* _EnabledModules.m */; };
+		AC0DD77E19C8543A0044EE17 /* _Group.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6E419C854390044EE17 /* _Group.h */; };
+		AC0DD77F19C8543A0044EE17 /* _Group.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6E519C854390044EE17 /* _Group.m */; };
+		AC0DD78019C8543A0044EE17 /* _GWLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6E619C854390044EE17 /* _GWLocation.h */; };
+		AC0DD78119C8543A0044EE17 /* _GWLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6E719C854390044EE17 /* _GWLocation.m */; };
+		AC0DD78219C8543A0044EE17 /* _Lead.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6E819C854390044EE17 /* _Lead.h */; };
+		AC0DD78319C8543A0044EE17 /* _Lead.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6E919C854390044EE17 /* _Lead.m */; };
+		AC0DD78419C8543A0044EE17 /* _LeadAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6EA19C854390044EE17 /* _LeadAddress.h */; };
+		AC0DD78519C8543A0044EE17 /* _LeadAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6EB19C854390044EE17 /* _LeadAddress.m */; };
+		AC0DD78619C8543A0044EE17 /* _ModifiedRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6EC19C854390044EE17 /* _ModifiedRecord.h */; };
+		AC0DD78719C8543A0044EE17 /* _ModifiedRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6ED19C854390044EE17 /* _ModifiedRecord.m */; };
+		AC0DD78819C8543A0044EE17 /* _Module.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6EE19C854390044EE17 /* _Module.h */; };
+		AC0DD78919C8543A0044EE17 /* _Module.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6EF19C854390044EE17 /* _Module.m */; };
+		AC0DD78A19C8543A0044EE17 /* _Potential.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6F019C854390044EE17 /* _Potential.h */; };
+		AC0DD78B19C8543A0044EE17 /* _Potential.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6F119C854390044EE17 /* _Potential.m */; };
+		AC0DD78C19C8543A0044EE17 /* _Product.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6F219C854390044EE17 /* _Product.h */; };
+		AC0DD78D19C8543A0044EE17 /* _Product.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6F319C854390044EE17 /* _Product.m */; };
+		AC0DD78E19C8543A0044EE17 /* _Service.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6F419C854390044EE17 /* _Service.h */; };
+		AC0DD78F19C8543A0044EE17 /* _Service.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6F519C854390044EE17 /* _Service.m */; };
+		AC0DD79019C8543A0044EE17 /* _Sync.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6F619C854390044EE17 /* _Sync.h */; };
+		AC0DD79119C8543A0044EE17 /* _Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6F719C854390044EE17 /* _Sync.m */; };
+		AC0DD79219C8543A0044EE17 /* _SyncToken.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6F819C8543A0044EE17 /* _SyncToken.h */; };
+		AC0DD79319C8543A0044EE17 /* _SyncToken.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6F919C8543A0044EE17 /* _SyncToken.m */; };
+		AC0DD79419C8543A0044EE17 /* _Ticket.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6FA19C8543A0044EE17 /* _Ticket.h */; };
+		AC0DD79519C8543A0044EE17 /* _Ticket.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6FB19C8543A0044EE17 /* _Ticket.m */; };
+		AC0DD79619C8543A0044EE17 /* _User.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6FC19C8543A0044EE17 /* _User.h */; };
+		AC0DD79719C8543A0044EE17 /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6FD19C8543A0044EE17 /* _User.m */; };
+		AC0DD79819C8543A0044EE17 /* Account.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD6FE19C8543A0044EE17 /* Account.h */; };
+		AC0DD79919C8543A0044EE17 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD6FF19C8543A0044EE17 /* Account.m */; };
+		AC0DD79A19C8543A0044EE17 /* AccountAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70019C8543A0044EE17 /* AccountAddress.h */; };
+		AC0DD79B19C8543A0044EE17 /* AccountAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70119C8543A0044EE17 /* AccountAddress.m */; };
+		AC0DD79C19C8543A0044EE17 /* Activity.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70219C8543A0044EE17 /* Activity.h */; };
+		AC0DD79D19C8543A0044EE17 /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70319C8543A0044EE17 /* Activity.m */; };
+		AC0DD79E19C8543A0044EE17 /* Campaign.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70419C8543A0044EE17 /* Campaign.h */; };
+		AC0DD79F19C8543A0044EE17 /* Campaign.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70519C8543A0044EE17 /* Campaign.m */; };
+		AC0DD7A019C8543A0044EE17 /* Contact.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70619C8543A0044EE17 /* Contact.h */; };
+		AC0DD7A119C8543A0044EE17 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70719C8543A0044EE17 /* Contact.m */; };
+		AC0DD7A219C8543A0044EE17 /* ContactAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70819C8543A0044EE17 /* ContactAddress.h */; };
+		AC0DD7A319C8543A0044EE17 /* ContactAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70919C8543A0044EE17 /* ContactAddress.m */; };
+		AC0DD7A419C8543A0044EE17 /* CRMErrorMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70A19C8543A0044EE17 /* CRMErrorMessage.h */; };
+		AC0DD7A519C8543A0044EE17 /* CRMErrorMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70B19C8543A0044EE17 /* CRMErrorMessage.m */; };
+		AC0DD7A619C8543A0044EE17 /* CRMField.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70C19C8543A0044EE17 /* CRMField.h */; };
+		AC0DD7A719C8543A0044EE17 /* CRMField.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70D19C8543A0044EE17 /* CRMField.m */; };
+		AC0DD7A819C8543A0044EE17 /* CRMFieldPicklistValue.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD70E19C8543A0044EE17 /* CRMFieldPicklistValue.h */; };
+		AC0DD7A919C8543A0044EE17 /* CRMFieldPicklistValue.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD70F19C8543A0044EE17 /* CRMFieldPicklistValue.m */; };
+		AC0DD7AA19C8543A0044EE17 /* Document.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71019C8543A0044EE17 /* Document.h */; };
+		AC0DD7AB19C8543A0044EE17 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71119C8543A0044EE17 /* Document.m */; };
+		AC0DD7AC19C8543A0044EE17 /* EnabledModules.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71219C8543A0044EE17 /* EnabledModules.h */; };
+		AC0DD7AD19C8543A0044EE17 /* EnabledModules.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71319C8543A0044EE17 /* EnabledModules.m */; };
+		AC0DD7AE19C8543A0044EE17 /* Group.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71419C8543A0044EE17 /* Group.h */; };
+		AC0DD7AF19C8543A0044EE17 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71519C8543A0044EE17 /* Group.m */; };
+		AC0DD7B019C8543A0044EE17 /* GWLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71619C8543A0044EE17 /* GWLocation.h */; };
+		AC0DD7B119C8543A0044EE17 /* GWLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71719C8543A0044EE17 /* GWLocation.m */; };
+		AC0DD7B219C8543A0044EE17 /* Lead.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71819C8543A0044EE17 /* Lead.h */; };
+		AC0DD7B319C8543A0044EE17 /* Lead.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71919C8543A0044EE17 /* Lead.m */; };
+		AC0DD7B419C8543A0044EE17 /* LeadAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71A19C8543A0044EE17 /* LeadAddress.h */; };
+		AC0DD7B519C8543A0044EE17 /* LeadAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71B19C8543A0044EE17 /* LeadAddress.m */; };
+		AC0DD7B619C8543A0044EE17 /* ModifiedRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71C19C8543A0044EE17 /* ModifiedRecord.h */; };
+		AC0DD7B719C8543A0044EE17 /* ModifiedRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71D19C8543A0044EE17 /* ModifiedRecord.m */; };
+		AC0DD7B819C8543A0044EE17 /* Module.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD71E19C8543A0044EE17 /* Module.h */; };
+		AC0DD7B919C8543A0044EE17 /* Module.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD71F19C8543A0044EE17 /* Module.m */; };
+		AC0DD7BA19C8543A0044EE17 /* Potential.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72019C8543A0044EE17 /* Potential.h */; };
+		AC0DD7BB19C8543A0044EE17 /* Potential.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72119C8543A0044EE17 /* Potential.m */; };
+		AC0DD7BC19C8543A0044EE17 /* Product.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72219C8543A0044EE17 /* Product.h */; };
+		AC0DD7BD19C8543A0044EE17 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72319C8543A0044EE17 /* Product.m */; };
+		AC0DD7BE19C8543A0044EE17 /* Service.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72419C8543A0044EE17 /* Service.h */; };
+		AC0DD7BF19C8543A0044EE17 /* Service.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72519C8543A0044EE17 /* Service.m */; };
+		AC0DD7C019C8543A0044EE17 /* Sync.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72619C8543A0044EE17 /* Sync.h */; };
+		AC0DD7C119C8543A0044EE17 /* Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72719C8543A0044EE17 /* Sync.m */; };
+		AC0DD7C219C8543A0044EE17 /* SyncToken.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72819C8543A0044EE17 /* SyncToken.h */; };
+		AC0DD7C319C8543A0044EE17 /* SyncToken.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72919C8543A0044EE17 /* SyncToken.m */; };
+		AC0DD7C419C8543A0044EE17 /* Ticket.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72A19C8543A0044EE17 /* Ticket.h */; };
+		AC0DD7C519C8543A0044EE17 /* Ticket.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72B19C8543A0044EE17 /* Ticket.m */; };
+		AC0DD7C619C8543A0044EE17 /* User.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD72C19C8543A0044EE17 /* User.h */; };
+		AC0DD7C719C8543A0044EE17 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72D19C8543A0044EE17 /* User.m */; };
+		AC0DD7C819C8543A0044EE17 /* Migration1_2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72E19C8543A0044EE17 /* Migration1_2.xcmappingmodel */; };
+		AC0DD7C919C8543A0044EE17 /* Migration2_3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD72F19C8543A0044EE17 /* Migration2_3.xcmappingmodel */; };
+		AC0DD7CA19C8543A0044EE17 /* Migration3_4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73019C8543A0044EE17 /* Migration3_4.xcmappingmodel */; };
+		AC0DD7CB19C8543A0044EE17 /* Migration4_5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73119C8543A0044EE17 /* Migration4_5.xcmappingmodel */; };
+		AC0DD7CC19C8543A0044EE17 /* Migration5_6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73219C8543A0044EE17 /* Migration5_6.xcmappingmodel */; };
+		AC0DD7CD19C8543A0044EE17 /* Migration6_7.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73319C8543A0044EE17 /* Migration6_7.xcmappingmodel */; };
+		AC0DD7CE19C8543A0044EE17 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD73419C8543A0044EE17 /* Model.h */; };
+		AC0DD7CF19C8543A0044EE17 /* CRMLoginRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD73619C8543A0044EE17 /* CRMLoginRequestOperation.h */; };
+		AC0DD7D019C8543A0044EE17 /* CRMLoginRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73719C8543A0044EE17 /* CRMLoginRequestOperation.m */; };
+		AC0DD7D119C8543A0044EE17 /* NotificationsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD73919C8543A0044EE17 /* NotificationsHandler.h */; };
+		AC0DD7D219C8543A0044EE17 /* NotificationsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73A19C8543A0044EE17 /* NotificationsHandler.m */; };
+		AC0DD7D319C8543A0044EE17 /* ParserResult.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD73B19C8543A0044EE17 /* ParserResult.h */; };
+		AC0DD7D419C8543A0044EE17 /* ParserResult.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73C19C8543A0044EE17 /* ParserResult.m */; };
+		AC0DD7D519C8543A0044EE17 /* ResponseParser.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD73D19C8543A0044EE17 /* ResponseParser.h */; };
+		AC0DD7D619C8543A0044EE17 /* ResponseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0DD73E19C8543A0044EE17 /* ResponseParser.m */; };
+		AC0DD7D719C8543A0044EE17 /* URLCheckerClientDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = AC0DD74019C8543A0044EE17 /* URLCheckerClientDelegate.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AC0DD68119C8538B0044EE17 /* vtcrmclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = vtcrmclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC0DD68519C8538B0044EE17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC0DD68619C8538B0044EE17 /* crmclient-vtiger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "crmclient-vtiger.h"; sourceTree = "<group>"; };
+		AC0DD68C19C8538C0044EE17 /* vtcrmclientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vtcrmclientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC0DD68F19C8538C0044EE17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC0DD69019C8538C0044EE17 /* crmclient_vtigerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = crmclient_vtigerTests.m; sourceTree = "<group>"; };
+		AC0DD69B19C854390044EE17 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		AC0DD69C19C854390044EE17 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		AC0DD69D19C854390044EE17 /* NSDate+GWUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+GWUtilities.h"; sourceTree = "<group>"; };
+		AC0DD69E19C854390044EE17 /* NSDate+GWUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+GWUtilities.m"; sourceTree = "<group>"; };
+		AC0DD69F19C854390044EE17 /* NSDictionary+GWJSONString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+GWJSONString.h"; sourceTree = "<group>"; };
+		AC0DD6A019C854390044EE17 /* NSDictionary+GWJSONString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GWJSONString.m"; sourceTree = "<group>"; };
+		AC0DD6A219C854390044EE17 /* CRMClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMClient.h; sourceTree = "<group>"; };
+		AC0DD6A319C854390044EE17 /* CRMClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMClient.m; sourceTree = "<group>"; };
+		AC0DD6A419C854390044EE17 /* CRMHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMHTTPClient.h; sourceTree = "<group>"; };
+		AC0DD6A519C854390044EE17 /* CRMHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMHTTPClient.m; sourceTree = "<group>"; };
+		AC0DD6A619C854390044EE17 /* NSURL+GWAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+GWAdditions.h"; sourceTree = "<group>"; };
+		AC0DD6A719C854390044EE17 /* NSURL+GWAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+GWAdditions.m"; sourceTree = "<group>"; };
+		AC0DD6A819C854390044EE17 /* URLCheckerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLCheckerClient.h; sourceTree = "<group>"; };
+		AC0DD6A919C854390044EE17 /* URLCheckerClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLCheckerClient.m; sourceTree = "<group>"; };
+		AC0DD6AB19C854390044EE17 /* CRMConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMConstants.h; sourceTree = "<group>"; };
+		AC0DD6AC19C854390044EE17 /* CRMConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMConstants.m; sourceTree = "<group>"; };
+		AC0DD6AD19C854390044EE17 /* CRMFieldConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMFieldConstants.h; sourceTree = "<group>"; };
+		AC0DD6AE19C854390044EE17 /* CRMFieldConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMFieldConstants.m; sourceTree = "<group>"; };
+		AC0DD6AF19C854390044EE17 /* GWNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GWNotificationNames.h; sourceTree = "<group>"; };
+		AC0DD6B019C854390044EE17 /* GWNotificationNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GWNotificationNames.m; sourceTree = "<group>"; };
+		AC0DD6B219C854390044EE17 /* CredentialsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialsHelper.h; sourceTree = "<group>"; };
+		AC0DD6B319C854390044EE17 /* CredentialsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CredentialsHelper.m; sourceTree = "<group>"; };
+		AC0DD6B419C854390044EE17 /* CRMPicklistHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMPicklistHelper.h; sourceTree = "<group>"; };
+		AC0DD6B519C854390044EE17 /* CRMPicklistHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMPicklistHelper.m; sourceTree = "<group>"; };
+		AC0DD6B619C854390044EE17 /* CRMQueryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMQueryHelper.h; sourceTree = "<group>"; };
+		AC0DD6B719C854390044EE17 /* CRMQueryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMQueryHelper.m; sourceTree = "<group>"; };
+		AC0DD6B819C854390044EE17 /* EnabledModulesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnabledModulesHelper.h; sourceTree = "<group>"; };
+		AC0DD6B919C854390044EE17 /* EnabledModulesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnabledModulesHelper.m; sourceTree = "<group>"; };
+		AC0DD6BA19C854390044EE17 /* ModuleFieldHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleFieldHelper.h; sourceTree = "<group>"; };
+		AC0DD6BB19C854390044EE17 /* ModuleFieldHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModuleFieldHelper.m; sourceTree = "<group>"; };
+		AC0DD6BC19C854390044EE17 /* ModulesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModulesHelper.h; sourceTree = "<group>"; };
+		AC0DD6BD19C854390044EE17 /* ModulesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModulesHelper.m; sourceTree = "<group>"; };
+		AC0DD6BE19C854390044EE17 /* ServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceHelper.h; sourceTree = "<group>"; };
+		AC0DD6BF19C854390044EE17 /* ServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceHelper.m; sourceTree = "<group>"; };
+		AC0DD6C019C854390044EE17 /* UsersHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersHelper.h; sourceTree = "<group>"; };
+		AC0DD6C119C854390044EE17 /* UsersHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersHelper.m; sourceTree = "<group>"; };
+		AC0DD6C319C854390044EE17 /* APLImageToDataTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLImageToDataTransformer.h; sourceTree = "<group>"; };
+		AC0DD6C419C854390044EE17 /* APLImageToDataTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLImageToDataTransformer.m; sourceTree = "<group>"; };
+		AC0DD6C619C854390044EE17 /* CalendarAppThatSyncs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6C719C854390044EE17 /* CalendarAppThatSyncs2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs2.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6C819C854390044EE17 /* CalendarAppThatSyncs3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs3.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6C919C854390044EE17 /* CalendarAppThatSyncs4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs4.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6CA19C854390044EE17 /* CalendarAppThatSyncs5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs5.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6CB19C854390044EE17 /* CalendarAppThatSyncs6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs6.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6CC19C854390044EE17 /* CalendarAppThatSyncs7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CalendarAppThatSyncs7.xcdatamodel; sourceTree = "<group>"; };
+		AC0DD6CE19C854390044EE17 /* _Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Account.h; sourceTree = "<group>"; };
+		AC0DD6CF19C854390044EE17 /* _Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Account.m; sourceTree = "<group>"; };
+		AC0DD6D019C854390044EE17 /* _AccountAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _AccountAddress.h; sourceTree = "<group>"; };
+		AC0DD6D119C854390044EE17 /* _AccountAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _AccountAddress.m; sourceTree = "<group>"; };
+		AC0DD6D219C854390044EE17 /* _Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Activity.h; sourceTree = "<group>"; };
+		AC0DD6D319C854390044EE17 /* _Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Activity.m; sourceTree = "<group>"; };
+		AC0DD6D419C854390044EE17 /* _Campaign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Campaign.h; sourceTree = "<group>"; };
+		AC0DD6D519C854390044EE17 /* _Campaign.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Campaign.m; sourceTree = "<group>"; };
+		AC0DD6D619C854390044EE17 /* _Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Contact.h; sourceTree = "<group>"; };
+		AC0DD6D719C854390044EE17 /* _Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Contact.m; sourceTree = "<group>"; };
+		AC0DD6D819C854390044EE17 /* _ContactAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _ContactAddress.h; sourceTree = "<group>"; };
+		AC0DD6D919C854390044EE17 /* _ContactAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _ContactAddress.m; sourceTree = "<group>"; };
+		AC0DD6DA19C854390044EE17 /* _CRMErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CRMErrorMessage.h; sourceTree = "<group>"; };
+		AC0DD6DB19C854390044EE17 /* _CRMErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CRMErrorMessage.m; sourceTree = "<group>"; };
+		AC0DD6DC19C854390044EE17 /* _CRMField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CRMField.h; sourceTree = "<group>"; };
+		AC0DD6DD19C854390044EE17 /* _CRMField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CRMField.m; sourceTree = "<group>"; };
+		AC0DD6DE19C854390044EE17 /* _CRMFieldPicklistValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CRMFieldPicklistValue.h; sourceTree = "<group>"; };
+		AC0DD6DF19C854390044EE17 /* _CRMFieldPicklistValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CRMFieldPicklistValue.m; sourceTree = "<group>"; };
+		AC0DD6E019C854390044EE17 /* _Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Document.h; sourceTree = "<group>"; };
+		AC0DD6E119C854390044EE17 /* _Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Document.m; sourceTree = "<group>"; };
+		AC0DD6E219C854390044EE17 /* _EnabledModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _EnabledModules.h; sourceTree = "<group>"; };
+		AC0DD6E319C854390044EE17 /* _EnabledModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EnabledModules.m; sourceTree = "<group>"; };
+		AC0DD6E419C854390044EE17 /* _Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Group.h; sourceTree = "<group>"; };
+		AC0DD6E519C854390044EE17 /* _Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Group.m; sourceTree = "<group>"; };
+		AC0DD6E619C854390044EE17 /* _GWLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _GWLocation.h; sourceTree = "<group>"; };
+		AC0DD6E719C854390044EE17 /* _GWLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _GWLocation.m; sourceTree = "<group>"; };
+		AC0DD6E819C854390044EE17 /* _Lead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Lead.h; sourceTree = "<group>"; };
+		AC0DD6E919C854390044EE17 /* _Lead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Lead.m; sourceTree = "<group>"; };
+		AC0DD6EA19C854390044EE17 /* _LeadAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _LeadAddress.h; sourceTree = "<group>"; };
+		AC0DD6EB19C854390044EE17 /* _LeadAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _LeadAddress.m; sourceTree = "<group>"; };
+		AC0DD6EC19C854390044EE17 /* _ModifiedRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _ModifiedRecord.h; sourceTree = "<group>"; };
+		AC0DD6ED19C854390044EE17 /* _ModifiedRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _ModifiedRecord.m; sourceTree = "<group>"; };
+		AC0DD6EE19C854390044EE17 /* _Module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Module.h; sourceTree = "<group>"; };
+		AC0DD6EF19C854390044EE17 /* _Module.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Module.m; sourceTree = "<group>"; };
+		AC0DD6F019C854390044EE17 /* _Potential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Potential.h; sourceTree = "<group>"; };
+		AC0DD6F119C854390044EE17 /* _Potential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Potential.m; sourceTree = "<group>"; };
+		AC0DD6F219C854390044EE17 /* _Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Product.h; sourceTree = "<group>"; };
+		AC0DD6F319C854390044EE17 /* _Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Product.m; sourceTree = "<group>"; };
+		AC0DD6F419C854390044EE17 /* _Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Service.h; sourceTree = "<group>"; };
+		AC0DD6F519C854390044EE17 /* _Service.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Service.m; sourceTree = "<group>"; };
+		AC0DD6F619C854390044EE17 /* _Sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Sync.h; sourceTree = "<group>"; };
+		AC0DD6F719C854390044EE17 /* _Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Sync.m; sourceTree = "<group>"; };
+		AC0DD6F819C8543A0044EE17 /* _SyncToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SyncToken.h; sourceTree = "<group>"; };
+		AC0DD6F919C8543A0044EE17 /* _SyncToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SyncToken.m; sourceTree = "<group>"; };
+		AC0DD6FA19C8543A0044EE17 /* _Ticket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Ticket.h; sourceTree = "<group>"; };
+		AC0DD6FB19C8543A0044EE17 /* _Ticket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Ticket.m; sourceTree = "<group>"; };
+		AC0DD6FC19C8543A0044EE17 /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
+		AC0DD6FD19C8543A0044EE17 /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
+		AC0DD6FE19C8543A0044EE17 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
+		AC0DD6FF19C8543A0044EE17 /* Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account.m; sourceTree = "<group>"; };
+		AC0DD70019C8543A0044EE17 /* AccountAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountAddress.h; sourceTree = "<group>"; };
+		AC0DD70119C8543A0044EE17 /* AccountAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountAddress.m; sourceTree = "<group>"; };
+		AC0DD70219C8543A0044EE17 /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
+		AC0DD70319C8543A0044EE17 /* Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Activity.m; sourceTree = "<group>"; };
+		AC0DD70419C8543A0044EE17 /* Campaign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Campaign.h; sourceTree = "<group>"; };
+		AC0DD70519C8543A0044EE17 /* Campaign.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Campaign.m; sourceTree = "<group>"; };
+		AC0DD70619C8543A0044EE17 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		AC0DD70719C8543A0044EE17 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		AC0DD70819C8543A0044EE17 /* ContactAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactAddress.h; sourceTree = "<group>"; };
+		AC0DD70919C8543A0044EE17 /* ContactAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactAddress.m; sourceTree = "<group>"; };
+		AC0DD70A19C8543A0044EE17 /* CRMErrorMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMErrorMessage.h; sourceTree = "<group>"; };
+		AC0DD70B19C8543A0044EE17 /* CRMErrorMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMErrorMessage.m; sourceTree = "<group>"; };
+		AC0DD70C19C8543A0044EE17 /* CRMField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMField.h; sourceTree = "<group>"; };
+		AC0DD70D19C8543A0044EE17 /* CRMField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMField.m; sourceTree = "<group>"; };
+		AC0DD70E19C8543A0044EE17 /* CRMFieldPicklistValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMFieldPicklistValue.h; sourceTree = "<group>"; };
+		AC0DD70F19C8543A0044EE17 /* CRMFieldPicklistValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMFieldPicklistValue.m; sourceTree = "<group>"; };
+		AC0DD71019C8543A0044EE17 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
+		AC0DD71119C8543A0044EE17 /* Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
+		AC0DD71219C8543A0044EE17 /* EnabledModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnabledModules.h; sourceTree = "<group>"; };
+		AC0DD71319C8543A0044EE17 /* EnabledModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnabledModules.m; sourceTree = "<group>"; };
+		AC0DD71419C8543A0044EE17 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
+		AC0DD71519C8543A0044EE17 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		AC0DD71619C8543A0044EE17 /* GWLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GWLocation.h; sourceTree = "<group>"; };
+		AC0DD71719C8543A0044EE17 /* GWLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GWLocation.m; sourceTree = "<group>"; };
+		AC0DD71819C8543A0044EE17 /* Lead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lead.h; sourceTree = "<group>"; };
+		AC0DD71919C8543A0044EE17 /* Lead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Lead.m; sourceTree = "<group>"; };
+		AC0DD71A19C8543A0044EE17 /* LeadAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeadAddress.h; sourceTree = "<group>"; };
+		AC0DD71B19C8543A0044EE17 /* LeadAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeadAddress.m; sourceTree = "<group>"; };
+		AC0DD71C19C8543A0044EE17 /* ModifiedRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifiedRecord.h; sourceTree = "<group>"; };
+		AC0DD71D19C8543A0044EE17 /* ModifiedRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifiedRecord.m; sourceTree = "<group>"; };
+		AC0DD71E19C8543A0044EE17 /* Module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Module.h; sourceTree = "<group>"; };
+		AC0DD71F19C8543A0044EE17 /* Module.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Module.m; sourceTree = "<group>"; };
+		AC0DD72019C8543A0044EE17 /* Potential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Potential.h; sourceTree = "<group>"; };
+		AC0DD72119C8543A0044EE17 /* Potential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Potential.m; sourceTree = "<group>"; };
+		AC0DD72219C8543A0044EE17 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		AC0DD72319C8543A0044EE17 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
+		AC0DD72419C8543A0044EE17 /* Service.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Service.h; sourceTree = "<group>"; };
+		AC0DD72519C8543A0044EE17 /* Service.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Service.m; sourceTree = "<group>"; };
+		AC0DD72619C8543A0044EE17 /* Sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sync.h; sourceTree = "<group>"; };
+		AC0DD72719C8543A0044EE17 /* Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sync.m; sourceTree = "<group>"; };
+		AC0DD72819C8543A0044EE17 /* SyncToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncToken.h; sourceTree = "<group>"; };
+		AC0DD72919C8543A0044EE17 /* SyncToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncToken.m; sourceTree = "<group>"; };
+		AC0DD72A19C8543A0044EE17 /* Ticket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ticket.h; sourceTree = "<group>"; };
+		AC0DD72B19C8543A0044EE17 /* Ticket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ticket.m; sourceTree = "<group>"; };
+		AC0DD72C19C8543A0044EE17 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		AC0DD72D19C8543A0044EE17 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		AC0DD72E19C8543A0044EE17 /* Migration1_2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration1_2.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD72F19C8543A0044EE17 /* Migration2_3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration2_3.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD73019C8543A0044EE17 /* Migration3_4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration3_4.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD73119C8543A0044EE17 /* Migration4_5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration4_5.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD73219C8543A0044EE17 /* Migration5_6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration5_6.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD73319C8543A0044EE17 /* Migration6_7.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Migration6_7.xcmappingmodel; sourceTree = "<group>"; };
+		AC0DD73419C8543A0044EE17 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		AC0DD73619C8543A0044EE17 /* CRMLoginRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMLoginRequestOperation.h; sourceTree = "<group>"; };
+		AC0DD73719C8543A0044EE17 /* CRMLoginRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMLoginRequestOperation.m; sourceTree = "<group>"; };
+		AC0DD73919C8543A0044EE17 /* NotificationsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsHandler.h; sourceTree = "<group>"; };
+		AC0DD73A19C8543A0044EE17 /* NotificationsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsHandler.m; sourceTree = "<group>"; };
+		AC0DD73B19C8543A0044EE17 /* ParserResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserResult.h; sourceTree = "<group>"; };
+		AC0DD73C19C8543A0044EE17 /* ParserResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserResult.m; sourceTree = "<group>"; };
+		AC0DD73D19C8543A0044EE17 /* ResponseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponseParser.h; sourceTree = "<group>"; };
+		AC0DD73E19C8543A0044EE17 /* ResponseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponseParser.m; sourceTree = "<group>"; };
+		AC0DD74019C8543A0044EE17 /* URLCheckerClientDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLCheckerClientDelegate.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC0DD67D19C8538B0044EE17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC0DD68919C8538C0044EE17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC0DD67719C8538B0044EE17 = {
+			isa = PBXGroup;
+			children = (
+				AC0DD68319C8538B0044EE17 /* crmclient-vtiger */,
+				AC0DD68D19C8538C0044EE17 /* crmclient-vtigerTests */,
+				AC0DD68219C8538B0044EE17 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC0DD68219C8538B0044EE17 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD68119C8538B0044EE17 /* vtcrmclient.framework */,
+				AC0DD68C19C8538C0044EE17 /* vtcrmclientTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC0DD68319C8538B0044EE17 /* crmclient-vtiger */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD69A19C854390044EE17 /* Categories */,
+				AC0DD6A119C854390044EE17 /* Client */,
+				AC0DD6AA19C854390044EE17 /* Constants */,
+				AC0DD6B119C854390044EE17 /* Helpers */,
+				AC0DD6C219C854390044EE17 /* Model */,
+				AC0DD73519C8543A0044EE17 /* Operations */,
+				AC0DD73819C8543A0044EE17 /* Parser */,
+				AC0DD73F19C8543A0044EE17 /* Protocols */,
+				AC0DD68619C8538B0044EE17 /* crmclient-vtiger.h */,
+				AC0DD68419C8538B0044EE17 /* Supporting Files */,
+			);
+			path = "crmclient-vtiger";
+			sourceTree = "<group>";
+		};
+		AC0DD68419C8538B0044EE17 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD68519C8538B0044EE17 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC0DD68D19C8538C0044EE17 /* crmclient-vtigerTests */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD69019C8538C0044EE17 /* crmclient_vtigerTests.m */,
+				AC0DD68E19C8538C0044EE17 /* Supporting Files */,
+			);
+			path = "crmclient-vtigerTests";
+			sourceTree = "<group>";
+		};
+		AC0DD68E19C8538C0044EE17 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD68F19C8538C0044EE17 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC0DD69A19C854390044EE17 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD69B19C854390044EE17 /* GTMNSString+HTML.h */,
+				AC0DD69C19C854390044EE17 /* GTMNSString+HTML.m */,
+				AC0DD69D19C854390044EE17 /* NSDate+GWUtilities.h */,
+				AC0DD69E19C854390044EE17 /* NSDate+GWUtilities.m */,
+				AC0DD69F19C854390044EE17 /* NSDictionary+GWJSONString.h */,
+				AC0DD6A019C854390044EE17 /* NSDictionary+GWJSONString.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		AC0DD6A119C854390044EE17 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD6A219C854390044EE17 /* CRMClient.h */,
+				AC0DD6A319C854390044EE17 /* CRMClient.m */,
+				AC0DD6A419C854390044EE17 /* CRMHTTPClient.h */,
+				AC0DD6A519C854390044EE17 /* CRMHTTPClient.m */,
+				AC0DD6A619C854390044EE17 /* NSURL+GWAdditions.h */,
+				AC0DD6A719C854390044EE17 /* NSURL+GWAdditions.m */,
+				AC0DD6A819C854390044EE17 /* URLCheckerClient.h */,
+				AC0DD6A919C854390044EE17 /* URLCheckerClient.m */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		AC0DD6AA19C854390044EE17 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD6AB19C854390044EE17 /* CRMConstants.h */,
+				AC0DD6AC19C854390044EE17 /* CRMConstants.m */,
+				AC0DD6AD19C854390044EE17 /* CRMFieldConstants.h */,
+				AC0DD6AE19C854390044EE17 /* CRMFieldConstants.m */,
+				AC0DD6AF19C854390044EE17 /* GWNotificationNames.h */,
+				AC0DD6B019C854390044EE17 /* GWNotificationNames.m */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		AC0DD6B119C854390044EE17 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD6B219C854390044EE17 /* CredentialsHelper.h */,
+				AC0DD6B319C854390044EE17 /* CredentialsHelper.m */,
+				AC0DD6B419C854390044EE17 /* CRMPicklistHelper.h */,
+				AC0DD6B519C854390044EE17 /* CRMPicklistHelper.m */,
+				AC0DD6B619C854390044EE17 /* CRMQueryHelper.h */,
+				AC0DD6B719C854390044EE17 /* CRMQueryHelper.m */,
+				AC0DD6B819C854390044EE17 /* EnabledModulesHelper.h */,
+				AC0DD6B919C854390044EE17 /* EnabledModulesHelper.m */,
+				AC0DD6BA19C854390044EE17 /* ModuleFieldHelper.h */,
+				AC0DD6BB19C854390044EE17 /* ModuleFieldHelper.m */,
+				AC0DD6BC19C854390044EE17 /* ModulesHelper.h */,
+				AC0DD6BD19C854390044EE17 /* ModulesHelper.m */,
+				AC0DD6BE19C854390044EE17 /* ServiceHelper.h */,
+				AC0DD6BF19C854390044EE17 /* ServiceHelper.m */,
+				AC0DD6C019C854390044EE17 /* UsersHelper.h */,
+				AC0DD6C119C854390044EE17 /* UsersHelper.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		AC0DD6C219C854390044EE17 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD6C319C854390044EE17 /* APLImageToDataTransformer.h */,
+				AC0DD6C419C854390044EE17 /* APLImageToDataTransformer.m */,
+				AC0DD6C519C854390044EE17 /* CalendarAppThatSyncs.xcdatamodeld */,
+				AC0DD6CD19C854390044EE17 /* Entities */,
+				AC0DD72E19C8543A0044EE17 /* Migration1_2.xcmappingmodel */,
+				AC0DD72F19C8543A0044EE17 /* Migration2_3.xcmappingmodel */,
+				AC0DD73019C8543A0044EE17 /* Migration3_4.xcmappingmodel */,
+				AC0DD73119C8543A0044EE17 /* Migration4_5.xcmappingmodel */,
+				AC0DD73219C8543A0044EE17 /* Migration5_6.xcmappingmodel */,
+				AC0DD73319C8543A0044EE17 /* Migration6_7.xcmappingmodel */,
+				AC0DD73419C8543A0044EE17 /* Model.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC0DD6CD19C854390044EE17 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD6CE19C854390044EE17 /* _Account.h */,
+				AC0DD6CF19C854390044EE17 /* _Account.m */,
+				AC0DD6D019C854390044EE17 /* _AccountAddress.h */,
+				AC0DD6D119C854390044EE17 /* _AccountAddress.m */,
+				AC0DD6D219C854390044EE17 /* _Activity.h */,
+				AC0DD6D319C854390044EE17 /* _Activity.m */,
+				AC0DD6D419C854390044EE17 /* _Campaign.h */,
+				AC0DD6D519C854390044EE17 /* _Campaign.m */,
+				AC0DD6D619C854390044EE17 /* _Contact.h */,
+				AC0DD6D719C854390044EE17 /* _Contact.m */,
+				AC0DD6D819C854390044EE17 /* _ContactAddress.h */,
+				AC0DD6D919C854390044EE17 /* _ContactAddress.m */,
+				AC0DD6DA19C854390044EE17 /* _CRMErrorMessage.h */,
+				AC0DD6DB19C854390044EE17 /* _CRMErrorMessage.m */,
+				AC0DD6DC19C854390044EE17 /* _CRMField.h */,
+				AC0DD6DD19C854390044EE17 /* _CRMField.m */,
+				AC0DD6DE19C854390044EE17 /* _CRMFieldPicklistValue.h */,
+				AC0DD6DF19C854390044EE17 /* _CRMFieldPicklistValue.m */,
+				AC0DD6E019C854390044EE17 /* _Document.h */,
+				AC0DD6E119C854390044EE17 /* _Document.m */,
+				AC0DD6E219C854390044EE17 /* _EnabledModules.h */,
+				AC0DD6E319C854390044EE17 /* _EnabledModules.m */,
+				AC0DD6E419C854390044EE17 /* _Group.h */,
+				AC0DD6E519C854390044EE17 /* _Group.m */,
+				AC0DD6E619C854390044EE17 /* _GWLocation.h */,
+				AC0DD6E719C854390044EE17 /* _GWLocation.m */,
+				AC0DD6E819C854390044EE17 /* _Lead.h */,
+				AC0DD6E919C854390044EE17 /* _Lead.m */,
+				AC0DD6EA19C854390044EE17 /* _LeadAddress.h */,
+				AC0DD6EB19C854390044EE17 /* _LeadAddress.m */,
+				AC0DD6EC19C854390044EE17 /* _ModifiedRecord.h */,
+				AC0DD6ED19C854390044EE17 /* _ModifiedRecord.m */,
+				AC0DD6EE19C854390044EE17 /* _Module.h */,
+				AC0DD6EF19C854390044EE17 /* _Module.m */,
+				AC0DD6F019C854390044EE17 /* _Potential.h */,
+				AC0DD6F119C854390044EE17 /* _Potential.m */,
+				AC0DD6F219C854390044EE17 /* _Product.h */,
+				AC0DD6F319C854390044EE17 /* _Product.m */,
+				AC0DD6F419C854390044EE17 /* _Service.h */,
+				AC0DD6F519C854390044EE17 /* _Service.m */,
+				AC0DD6F619C854390044EE17 /* _Sync.h */,
+				AC0DD6F719C854390044EE17 /* _Sync.m */,
+				AC0DD6F819C8543A0044EE17 /* _SyncToken.h */,
+				AC0DD6F919C8543A0044EE17 /* _SyncToken.m */,
+				AC0DD6FA19C8543A0044EE17 /* _Ticket.h */,
+				AC0DD6FB19C8543A0044EE17 /* _Ticket.m */,
+				AC0DD6FC19C8543A0044EE17 /* _User.h */,
+				AC0DD6FD19C8543A0044EE17 /* _User.m */,
+				AC0DD6FE19C8543A0044EE17 /* Account.h */,
+				AC0DD6FF19C8543A0044EE17 /* Account.m */,
+				AC0DD70019C8543A0044EE17 /* AccountAddress.h */,
+				AC0DD70119C8543A0044EE17 /* AccountAddress.m */,
+				AC0DD70219C8543A0044EE17 /* Activity.h */,
+				AC0DD70319C8543A0044EE17 /* Activity.m */,
+				AC0DD70419C8543A0044EE17 /* Campaign.h */,
+				AC0DD70519C8543A0044EE17 /* Campaign.m */,
+				AC0DD70619C8543A0044EE17 /* Contact.h */,
+				AC0DD70719C8543A0044EE17 /* Contact.m */,
+				AC0DD70819C8543A0044EE17 /* ContactAddress.h */,
+				AC0DD70919C8543A0044EE17 /* ContactAddress.m */,
+				AC0DD70A19C8543A0044EE17 /* CRMErrorMessage.h */,
+				AC0DD70B19C8543A0044EE17 /* CRMErrorMessage.m */,
+				AC0DD70C19C8543A0044EE17 /* CRMField.h */,
+				AC0DD70D19C8543A0044EE17 /* CRMField.m */,
+				AC0DD70E19C8543A0044EE17 /* CRMFieldPicklistValue.h */,
+				AC0DD70F19C8543A0044EE17 /* CRMFieldPicklistValue.m */,
+				AC0DD71019C8543A0044EE17 /* Document.h */,
+				AC0DD71119C8543A0044EE17 /* Document.m */,
+				AC0DD71219C8543A0044EE17 /* EnabledModules.h */,
+				AC0DD71319C8543A0044EE17 /* EnabledModules.m */,
+				AC0DD71419C8543A0044EE17 /* Group.h */,
+				AC0DD71519C8543A0044EE17 /* Group.m */,
+				AC0DD71619C8543A0044EE17 /* GWLocation.h */,
+				AC0DD71719C8543A0044EE17 /* GWLocation.m */,
+				AC0DD71819C8543A0044EE17 /* Lead.h */,
+				AC0DD71919C8543A0044EE17 /* Lead.m */,
+				AC0DD71A19C8543A0044EE17 /* LeadAddress.h */,
+				AC0DD71B19C8543A0044EE17 /* LeadAddress.m */,
+				AC0DD71C19C8543A0044EE17 /* ModifiedRecord.h */,
+				AC0DD71D19C8543A0044EE17 /* ModifiedRecord.m */,
+				AC0DD71E19C8543A0044EE17 /* Module.h */,
+				AC0DD71F19C8543A0044EE17 /* Module.m */,
+				AC0DD72019C8543A0044EE17 /* Potential.h */,
+				AC0DD72119C8543A0044EE17 /* Potential.m */,
+				AC0DD72219C8543A0044EE17 /* Product.h */,
+				AC0DD72319C8543A0044EE17 /* Product.m */,
+				AC0DD72419C8543A0044EE17 /* Service.h */,
+				AC0DD72519C8543A0044EE17 /* Service.m */,
+				AC0DD72619C8543A0044EE17 /* Sync.h */,
+				AC0DD72719C8543A0044EE17 /* Sync.m */,
+				AC0DD72819C8543A0044EE17 /* SyncToken.h */,
+				AC0DD72919C8543A0044EE17 /* SyncToken.m */,
+				AC0DD72A19C8543A0044EE17 /* Ticket.h */,
+				AC0DD72B19C8543A0044EE17 /* Ticket.m */,
+				AC0DD72C19C8543A0044EE17 /* User.h */,
+				AC0DD72D19C8543A0044EE17 /* User.m */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		AC0DD73519C8543A0044EE17 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD73619C8543A0044EE17 /* CRMLoginRequestOperation.h */,
+				AC0DD73719C8543A0044EE17 /* CRMLoginRequestOperation.m */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		AC0DD73819C8543A0044EE17 /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD73919C8543A0044EE17 /* NotificationsHandler.h */,
+				AC0DD73A19C8543A0044EE17 /* NotificationsHandler.m */,
+				AC0DD73B19C8543A0044EE17 /* ParserResult.h */,
+				AC0DD73C19C8543A0044EE17 /* ParserResult.m */,
+				AC0DD73D19C8543A0044EE17 /* ResponseParser.h */,
+				AC0DD73E19C8543A0044EE17 /* ResponseParser.m */,
+			);
+			path = Parser;
+			sourceTree = "<group>";
+		};
+		AC0DD73F19C8543A0044EE17 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				AC0DD74019C8543A0044EE17 /* URLCheckerClientDelegate.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AC0DD67E19C8538B0044EE17 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0DD7C019C8543A0044EE17 /* Sync.h in Headers */,
+				AC0DD79E19C8543A0044EE17 /* Campaign.h in Headers */,
+				AC0DD74119C8543A0044EE17 /* GTMNSString+HTML.h in Headers */,
+				AC0DD77A19C8543A0044EE17 /* _Document.h in Headers */,
+				AC0DD75F19C8543A0044EE17 /* ModulesHelper.h in Headers */,
+				AC0DD79A19C8543A0044EE17 /* AccountAddress.h in Headers */,
+				AC0DD76819C8543A0044EE17 /* _Account.h in Headers */,
+				AC0DD77C19C8543A0044EE17 /* _EnabledModules.h in Headers */,
+				AC0DD7D319C8543A0044EE17 /* ParserResult.h in Headers */,
+				AC0DD74F19C8543A0044EE17 /* CRMConstants.h in Headers */,
+				AC0DD75919C8543A0044EE17 /* CRMQueryHelper.h in Headers */,
+				AC0DD78A19C8543A0044EE17 /* _Potential.h in Headers */,
+				AC0DD7B619C8543A0044EE17 /* ModifiedRecord.h in Headers */,
+				AC0DD7AC19C8543A0044EE17 /* EnabledModules.h in Headers */,
+				AC0DD77419C8543A0044EE17 /* _CRMErrorMessage.h in Headers */,
+				AC0DD75D19C8543A0044EE17 /* ModuleFieldHelper.h in Headers */,
+				AC0DD7A819C8543A0044EE17 /* CRMFieldPicklistValue.h in Headers */,
+				AC0DD74B19C8543A0044EE17 /* NSURL+GWAdditions.h in Headers */,
+				AC0DD7C419C8543A0044EE17 /* Ticket.h in Headers */,
+				AC0DD77E19C8543A0044EE17 /* _Group.h in Headers */,
+				AC0DD7C619C8543A0044EE17 /* User.h in Headers */,
+				AC0DD75519C8543A0044EE17 /* CredentialsHelper.h in Headers */,
+				AC0DD76E19C8543A0044EE17 /* _Campaign.h in Headers */,
+				AC0DD77819C8543A0044EE17 /* _CRMFieldPicklistValue.h in Headers */,
+				AC0DD79619C8543A0044EE17 /* _User.h in Headers */,
+				AC0DD78819C8543A0044EE17 /* _Module.h in Headers */,
+				AC0DD7B819C8543A0044EE17 /* Module.h in Headers */,
+				AC0DD78619C8543A0044EE17 /* _ModifiedRecord.h in Headers */,
+				AC0DD7D519C8543A0044EE17 /* ResponseParser.h in Headers */,
+				AC0DD79819C8543A0044EE17 /* Account.h in Headers */,
+				AC0DD7D719C8543A0044EE17 /* URLCheckerClientDelegate.h in Headers */,
+				AC0DD78219C8543A0044EE17 /* _Lead.h in Headers */,
+				AC0DD7AA19C8543A0044EE17 /* Document.h in Headers */,
+				AC0DD79419C8543A0044EE17 /* _Ticket.h in Headers */,
+				AC0DD76C19C8543A0044EE17 /* _Activity.h in Headers */,
+				AC0DD7A219C8543A0044EE17 /* ContactAddress.h in Headers */,
+				AC0DD68719C8538B0044EE17 /* crmclient-vtiger.h in Headers */,
+				AC0DD74719C8543A0044EE17 /* CRMClient.h in Headers */,
+				AC0DD74519C8543A0044EE17 /* NSDictionary+GWJSONString.h in Headers */,
+				AC0DD77619C8543A0044EE17 /* _CRMField.h in Headers */,
+				AC0DD75719C8543A0044EE17 /* CRMPicklistHelper.h in Headers */,
+				AC0DD7A619C8543A0044EE17 /* CRMField.h in Headers */,
+				AC0DD79C19C8543A0044EE17 /* Activity.h in Headers */,
+				AC0DD78E19C8543A0044EE17 /* _Service.h in Headers */,
+				AC0DD77219C8543A0044EE17 /* _ContactAddress.h in Headers */,
+				AC0DD7BC19C8543A0044EE17 /* Product.h in Headers */,
+				AC0DD7BA19C8543A0044EE17 /* Potential.h in Headers */,
+				AC0DD75119C8543A0044EE17 /* CRMFieldConstants.h in Headers */,
+				AC0DD77019C8543A0044EE17 /* _Contact.h in Headers */,
+				AC0DD78C19C8543A0044EE17 /* _Product.h in Headers */,
+				AC0DD74919C8543A0044EE17 /* CRMHTTPClient.h in Headers */,
+				AC0DD7A019C8543A0044EE17 /* Contact.h in Headers */,
+				AC0DD76519C8543A0044EE17 /* APLImageToDataTransformer.h in Headers */,
+				AC0DD7B419C8543A0044EE17 /* LeadAddress.h in Headers */,
+				AC0DD7BE19C8543A0044EE17 /* Service.h in Headers */,
+				AC0DD78019C8543A0044EE17 /* _GWLocation.h in Headers */,
+				AC0DD74319C8543A0044EE17 /* NSDate+GWUtilities.h in Headers */,
+				AC0DD75319C8543A0044EE17 /* GWNotificationNames.h in Headers */,
+				AC0DD74D19C8543A0044EE17 /* URLCheckerClient.h in Headers */,
+				AC0DD7A419C8543A0044EE17 /* CRMErrorMessage.h in Headers */,
+				AC0DD78419C8543A0044EE17 /* _LeadAddress.h in Headers */,
+				AC0DD76119C8543A0044EE17 /* ServiceHelper.h in Headers */,
+				AC0DD7C219C8543A0044EE17 /* SyncToken.h in Headers */,
+				AC0DD7CE19C8543A0044EE17 /* Model.h in Headers */,
+				AC0DD7AE19C8543A0044EE17 /* Group.h in Headers */,
+				AC0DD7B019C8543A0044EE17 /* GWLocation.h in Headers */,
+				AC0DD7B219C8543A0044EE17 /* Lead.h in Headers */,
+				AC0DD79219C8543A0044EE17 /* _SyncToken.h in Headers */,
+				AC0DD7D119C8543A0044EE17 /* NotificationsHandler.h in Headers */,
+				AC0DD79019C8543A0044EE17 /* _Sync.h in Headers */,
+				AC0DD75B19C8543A0044EE17 /* EnabledModulesHelper.h in Headers */,
+				AC0DD76319C8543A0044EE17 /* UsersHelper.h in Headers */,
+				AC0DD76A19C8543A0044EE17 /* _AccountAddress.h in Headers */,
+				AC0DD7CF19C8543A0044EE17 /* CRMLoginRequestOperation.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		AC0DD68019C8538B0044EE17 /* vtcrmclient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC0DD69419C8538C0044EE17 /* Build configuration list for PBXNativeTarget "vtcrmclient" */;
+			buildPhases = (
+				AC0DD67C19C8538B0044EE17 /* Sources */,
+				AC0DD67D19C8538B0044EE17 /* Frameworks */,
+				AC0DD67E19C8538B0044EE17 /* Headers */,
+				AC0DD67F19C8538B0044EE17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vtcrmclient;
+			productName = "crmclient-vtiger";
+			productReference = AC0DD68119C8538B0044EE17 /* vtcrmclient.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AC0DD68B19C8538C0044EE17 /* vtcrmclientTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC0DD69719C8538C0044EE17 /* Build configuration list for PBXNativeTarget "vtcrmclientTests" */;
+			buildPhases = (
+				AC0DD68819C8538C0044EE17 /* Sources */,
+				AC0DD68919C8538C0044EE17 /* Frameworks */,
+				AC0DD68A19C8538C0044EE17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vtcrmclientTests;
+			productName = "crmclient-vtigerTests";
+			productReference = AC0DD68C19C8538C0044EE17 /* vtcrmclientTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC0DD67819C8538B0044EE17 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = gixWorks;
+				TargetAttributes = {
+					AC0DD68019C8538B0044EE17 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					AC0DD68B19C8538C0044EE17 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+				};
+			};
+			buildConfigurationList = AC0DD67B19C8538B0044EE17 /* Build configuration list for PBXProject "vtcrmclient" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AC0DD67719C8538B0044EE17;
+			productRefGroup = AC0DD68219C8538B0044EE17 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC0DD68019C8538B0044EE17 /* vtcrmclient */,
+				AC0DD68B19C8538C0044EE17 /* vtcrmclientTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC0DD67F19C8538B0044EE17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC0DD68A19C8538C0044EE17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC0DD67C19C8538B0044EE17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0DD7C119C8543A0044EE17 /* Sync.m in Sources */,
+				AC0DD79719C8543A0044EE17 /* _User.m in Sources */,
+				AC0DD75E19C8543A0044EE17 /* ModuleFieldHelper.m in Sources */,
+				AC0DD76619C8543A0044EE17 /* APLImageToDataTransformer.m in Sources */,
+				AC0DD7C719C8543A0044EE17 /* User.m in Sources */,
+				AC0DD7B519C8543A0044EE17 /* LeadAddress.m in Sources */,
+				AC0DD75219C8543A0044EE17 /* CRMFieldConstants.m in Sources */,
+				AC0DD7D619C8543A0044EE17 /* ResponseParser.m in Sources */,
+				AC0DD7C919C8543A0044EE17 /* Migration2_3.xcmappingmodel in Sources */,
+				AC0DD7C319C8543A0044EE17 /* SyncToken.m in Sources */,
+				AC0DD7A119C8543A0044EE17 /* Contact.m in Sources */,
+				AC0DD7AD19C8543A0044EE17 /* EnabledModules.m in Sources */,
+				AC0DD79519C8543A0044EE17 /* _Ticket.m in Sources */,
+				AC0DD76919C8543A0044EE17 /* _Account.m in Sources */,
+				AC0DD7A719C8543A0044EE17 /* CRMField.m in Sources */,
+				AC0DD7A519C8543A0044EE17 /* CRMErrorMessage.m in Sources */,
+				AC0DD78D19C8543A0044EE17 /* _Product.m in Sources */,
+				AC0DD78119C8543A0044EE17 /* _GWLocation.m in Sources */,
+				AC0DD7A319C8543A0044EE17 /* ContactAddress.m in Sources */,
+				AC0DD75419C8543A0044EE17 /* GWNotificationNames.m in Sources */,
+				AC0DD76F19C8543A0044EE17 /* _Campaign.m in Sources */,
+				AC0DD76019C8543A0044EE17 /* ModulesHelper.m in Sources */,
+				AC0DD7D219C8543A0044EE17 /* NotificationsHandler.m in Sources */,
+				AC0DD7B119C8543A0044EE17 /* GWLocation.m in Sources */,
+				AC0DD76B19C8543A0044EE17 /* _AccountAddress.m in Sources */,
+				AC0DD75019C8543A0044EE17 /* CRMConstants.m in Sources */,
+				AC0DD78B19C8543A0044EE17 /* _Potential.m in Sources */,
+				AC0DD7BD19C8543A0044EE17 /* Product.m in Sources */,
+				AC0DD7AB19C8543A0044EE17 /* Document.m in Sources */,
+				AC0DD75C19C8543A0044EE17 /* EnabledModulesHelper.m in Sources */,
+				AC0DD76419C8543A0044EE17 /* UsersHelper.m in Sources */,
+				AC0DD77719C8543A0044EE17 /* _CRMField.m in Sources */,
+				AC0DD7AF19C8543A0044EE17 /* Group.m in Sources */,
+				AC0DD7C519C8543A0044EE17 /* Ticket.m in Sources */,
+				AC0DD7B919C8543A0044EE17 /* Module.m in Sources */,
+				AC0DD78319C8543A0044EE17 /* _Lead.m in Sources */,
+				AC0DD79919C8543A0044EE17 /* Account.m in Sources */,
+				AC0DD7A919C8543A0044EE17 /* CRMFieldPicklistValue.m in Sources */,
+				AC0DD75819C8543A0044EE17 /* CRMPicklistHelper.m in Sources */,
+				AC0DD7B319C8543A0044EE17 /* Lead.m in Sources */,
+				AC0DD7D419C8543A0044EE17 /* ParserResult.m in Sources */,
+				AC0DD76219C8543A0044EE17 /* ServiceHelper.m in Sources */,
+				AC0DD74C19C8543A0044EE17 /* NSURL+GWAdditions.m in Sources */,
+				AC0DD77F19C8543A0044EE17 /* _Group.m in Sources */,
+				AC0DD74E19C8543A0044EE17 /* URLCheckerClient.m in Sources */,
+				AC0DD7B719C8543A0044EE17 /* ModifiedRecord.m in Sources */,
+				AC0DD77B19C8543A0044EE17 /* _Document.m in Sources */,
+				AC0DD7CC19C8543A0044EE17 /* Migration5_6.xcmappingmodel in Sources */,
+				AC0DD7CA19C8543A0044EE17 /* Migration3_4.xcmappingmodel in Sources */,
+				AC0DD78519C8543A0044EE17 /* _LeadAddress.m in Sources */,
+				AC0DD77519C8543A0044EE17 /* _CRMErrorMessage.m in Sources */,
+				AC0DD77119C8543A0044EE17 /* _Contact.m in Sources */,
+				AC0DD75A19C8543A0044EE17 /* CRMQueryHelper.m in Sources */,
+				AC0DD79319C8543A0044EE17 /* _SyncToken.m in Sources */,
+				AC0DD79D19C8543A0044EE17 /* Activity.m in Sources */,
+				AC0DD79B19C8543A0044EE17 /* AccountAddress.m in Sources */,
+				AC0DD79119C8543A0044EE17 /* _Sync.m in Sources */,
+				AC0DD74619C8543A0044EE17 /* NSDictionary+GWJSONString.m in Sources */,
+				AC0DD75619C8543A0044EE17 /* CredentialsHelper.m in Sources */,
+				AC0DD7C819C8543A0044EE17 /* Migration1_2.xcmappingmodel in Sources */,
+				AC0DD78919C8543A0044EE17 /* _Module.m in Sources */,
+				AC0DD78F19C8543A0044EE17 /* _Service.m in Sources */,
+				AC0DD7D019C8543A0044EE17 /* CRMLoginRequestOperation.m in Sources */,
+				AC0DD7CD19C8543A0044EE17 /* Migration6_7.xcmappingmodel in Sources */,
+				AC0DD79F19C8543A0044EE17 /* Campaign.m in Sources */,
+				AC0DD7CB19C8543A0044EE17 /* Migration4_5.xcmappingmodel in Sources */,
+				AC0DD76719C8543A0044EE17 /* CalendarAppThatSyncs.xcdatamodeld in Sources */,
+				AC0DD7BF19C8543A0044EE17 /* Service.m in Sources */,
+				AC0DD76D19C8543A0044EE17 /* _Activity.m in Sources */,
+				AC0DD74219C8543A0044EE17 /* GTMNSString+HTML.m in Sources */,
+				AC0DD7BB19C8543A0044EE17 /* Potential.m in Sources */,
+				AC0DD74419C8543A0044EE17 /* NSDate+GWUtilities.m in Sources */,
+				AC0DD77319C8543A0044EE17 /* _ContactAddress.m in Sources */,
+				AC0DD74819C8543A0044EE17 /* CRMClient.m in Sources */,
+				AC0DD74A19C8543A0044EE17 /* CRMHTTPClient.m in Sources */,
+				AC0DD77D19C8543A0044EE17 /* _EnabledModules.m in Sources */,
+				AC0DD77919C8543A0044EE17 /* _CRMFieldPicklistValue.m in Sources */,
+				AC0DD78719C8543A0044EE17 /* _ModifiedRecord.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC0DD68819C8538C0044EE17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC0DD69119C8538C0044EE17 /* crmclient_vtigerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AC0DD69219C8538C0044EE17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AC0DD69319C8538C0044EE17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		AC0DD69519C8538C0044EE17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "crmclient-vtiger/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = vtcrmclient;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AC0DD69619C8538C0044EE17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "crmclient-vtiger/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = vtcrmclient;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		AC0DD69819C8538C0044EE17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "crmclient-vtigerTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = vtcrmclientTests;
+			};
+			name = Debug;
+		};
+		AC0DD69919C8538C0044EE17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "crmclient-vtigerTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = vtcrmclientTests;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC0DD67B19C8538B0044EE17 /* Build configuration list for PBXProject "vtcrmclient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC0DD69219C8538C0044EE17 /* Debug */,
+				AC0DD69319C8538C0044EE17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC0DD69419C8538C0044EE17 /* Build configuration list for PBXNativeTarget "vtcrmclient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC0DD69519C8538C0044EE17 /* Debug */,
+				AC0DD69619C8538C0044EE17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC0DD69719C8538C0044EE17 /* Build configuration list for PBXNativeTarget "vtcrmclientTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC0DD69819C8538C0044EE17 /* Debug */,
+				AC0DD69919C8538C0044EE17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AC0DD6C519C854390044EE17 /* CalendarAppThatSyncs.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AC0DD6C619C854390044EE17 /* CalendarAppThatSyncs.xcdatamodel */,
+				AC0DD6C719C854390044EE17 /* CalendarAppThatSyncs2.xcdatamodel */,
+				AC0DD6C819C854390044EE17 /* CalendarAppThatSyncs3.xcdatamodel */,
+				AC0DD6C919C854390044EE17 /* CalendarAppThatSyncs4.xcdatamodel */,
+				AC0DD6CA19C854390044EE17 /* CalendarAppThatSyncs5.xcdatamodel */,
+				AC0DD6CB19C854390044EE17 /* CalendarAppThatSyncs6.xcdatamodel */,
+				AC0DD6CC19C854390044EE17 /* CalendarAppThatSyncs7.xcdatamodel */,
+			);
+			currentVersion = AC0DD6CC19C854390044EE17 /* CalendarAppThatSyncs7.xcdatamodel */;
+			path = CalendarAppThatSyncs.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = AC0DD67819C8538B0044EE17 /* Project object */;
+}
