@@ -1,5 +1,7 @@
 #import "Product.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
 
 @interface Product ()
 

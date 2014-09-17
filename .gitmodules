@@ -1,0 +1,14 @@
+[submodule "MagicalRecord"]
+	path = MagicalRecord
+	url = https://github.com/gixWorks/MagicalRecord.git
+	branch = release/2.2
+[submodule "sskeychain"]
+	path = sskeychain
+	url = https://github.com/soffes/sskeychain.git
+[submodule "AFNetworking"]
+	path = AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking.git
+	branch = 1.x
+[submodule "CocoaLumberjack"]
+	path = CocoaLumberjack
+	url = https://github.com/CocoaLumberjack/CocoaLumberjack.git

@@ -10,6 +10,9 @@
 #import "CredentialsHelper.h"
 #import "CRMLoginRequestOperation.h"
 #import "GWCertificatesHelper.h"
+#import "Service.h"
+#import <CocoaLumberjack.h>
+#import "DDLogLevel.h"
 
 //Notification constants
 NSString* const kClientHasFinishedLogin = @"kClientHasFinishedLogin";

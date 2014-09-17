@@ -9,6 +9,14 @@
 #import "CRMQueryHelper.h"
 #import "CRMFieldConstants.h"
 #import "ModulesHelper.h"
+#import "Activity.h"
+#import "CoreData+MagicalRecord.h"
+#import "Account.h"
+#import "Lead.h"
+#import "Potential.h"
+#import "Ticket.h"
+#import "Product.h"
+#import "Contact.h"
 
 @implementation CRMQueryHelper
 

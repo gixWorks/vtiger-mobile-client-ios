@@ -10,6 +10,8 @@
 #import "ResponseParser.h"
 #import "CRMConstants.h"
 #import "GWNotificationNames.h"
+#import <CocoaLumberjack.h>
+#import "DDLogLevel.h"
 
 
 //THIS WHOLE CLASS IS WORK IN PROGRESS //GM 2014-05-24

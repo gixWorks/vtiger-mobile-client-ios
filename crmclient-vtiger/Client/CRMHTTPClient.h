@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 @class CredentialsHelper;
 
 //These constants are accessed from the CRMClient 

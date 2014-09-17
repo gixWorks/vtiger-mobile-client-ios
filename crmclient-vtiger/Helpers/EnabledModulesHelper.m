@@ -8,6 +8,9 @@
 
 #import "EnabledModulesHelper.h"
 #import "CRMConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "EnabledModules.h"
+#import "Service.h"
 
 @implementation EnabledModulesHelper
 

@@ -8,6 +8,8 @@
 
 #import "URLCheckerClient.h"
 #import "GWCertificatesHelper.h"
+#import <CocoaLumberjack.h>
+#import "DDLogLevel.h"
 
 static BOOL user_wants_to_trust_invalid_certificates = YES;
 

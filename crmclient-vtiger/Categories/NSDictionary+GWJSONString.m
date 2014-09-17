@@ -17,7 +17,9 @@
                                                          error:&error];
     
     if (! jsonData) {
-        DDLogError(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+#if DEBUG
+        NSLog(@"bv_jsonStringWithPrettyPrint: error: %@", error.localizedDescription);
+#endif
         return @"{}";
     } else {
         return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];

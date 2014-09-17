@@ -1,5 +1,8 @@
 #import "Module.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
+#import "CRMField.h"
 
 @interface Module ()
 

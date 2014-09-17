@@ -1,5 +1,6 @@
 #import "Sync.h"
-
+#import "Service.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface Sync ()
 

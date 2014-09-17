@@ -1,5 +1,8 @@
 #import "Contact.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "ContactAddress.h"
+#import "Service.h"
 
 @interface Contact ()
 

@@ -7,6 +7,10 @@
 //
 
 #import "ModuleFieldHelper.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
+#import "Module.h"
+#import "CRMField.h"
 #import "GTMNSString+HTML.h"
 
 @implementation ModuleFieldHelper

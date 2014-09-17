@@ -11,6 +11,10 @@
 #import "CRMFieldConstants.h"
 #import "GWActivitySelectItem.h"
 #import "CRMFieldPicklistValue.h"
+#import "Module.h"
+#import "CoreData+MagicalRecord.h"
+#import "CRMField.h"
+#import "Service.h"
 
 @implementation CRMPicklistHelper
 

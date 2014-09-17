@@ -1,5 +1,6 @@
 #import "AccountAddress.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface AccountAddress ()
 

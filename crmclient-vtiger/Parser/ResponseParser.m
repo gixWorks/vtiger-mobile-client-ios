@@ -15,6 +15,8 @@
 #import "CRMFieldConstants.h"
 #import "CRMConstants.h"
 #import "ParserResult.h"
+#import <CocoaLumberjack.h>
+#import "DDLogLevel.h"
 
 @interface ResponseParser ()
 
@@ -120,7 +122,9 @@
         }
     }
     @catch (NSException *exception) {
-        DDLogError(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+#if DEBUG
+        NSLog(@"%@ %@ Exception: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [exception description]);
+#endif
         [parseResult setObject:[exception description] forKey:kErrorKey];
     }
     return parseResult;

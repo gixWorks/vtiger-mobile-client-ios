@@ -1,5 +1,5 @@
 #import "Service.h"
-
+#import "CoreData+MagicalRecord.h"
 
 @interface Service ()
 

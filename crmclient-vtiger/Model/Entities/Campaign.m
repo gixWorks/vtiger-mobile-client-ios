@@ -2,6 +2,8 @@
 #import "CRMFieldConstants.h"
 #import "ModulesHelper.h"
 #import "CRMClient.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
 
 @interface Campaign ()
 

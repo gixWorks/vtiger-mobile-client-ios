@@ -1,5 +1,6 @@
 #import "LeadAddress.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface LeadAddress ()
 
@@ -10,9 +11,9 @@
 
 @implementation LeadAddress
 
-+ (ContactAddress *)modelObjectWithDictionary:(NSDictionary *)dict
++ (LeadAddress *)modelObjectWithDictionary:(NSDictionary *)dict
 {
-    ContactAddress *instance = [ContactAddress MR_createEntity];
+    LeadAddress *instance = [LeadAddress MR_createEntity];
     
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.

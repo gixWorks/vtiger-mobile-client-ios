@@ -7,7 +7,13 @@
 //
 
 #import "CredentialsHelper.h"
-#import "Secret.h"
+#import "Service.h"
+
+//Used for storing app UUID in keychain and retrieve afterwards
+#ifndef kServiceNameForKeychain
+#define kServiceNameForKeychain @"com.gixWorks.FunctionalitiesApp"
+#define kAccountNameForKeychainDevice @"deviceID"
+#endif
 
 #define kNSUserDefaultsServiceUrl @"ServiceURL"
 #define kNSUserDefaultsUsername @"username"

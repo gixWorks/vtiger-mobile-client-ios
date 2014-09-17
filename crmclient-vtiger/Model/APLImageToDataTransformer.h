@@ -48,6 +48,8 @@ Both Event and Photograph contain image data stored as a transformable attribute
  
  */
 
+@import UIKit;
+
 @interface APLImageToDataTransformer : NSValueTransformer
 
 @end

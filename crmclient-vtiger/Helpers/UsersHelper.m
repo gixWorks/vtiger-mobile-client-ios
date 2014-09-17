@@ -10,6 +10,9 @@
 #import "CRMConstants.h"
 #import "CRMFieldConstants.h"
 #import "ModulesHelper.h"
+#import "Service.h"
+#import "CoreData+MagicalRecord.h"
+#import "User.h"
 
 @implementation UsersHelper
 

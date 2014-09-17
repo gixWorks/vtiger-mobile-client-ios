@@ -1,6 +1,7 @@
 #import "User.h"
 #import "CRMFieldConstants.h"
-
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
 
 @interface User ()
 

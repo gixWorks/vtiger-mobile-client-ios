@@ -1,5 +1,6 @@
 #import "CRMErrorMessage.h"
-
+#import "Service.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface CRMErrorMessage ()
 

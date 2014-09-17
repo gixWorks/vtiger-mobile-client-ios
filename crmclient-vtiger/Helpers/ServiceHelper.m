@@ -10,6 +10,9 @@
 #import "MagicalRecord+GMAdditions.h"
 #import "CredentialsHelper.h"
 #import "GWPreferencesHelper.h"
+#import "Service.h"
+#import "CoreData+MagicalRecord.h"
+
 
 @implementation ServiceHelper
 

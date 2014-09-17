@@ -1,5 +1,7 @@
 #import "Group.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
 
 @interface Group ()
 

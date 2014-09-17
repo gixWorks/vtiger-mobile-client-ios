@@ -5,6 +5,8 @@
 #import "CRMFieldConstants.h"
 #import "CRMConstants.h"
 #import "NSDate+GWUtilities.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
 
 
 @interface Activity ()

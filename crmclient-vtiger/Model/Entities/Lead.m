@@ -1,5 +1,8 @@
 #import "Lead.h"
 #import "CRMFieldConstants.h"
+#import "CoreData+MagicalRecord.h"
+#import "Service.h"
+#import "LeadAddress.h"
 
 @interface Lead ()
 

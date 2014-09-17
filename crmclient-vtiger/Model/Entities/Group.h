@@ -2,6 +2,6 @@
 
 @interface Group : _Group {}
 
-+ (User *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (Group *)modelObjectWithDictionary:(NSDictionary *)dict;
 
 @end

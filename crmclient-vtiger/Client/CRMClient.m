@@ -18,9 +18,25 @@
 #import "NotificationsHandler.h"
 #import "CRMConstants.h"
 #import "GWNotificationNames.h"
-#import <HockeySDK/HockeySDK.h>
-#import "Secret.h"
 #import "ParserResult.h"
+//Log
+#import <CocoaLumberjack.h>
+#import "DDLogLevel.h"
+//Log end
+#import "AFNetworking.h"
+#import "AFHTTPClient.h"
+#import "CoreData+MagicalRecord.h"
+//Entities
+#import "Service.h"
+#import "Sync.h"
+#import "SyncToken.h"
+#import "Activity.h"
+#import "Module.h"
+#import "EnabledModules.h"
+#import "CRMErrorMessage.h"
+#import "ModifiedRecord.h"
+#import "CoreData+MagicalRecord.h"
+
 
 //Notification constants
 NSString* const kManagerHasFinishedCheckURL = @"kManagerHasFinishedCheckURL";
