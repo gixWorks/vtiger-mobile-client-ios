@@ -5,6 +5,8 @@
 //  Created by Giovanni on 11/23/13.
 //  Copyright (c) 2013 gixWorks. All rights reserved.
 //
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 
 #import "CRMClient.h"
 #import "CRMHTTPClient.h"
