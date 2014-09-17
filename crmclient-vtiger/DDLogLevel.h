@@ -9,10 +9,12 @@
 #ifndef vtcrmclient_DDLogLevel_h
 #define vtcrmclient_DDLogLevel_h
 
+#ifndef LOG_LEVEL_DEF
 #ifdef DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
 static const int ddLogLevel = LOG_LEVEL_ERROR;
+#endif
 #endif
 
 
