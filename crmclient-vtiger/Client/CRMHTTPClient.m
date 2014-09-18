@@ -257,16 +257,16 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                 //means that there was an error
                 NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                 [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                NSNumber *errorNumber;
+                NSString *errorCode;
                 if ([[operationError objectForKey:@"code"] isKindOfClass:[NSString class]]) {
-                    errorNumber = [numberFormatter numberFromString:[operationError objectForKey:@"code"]];
+					errorCode = [operationError objectForKey:@"code"]; //[numberFormatter numberFromString:[operationError objectForKey:@"code"]];
                 }
                 else{
-                    errorNumber = [operationError objectForKey:@"code"];
+                    errorCode = [numberFormatter stringFromNumber:[operationError objectForKey:@"code"]];
                 }
                 NSString *errorMessage = [operationError objectForKey:@"message"];
-                NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorNumber, @"code", errorMessage, @"message", nil];
-                if ([errorNumber isEqualToNumber:[NSNumber numberWithInt:kErrorCodeLoginRequired]] && [errorMessage isEqualToString:@"Login required"]) {
+                NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:errorCode, @"code", errorMessage, @"message", nil];
+                if ([errorCode isEqualToString:[numberFormatter stringFromNumber:@(kErrorCodeLoginRequired)]] && [errorMessage isEqualToString:@"Login required"]) {
                     //means that the error is "Login Required" (which means the session variable was null or outdated. We would try to re-execute the same operation
                     [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
                 }

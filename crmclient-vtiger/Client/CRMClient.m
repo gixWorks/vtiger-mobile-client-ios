@@ -979,8 +979,18 @@ static int kMinutesToRetrySave = 15;
     DDLogDebug(@"%@ %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     @try {
         if ([[notification userInfo] objectForKey:kClientNotificationErrorKey] != nil) {
+			
+			id errorInfo = [[notification userInfo] objectForKey:kClientNotificationErrorKey];
+			NSString *message;
+			if ([errorInfo isKindOfClass:[NSDictionary class]] && [errorInfo objectForKey:@"message"]) {
+				message = [errorInfo objectForKey:@"message"];
+			}
+			else{
+				message = errorInfo;
+			}
+			message = [message stringByAppendingString:[NSString stringWithFormat:@" - Record: %@", recordid]];
             DDLogDebug(@"Save was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
-            [CRMErrorMessage addErrorMessageWithMessage:[[notification userInfo] objectForKey:kClientNotificationErrorKey]];
+            [CRMErrorMessage addErrorMessageWithMessage:message];
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerReportedError object:nil];
             //we will retry
             double delayInSeconds = kMinutesToRetrySave * 50; //15 minutes
