@@ -71,11 +71,27 @@
     else return @[];
 }
 
-+ (NSArray *)picklistValuesForActivityVisibility
++ (NSArray *)defaultPicklistValuesForActivityVisibility
 {
-    return
-    @[[GWActivitySelectItem itemWithLabel:NSLocalizedString(@"Private", @"Private Activity Type Label") value:@"Private"],
-      [GWActivitySelectItem itemWithLabel:NSLocalizedString(@"Public", @"Public Activity Type Label") value:@"Public"]];
+	return
+	    @[[GWActivitySelectItem itemWithLabel:NSLocalizedString(@"Private", @"Private Activity Type Label") value:@"Private"],
+	      [GWActivitySelectItem itemWithLabel:NSLocalizedString(@"Public", @"Public Activity Type Label") value:@"Public"]];
+}
+
++ (NSArray *)localizedPicklistValuesForActivityVisibility
+{
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], kVTModuleCalendar];
+    Module *crmmodule = [Module MR_findFirstWithPredicate:p];
+    CRMField *field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, kCalendarFieldvisibility]];
+	NSMutableArray *localizedPicklistValues = [[NSMutableArray alloc] init];
+	for (CRMFieldPicklistValue *picklistValue in field.picklist_values) {
+		[localizedPicklistValues addObject:[GWActivitySelectItem itemWithLabel:picklistValue.crm_label value:picklistValue.crm_value]];
+	}
+	if ([localizedPicklistValues count] == 0) {
+		//we got no localized values! But this picklist is important so I load the default ones
+		localizedPicklistValues = [[self defaultPicklistValuesForActivityVisibility] mutableCopy];
+	}
+	return localizedPicklistValues;
 }
 
 + (NSString*)localizedValueForActivityStatus:(NSString*)value activityType:(NSString*)activityType

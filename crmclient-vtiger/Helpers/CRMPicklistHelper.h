@@ -19,11 +19,11 @@
 + (NSArray*)picklistValuesForActivityStatus:(NSString*)activityType;
 
 /**
- *  Returns values of visibiltiy for activity
+ *  Returns localized values of visibiltiy for activity
  *
  *  @return NSArray of GWActivitySelectItems
  */
-+ (NSArray*)picklistValuesForActivityVisibility;
++ (NSArray *)localizedPicklistValuesForActivityVisibility;
 
 /**
  *  Translates the status of the activity to the localized label
