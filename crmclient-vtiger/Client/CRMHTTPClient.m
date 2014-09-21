@@ -187,6 +187,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         DDLogDebug(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
 	}];
+	operation.responseSerializer = [AFJSONResponseSerializer serializer];
 #if TARGET_IPHONE_SIMULATOR
     operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
@@ -287,6 +288,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
 
 	}];
+	operation.responseSerializer = [AFJSONResponseSerializer serializer];
 #if TARGET_IPHONE_SIMULATOR
     operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
@@ -382,6 +384,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
 
 	}];
+	operation.responseSerializer = [AFJSONResponseSerializer serializer];	
 #if TARGET_IPHONE_SIMULATOR
     operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
