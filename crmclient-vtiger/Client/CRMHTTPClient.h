@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AFNetworking.h"
+#import "AFHTTPSessionManager.h"
 @class CredentialsHelper;
 
 //These constants are accessed from the CRMClient 
@@ -35,7 +36,7 @@ extern NSInteger const kErrorCodeAuthenticationFailed;
 extern NSInteger const kErrorCodeLoginRequired;
 
 
-@interface CRMHTTPClient : AFHTTPClient
+@interface CRMHTTPClient : AFHTTPRequestOperationManager
 
 - (void)executeOperationWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;
 - (void)executeOperationWithoutLoginWithParameters:(NSDictionary*)parameters notificationName:(NSString*)notificationName;

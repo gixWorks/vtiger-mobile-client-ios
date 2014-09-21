@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 gixWorks. All rights reserved.
 //
 
-#import "AFJSONRequestOperation.h"
+#import "AFHTTPRequestOperation.h"
 
-@interface CRMLoginRequestOperation : AFJSONRequestOperation
+@interface CRMLoginRequestOperation : AFHTTPRequestOperation
 
 @end

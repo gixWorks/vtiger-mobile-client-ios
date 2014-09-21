@@ -55,10 +55,8 @@ NSInteger const kErrorCodeLoginRequired = 1501;
 - (id) initWithBaseURL:(NSURL *)url {
     self = [super initWithBaseURL:url];
     if (self){
-        [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-        [self registerHTTPOperationClass:[CRMLoginRequestOperation class]];
         [[self operationQueue] setMaxConcurrentOperationCount:1];
-        self.defaultSSLPinningMode = AFSSLPinningModeCertificate;
+		self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
     }
     return self;
 }
@@ -107,7 +105,7 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             //TODO: we should somehow stop the queue
         }
     }
-    
+	
     void (^clientCertificateBlock)(NSURLConnection*, NSURLAuthenticationChallenge*) = ^(NSURLConnection* connection, NSURLAuthenticationChallenge *challenge){
         if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
             NSLog(@"%@ %@ AuthenticationChallenge Client Certificate", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
@@ -138,13 +136,12 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         }
     };
-    
-    NSMutableURLRequest *request =  [self requestWithMethod:@"POST" path:@"api.php" parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil]];
+	NSString *urlString = [[self.baseURL absoluteString] stringByAppendingString:@"api.php"];
+	NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:[NSDictionary dictionaryWithObjectsAndKeys:@"login",@"_operation", username, @"username", password, @"password", nil] error:nil]; 
     [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-    CRMLoginRequestOperation *operation = [CRMLoginRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        
-        
-        NSDictionary *loginError = [JSON objectForKey:@"error"];
+	
+	CRMLoginRequestOperation *operation = (CRMLoginRequestOperation*)[self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *loginError = [responseObject objectForKey:@"error"];
         if(loginError)
         {
             DDLogDebug(@"%@ %@ Login error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loginError);
@@ -163,35 +160,35 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, @"error", nil]];
         }
         else{
-            
-            session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
+
+            session = [[[responseObject valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
             //Writes the new session
             [self updateSession:session];
-            
+
             NSDictionary *result;
-            if([NSJSONSerialization isValidJSONObject:JSON]){
-                result = JSON;
+            if([NSJSONSerialization isValidJSONObject:responseObject]){
+                result = responseObject;
             }
-            
+
             if(selector != nil){
                 //Update the session in the parameters
                 NSMutableDictionary *updatedParams = [selectorObject1 mutableCopy];
                 [updatedParams setObject:session forKey:@"_session"];
-                
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [self performSelector:selector withObject:updatedParams withObject:selectorObject2];
 #pragma clang diagnostic pop
             }
-            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:result, kClientNotificationResponseBodyKey, nil]];
+		}
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DDLogDebug(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kClientHasFinishedLogin object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
-    }];
+	}];
 #if TARGET_IPHONE_SIMULATOR
-    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+    operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
     [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
@@ -245,10 +242,10 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         }
     };
-    
-    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
-    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+	NSString *urlString = [[self.baseURL absoluteString] stringByAppendingString:@"api.php"];
+	NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
+	[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
+	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];
             if(operationError)
@@ -285,17 +282,13 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         @catch (NSException *exception) {
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[exception description], kClientNotificationErrorKey, nil]];
         }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DDLogDebug(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
-    }];
-    
-    if ([CredentialsHelper getSession] == nil) {
 
-        return;
-    }
+	}];
 #if TARGET_IPHONE_SIMULATOR
-    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+    operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
     [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock];
     [self.operationQueue addOperation:operation];
@@ -343,10 +336,11 @@ NSInteger const kErrorCodeLoginRequired = 1501;
             [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         }
     };
-    
-    NSMutableURLRequest *request = [self requestWithMethod:@"POST" path:@"api.php" parameters:parameters];
-    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+	
+	NSString *urlString = [[self.baseURL absoluteString] stringByAppendingString:@"api.php"];
+	NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
+	[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
+	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id JSON) {
         @try {
             NSDictionary *operationError = [JSON objectForKey:@"error"];
             if(operationError)
@@ -369,12 +363,6 @@ NSInteger const kErrorCodeLoginRequired = 1501;
                     [self loginAndExecuteSelector:_cmd withObject:parameters withObject:notificationName];
                 }
                 else{
-//                    NSString* session = [[[JSON valueForKeyPath:@"result"] valueForKeyPath:@"login"] valueForKeyPath:@"session"] ;
-//                    if (session!=nil) { //This should fix the very first login in the system, where session is not set yet
-//                        //Writes the new session
-//                        [self updateSession:session];
-//                    }
-
                     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorInfo, kClientNotificationErrorKey, nil]];
                 }
             }
@@ -389,12 +377,13 @@ NSInteger const kErrorCodeLoginRequired = 1501;
         @catch (NSException *exception) {
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[exception description], kClientNotificationErrorKey, nil]];
         }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DDLogError(@"%@ %@ Request failed: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
         [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[error description], kClientNotificationErrorKey, nil]];
-    }];
+
+	}];
 #if TARGET_IPHONE_SIMULATOR
-    operation.allowsInvalidSSLCertificate = YES;    //Only when debugging locally
+    operation.securityPolicy.allowInvalidCertificates = YES;    //Only when debugging locally
 #endif
     [operation setWillSendRequestForAuthenticationChallengeBlock:clientCertificateBlock]; 
     [self.operationQueue addOperation:operation];
