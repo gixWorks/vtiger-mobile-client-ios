@@ -57,7 +57,7 @@ const struct EnabledModulesRelationships EnabledModulesRelationships = {
 }
 
 - (void)setEnabledValue:(BOOL)value_ {
-	[self setEnabled:[NSNumber numberWithBool:value_]];
+	[self setEnabled:@(value_)];
 }
 
 - (BOOL)primitiveEnabledValue {
@@ -66,7 +66,7 @@ const struct EnabledModulesRelationships EnabledModulesRelationships = {
 }
 
 - (void)setPrimitiveEnabledValue:(BOOL)value_ {
-	[self setPrimitiveEnabled:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveEnabled:@(value_)];
 }
 
 @dynamic service;

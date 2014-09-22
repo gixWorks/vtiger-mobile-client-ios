@@ -94,7 +94,7 @@ const struct CampaignRelationships CampaignRelationships = {
 }
 
 - (void)setCrm_numsentValue:(int16_t)value_ {
-	[self setCrm_numsent:[NSNumber numberWithShort:value_]];
+	[self setCrm_numsent:@(value_)];
 }
 
 - (int16_t)primitiveCrm_numsentValue {
@@ -103,7 +103,7 @@ const struct CampaignRelationships CampaignRelationships = {
 }
 
 - (void)setPrimitiveCrm_numsentValue:(int16_t)value_ {
-	[self setPrimitiveCrm_numsent:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_numsent:@(value_)];
 }
 
 @dynamic crm_product_id;
@@ -122,7 +122,7 @@ const struct CampaignRelationships CampaignRelationships = {
 }
 
 - (void)setCrm_targetsizeValue:(int16_t)value_ {
-	[self setCrm_targetsize:[NSNumber numberWithShort:value_]];
+	[self setCrm_targetsize:@(value_)];
 }
 
 - (int16_t)primitiveCrm_targetsizeValue {
@@ -131,7 +131,7 @@ const struct CampaignRelationships CampaignRelationships = {
 }
 
 - (void)setPrimitiveCrm_targetsizeValue:(int16_t)value_ {
-	[self setPrimitiveCrm_targetsize:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_targetsize:@(value_)];
 }
 
 @dynamic crm_time_created;

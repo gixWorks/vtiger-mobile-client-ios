@@ -358,6 +358,8 @@ static int kMinutesToRetrySave = 15;
         [self syncModule:kVTModuleCampaigns];
         [self syncModule:kVTModuleHelpDesk];
         [self syncModule:kVTModulePotentials];
+		[self syncModule:kVTModuleProjects];
+		[self syncModule:kVTModuleProjectTask];
     }
 }
 

@@ -207,6 +207,12 @@
             else if([module isEqualToString:kVTModuleCampaigns]){
                 returnedRecord = [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
+			else if([module isEqualToString:kVTModuleProjects]){
+				returnedRecord = [Project modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+			}
+			else if ([module isEqualToString:kVTModuleProjectTask]){
+				returnedRecord = [ProjectTask modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+			}
             else{
                 NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
                 return  userInfo;
@@ -246,8 +252,16 @@
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
                 [Product MR_deleteAllMatchingPredicate:predicate];
             }
+			else if([module isEqualToString:kVTModuleProjects]){
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+				[Project MR_deleteAllMatchingPredicate:predicate];
+			}
+			else if([module isEqualToString:kVTModuleProjectTask]){
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:@"crm_id = %@",identifier];
+				[ProjectTask MR_deleteAllMatchingPredicate:predicate];
+			}
         }
-        
+		
         //F- Save to Core Data (or whatever) the array of items
 #if DEBUG
         NSLog(@"%@ saving to persistent storage", NSStringFromSelector(_cmd));
@@ -537,6 +551,12 @@
         else if([module isEqualToString:kVTModuleCampaigns]){
             returnedRecord = [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
         }
+		else if([module isEqualToString:kVTModuleProjects]){
+			[Project modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+		}
+		else if([module isEqualToString:kVTModuleProjectTask]){
+			[ProjectTask modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+		}
         else{
             NSDictionary* userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ %@ No Module Handler found for record %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), identifier], kErrorKey, nil];
             return  userInfo;
@@ -626,6 +646,12 @@
             else if([module isEqualToString:kVTModuleCampaigns]){
                 [Campaign modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
+			else if([module isEqualToString:kVTModuleProjects]){
+				[Project modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+			}
+			else if([module isEqualToString:kVTModuleProjectTask]){
+				[ProjectTask modelObjectWithDictionary:entityFields customFields:entityCustomFields];
+			}
             else if ([module isEqualToString:kVTModuleDocuments]) {
                 //TODO: DOCUMENT MODEL!!!!
                 //                [Document modelObjectWithDictionary:entityFields];

@@ -44,7 +44,7 @@ NSString *const kCalendarPublic = @"PUBLIC";
 
 + (NSArray*)allModules
 {
-    return @[kVTModuleCalendar, kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads, kVTModuleHelpDesk, kVTModuleGroups, kVTModuleProducts, kVTModulePotentials, kVTModuleDocuments, kVTModuleCampaigns];
+    return @[kVTModuleCalendar, kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads, kVTModuleHelpDesk, kVTModuleGroups, kVTModuleProducts, kVTModulePotentials, kVTModuleDocuments, kVTModuleCampaigns, kVTModuleProjects, kVTModuleProjectTask];
 }
 
 @end

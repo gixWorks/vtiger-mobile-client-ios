@@ -17,7 +17,7 @@ const struct ServiceAttributes ServiceAttributes = {
 
 const struct ServiceRelationships ServiceRelationships = {
 	.accounts = @"accounts",
-	.activities = @"activities",
+	.calendarItems = @"calendarItems",
 	.campaigns = @"campaigns",
 	.comments = @"comments",
 	.contacts = @"contacts",
@@ -30,6 +30,7 @@ const struct ServiceRelationships ServiceRelationships = {
 	.modules = @"modules",
 	.potentials = @"potentials",
 	.products = @"products",
+	.projects = @"projects",
 	.syncs = @"syncs",
 	.synctokens = @"synctokens",
 	.tickets = @"tickets",
@@ -84,7 +85,7 @@ const struct ServiceRelationships ServiceRelationships = {
 }
 
 - (void)setCrm_activeValue:(BOOL)value_ {
-	[self setCrm_active:[NSNumber numberWithBool:value_]];
+	[self setCrm_active:@(value_)];
 }
 
 - (BOOL)primitiveCrm_activeValue {
@@ -93,7 +94,7 @@ const struct ServiceRelationships ServiceRelationships = {
 }
 
 - (void)setPrimitiveCrm_activeValue:(BOOL)value_ {
-	[self setPrimitiveCrm_active:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_active:@(value_)];
 }
 
 @dynamic crm_client_certificate_data;
@@ -106,7 +107,7 @@ const struct ServiceRelationships ServiceRelationships = {
 }
 
 - (void)setCrm_crmondemandValue:(BOOL)value_ {
-	[self setCrm_crmondemand:[NSNumber numberWithBool:value_]];
+	[self setCrm_crmondemand:@(value_)];
 }
 
 - (BOOL)primitiveCrm_crmondemandValue {
@@ -115,7 +116,7 @@ const struct ServiceRelationships ServiceRelationships = {
 }
 
 - (void)setPrimitiveCrm_crmondemandValue:(BOOL)value_ {
-	[self setPrimitiveCrm_crmondemand:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_crmondemand:@(value_)];
 }
 
 @dynamic crm_servicename;
@@ -141,14 +142,14 @@ const struct ServiceRelationships ServiceRelationships = {
 	return result;
 }
 
-@dynamic activities;
+@dynamic calendarItems;
 
-- (NSMutableSet*)activitiesSet {
-	[self willAccessValueForKey:@"activities"];
+- (NSMutableSet*)calendarItemsSet {
+	[self willAccessValueForKey:@"calendarItems"];
 
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"activities"];
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"calendarItems"];
 
-	[self didAccessValueForKey:@"activities"];
+	[self didAccessValueForKey:@"calendarItems"];
 	return result;
 }
 
@@ -281,6 +282,17 @@ const struct ServiceRelationships ServiceRelationships = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"products"];
 
 	[self didAccessValueForKey:@"products"];
+	return result;
+}
+
+@dynamic projects;
+
+- (NSMutableSet*)projectsSet {
+	[self willAccessValueForKey:@"projects"];
+
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"projects"];
+
+	[self didAccessValueForKey:@"projects"];
 	return result;
 }
 

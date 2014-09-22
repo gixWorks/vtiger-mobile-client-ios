@@ -1,7 +1,7 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to User.h instead.
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 extern const struct UserAttributes {
 	__unsafe_unretained NSString *crm_id;

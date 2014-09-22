@@ -73,7 +73,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setSyncrecordsdeletedValue:(int32_t)value_ {
-	[self setSyncrecordsdeleted:[NSNumber numberWithInt:value_]];
+	[self setSyncrecordsdeleted:@(value_)];
 }
 
 - (int32_t)primitiveSyncrecordsdeletedValue {
@@ -82,7 +82,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setPrimitiveSyncrecordsdeletedValue:(int32_t)value_ {
-	[self setPrimitiveSyncrecordsdeleted:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveSyncrecordsdeleted:@(value_)];
 }
 
 @dynamic syncrecordsupdated;
@@ -93,7 +93,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setSyncrecordsupdatedValue:(int32_t)value_ {
-	[self setSyncrecordsupdated:[NSNumber numberWithInt:value_]];
+	[self setSyncrecordsupdated:@(value_)];
 }
 
 - (int32_t)primitiveSyncrecordsupdatedValue {
@@ -102,7 +102,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setPrimitiveSyncrecordsupdatedValue:(int32_t)value_ {
-	[self setPrimitiveSyncrecordsupdated:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveSyncrecordsupdated:@(value_)];
 }
 
 @dynamic syncsuccess;
@@ -113,7 +113,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setSyncsuccessValue:(int32_t)value_ {
-	[self setSyncsuccess:[NSNumber numberWithInt:value_]];
+	[self setSyncsuccess:@(value_)];
 }
 
 - (int32_t)primitiveSyncsuccessValue {
@@ -122,7 +122,7 @@ const struct SyncRelationships SyncRelationships = {
 }
 
 - (void)setPrimitiveSyncsuccessValue:(int32_t)value_ {
-	[self setPrimitiveSyncsuccess:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveSyncsuccess:@(value_)];
 }
 
 @dynamic synctoken;

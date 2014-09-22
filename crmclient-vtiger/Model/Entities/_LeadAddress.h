@@ -1,7 +1,7 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to LeadAddress.h instead.
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 extern const struct LeadAddressAttributes {
 	__unsafe_unretained NSString *crm_city;

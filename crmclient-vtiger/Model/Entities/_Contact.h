@@ -1,7 +1,7 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to Contact.h instead.
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 extern const struct ContactAttributes {
 	__unsafe_unretained NSString *crm_account_id;

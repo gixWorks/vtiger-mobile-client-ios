@@ -13,6 +13,7 @@
 #define kFieldModifiedTime  @"modifiedtime"
 #define kFieldId            @"id"
 #define kFieldLabel         @"label"
+#define kFieldDescription	@"description"
 
 //Module names constants
 #define kVTModuleCalendar  @"Calendar"
@@ -26,6 +27,8 @@
 #define kVTModuleGroups  @"Groups"
 #define kVTModuleDocuments @"Documents"
 #define kVTModuleCampaigns @"Campaigns"
+#define kVTModuleProjects @"Project"
+#define kVTModuleProjectTask @"ProjectTask"
 
 //Accounts
 #define kAccountFieldaccountname    @"accountname"
@@ -254,6 +257,47 @@
 #define kGroupFieldId @"id"
 #define kGroupFieldGroupName @"groupname"
 #define kGroupFieldDescription @"description"
+
+//Project
+#define kProjectId @"id"
+#define kProjectName @"projectname"
+#define kProjectStartdate @"startdate"
+#define kProjectTargetenddate @"targetenddate"
+#define kProjectActualenddate @"actualenddate"
+#define kProjectStatus @"projectstatus"
+#define kProjectType @"projecttype"
+#define kProjectLinkstoaccountscontacts @"linktoaccountscontacts"
+#define kProjectAssigned_user_id @"assigned_user_id"
+#define kProjectProject_no @"project_no"
+#define kProjectTargetbudget @"targetbudget"
+#define kProjectUrl @"projecturl"
+#define kProjectPriority @"projectpriority"
+#define kProjectProgress @"progress"
+//#define kProjectCreatedtime @"createdtime"
+//#define kProjectModifiedtime @"modifiedtime"
+#define kProjectModifiedby @"modifiedby"
+//#define kProjectDescription @"description"
+
+//ProjectTask
+#define kProjecttaskName @"projecttaskname"
+#define kProjecttaskType @"projecttasktype"
+#define kProjecttaskPriority @"projecttaskpriority"
+#define kProjecttaskProjectid @"projectid"
+#define kProjecttaskAssigned_user_id @"assigned_user_id"
+#define kProjecttaskNumber @"projecttasknumber"
+#define kProjecttaskNo @"projecttask_no"
+#define kProjecttaskProgress @"projecttaskprogress"
+#define kProjecttaskHours @"projecttaskhours"
+#define kProjecttaskStartdate @"startdate"
+#define kProjecttaskEnddate @"enddate"
+//#define kProjecttaskCreatedtime @"createdtime"
+//#define kProjecttaskModifiedtime @"modifiedtime"
+#define kProjecttaskModifiedby @"modifiedby"
+//#define kProjecttaskDescription @"description"
+#define kProjecttaskStatus @"projecttaskstatus"
+#define kProjecttaskId @"id"
+
+
 
 @interface CRMFieldConstants : NSObject
 

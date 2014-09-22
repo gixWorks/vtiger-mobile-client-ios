@@ -61,7 +61,7 @@ const struct ModuleRelationships ModuleRelationships = {
 }
 
 - (void)setCrm_isEntityValue:(BOOL)value_ {
-	[self setCrm_isEntity:[NSNumber numberWithBool:value_]];
+	[self setCrm_isEntity:@(value_)];
 }
 
 - (BOOL)primitiveCrm_isEntityValue {
@@ -70,7 +70,7 @@ const struct ModuleRelationships ModuleRelationships = {
 }
 
 - (void)setPrimitiveCrm_isEntityValue:(BOOL)value_ {
-	[self setPrimitiveCrm_isEntity:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_isEntity:@(value_)];
 }
 
 @dynamic crm_label;

@@ -62,7 +62,7 @@ const struct CRMFieldRelationships CRMFieldRelationships = {
 }
 
 - (void)setCrm_mandatoryValue:(BOOL)value_ {
-	[self setCrm_mandatory:[NSNumber numberWithBool:value_]];
+	[self setCrm_mandatory:@(value_)];
 }
 
 - (BOOL)primitiveCrm_mandatoryValue {
@@ -71,7 +71,7 @@ const struct CRMFieldRelationships CRMFieldRelationships = {
 }
 
 - (void)setPrimitiveCrm_mandatoryValue:(BOOL)value_ {
-	[self setPrimitiveCrm_mandatory:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_mandatory:@(value_)];
 }
 
 @dynamic crm_name;

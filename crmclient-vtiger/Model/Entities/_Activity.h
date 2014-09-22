@@ -1,7 +1,8 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to Activity.h instead.
 
-#import <CoreData/CoreData.h>
+@import CoreData;
+#import "CalendarItem.h"
 
 extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *crm_activitytype;
@@ -32,26 +33,17 @@ extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *crm_time_start;
 	__unsafe_unretained NSString *crm_visibility;
 	__unsafe_unretained NSString *my_custom_fields;
-	__unsafe_unretained NSString *my_datetime_end;
-	__unsafe_unretained NSString *my_datetime_start;
-	__unsafe_unretained NSString *my_deleted;
 	__unsafe_unretained NSString *my_timezone;
 } ActivityAttributes;
-
-extern const struct ActivityRelationships {
-	__unsafe_unretained NSString *service;
-} ActivityRelationships;
 
 extern const struct ActivityFetchedProperties {
 	__unsafe_unretained NSString *activity_relatedlead;
 } ActivityFetchedProperties;
 
-@class Service;
-
-@interface ActivityID : NSManagedObjectID {}
+@interface ActivityID : CalendarItemID {}
 @end
 
-@interface _Activity : NSManagedObject {}
+@interface _Activity : CalendarItem {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -181,29 +173,9 @@ extern const struct ActivityFetchedProperties {
 
 //- (BOOL)validateMy_custom_fields:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSDate* my_datetime_end;
-
-//- (BOOL)validateMy_datetime_end:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSDate* my_datetime_start;
-
-//- (BOOL)validateMy_datetime_start:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSNumber* my_deleted;
-
-@property (atomic) BOOL my_deletedValue;
-- (BOOL)my_deletedValue;
-- (void)setMy_deletedValue:(BOOL)value_;
-
-//- (BOOL)validateMy_deleted:(id*)value_ error:(NSError**)error_;
-
 @property (nonatomic, strong) NSString* my_timezone;
 
 //- (BOOL)validateMy_timezone:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) Service *service;
-
-//- (BOOL)validateService:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, readonly) NSArray *activity_relatedlead;
 
@@ -304,22 +276,7 @@ extern const struct ActivityFetchedProperties {
 - (NSData*)primitiveMy_custom_fields;
 - (void)setPrimitiveMy_custom_fields:(NSData*)value;
 
-- (NSDate*)primitiveMy_datetime_end;
-- (void)setPrimitiveMy_datetime_end:(NSDate*)value;
-
-- (NSDate*)primitiveMy_datetime_start;
-- (void)setPrimitiveMy_datetime_start:(NSDate*)value;
-
-- (NSNumber*)primitiveMy_deleted;
-- (void)setPrimitiveMy_deleted:(NSNumber*)value;
-
-- (BOOL)primitiveMy_deletedValue;
-- (void)setPrimitiveMy_deletedValue:(BOOL)value_;
-
 - (NSString*)primitiveMy_timezone;
 - (void)setPrimitiveMy_timezone:(NSString*)value;
-
-- (Service*)primitiveService;
-- (void)setPrimitiveService:(Service*)value;
 
 @end

@@ -78,7 +78,7 @@ const struct DocumentRelationships DocumentRelationships = {
 }
 
 - (void)setCrm_filedownloadcountValue:(int32_t)value_ {
-	[self setCrm_filedownloadcount:[NSNumber numberWithInt:value_]];
+	[self setCrm_filedownloadcount:@(value_)];
 }
 
 - (int32_t)primitiveCrm_filedownloadcountValue {
@@ -87,7 +87,7 @@ const struct DocumentRelationships DocumentRelationships = {
 }
 
 - (void)setPrimitiveCrm_filedownloadcountValue:(int32_t)value_ {
-	[self setPrimitiveCrm_filedownloadcount:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveCrm_filedownloadcount:@(value_)];
 }
 
 @dynamic crm_filelocationtype;
@@ -100,7 +100,7 @@ const struct DocumentRelationships DocumentRelationships = {
 }
 
 - (void)setCrm_filesizeValue:(int32_t)value_ {
-	[self setCrm_filesize:[NSNumber numberWithInt:value_]];
+	[self setCrm_filesize:@(value_)];
 }
 
 - (int32_t)primitiveCrm_filesizeValue {
@@ -109,7 +109,7 @@ const struct DocumentRelationships DocumentRelationships = {
 }
 
 - (void)setPrimitiveCrm_filesizeValue:(int32_t)value_ {
-	[self setPrimitiveCrm_filesize:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveCrm_filesize:@(value_)];
 }
 
 @dynamic crm_filestatus;

@@ -64,7 +64,7 @@ const struct GWLocationRelationships GWLocationRelationships = {
 }
 
 - (void)setGw_latitudeValue:(double)value_ {
-	[self setGw_latitude:[NSNumber numberWithDouble:value_]];
+	[self setGw_latitude:@(value_)];
 }
 
 - (double)primitiveGw_latitudeValue {
@@ -73,7 +73,7 @@ const struct GWLocationRelationships GWLocationRelationships = {
 }
 
 - (void)setPrimitiveGw_latitudeValue:(double)value_ {
-	[self setPrimitiveGw_latitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveGw_latitude:@(value_)];
 }
 
 @dynamic gw_longitude;
@@ -84,7 +84,7 @@ const struct GWLocationRelationships GWLocationRelationships = {
 }
 
 - (void)setGw_longitudeValue:(double)value_ {
-	[self setGw_longitude:[NSNumber numberWithDouble:value_]];
+	[self setGw_longitude:@(value_)];
 }
 
 - (double)primitiveGw_longitudeValue {
@@ -93,7 +93,7 @@ const struct GWLocationRelationships GWLocationRelationships = {
 }
 
 - (void)setPrimitiveGw_longitudeValue:(double)value_ {
-	[self setPrimitiveGw_longitude:[NSNumber numberWithDouble:value_]];
+	[self setPrimitiveGw_longitude:@(value_)];
 }
 
 @dynamic gw_name;

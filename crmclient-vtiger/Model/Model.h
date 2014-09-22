@@ -35,5 +35,8 @@
 #import "Campaign.h"
 #import "CRMErrorMessage.h"
 #import "GWLocation.h"
+#import "Project.h"
+#import "ProjectTask.h"
+#import "CalendarItem.h"
 
 #endif

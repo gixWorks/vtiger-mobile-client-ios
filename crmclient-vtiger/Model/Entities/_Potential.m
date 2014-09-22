@@ -100,7 +100,7 @@ const struct PotentialRelationships PotentialRelationships = {
 }
 
 - (void)setCrm_probabilityValue:(float)value_ {
-	[self setCrm_probability:[NSNumber numberWithFloat:value_]];
+	[self setCrm_probability:@(value_)];
 }
 
 - (float)primitiveCrm_probabilityValue {
@@ -109,7 +109,7 @@ const struct PotentialRelationships PotentialRelationships = {
 }
 
 - (void)setPrimitiveCrm_probabilityValue:(float)value_ {
-	[self setPrimitiveCrm_probability:[NSNumber numberWithFloat:value_]];
+	[self setPrimitiveCrm_probability:@(value_)];
 }
 
 @dynamic crm_related_to_id;

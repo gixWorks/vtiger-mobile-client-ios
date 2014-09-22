@@ -32,14 +32,7 @@ const struct ActivityAttributes ActivityAttributes = {
 	.crm_time_start = @"crm_time_start",
 	.crm_visibility = @"crm_visibility",
 	.my_custom_fields = @"my_custom_fields",
-	.my_datetime_end = @"my_datetime_end",
-	.my_datetime_start = @"my_datetime_start",
-	.my_deleted = @"my_deleted",
 	.my_timezone = @"my_timezone",
-};
-
-const struct ActivityRelationships ActivityRelationships = {
-	.service = @"service",
 };
 
 const struct ActivityFetchedProperties ActivityFetchedProperties = {
@@ -87,11 +80,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"my_deletedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"my_deleted"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 
 	return keyPaths;
 }
@@ -120,7 +108,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setCrm_duration_hoursValue:(int16_t)value_ {
-	[self setCrm_duration_hours:[NSNumber numberWithShort:value_]];
+	[self setCrm_duration_hours:@(value_)];
 }
 
 - (int16_t)primitiveCrm_duration_hoursValue {
@@ -129,7 +117,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setPrimitiveCrm_duration_hoursValue:(int16_t)value_ {
-	[self setPrimitiveCrm_duration_hours:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_duration_hours:@(value_)];
 }
 
 @dynamic crm_duration_minutes;
@@ -140,7 +128,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setCrm_duration_minutesValue:(int16_t)value_ {
-	[self setCrm_duration_minutes:[NSNumber numberWithShort:value_]];
+	[self setCrm_duration_minutes:@(value_)];
 }
 
 - (int16_t)primitiveCrm_duration_minutesValue {
@@ -149,7 +137,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setPrimitiveCrm_duration_minutesValue:(int16_t)value_ {
-	[self setPrimitiveCrm_duration_minutes:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_duration_minutes:@(value_)];
 }
 
 @dynamic crm_eventstatus;
@@ -178,7 +166,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setCrm_reminder_timeValue:(int16_t)value_ {
-	[self setCrm_reminder_time:[NSNumber numberWithShort:value_]];
+	[self setCrm_reminder_time:@(value_)];
 }
 
 - (int16_t)primitiveCrm_reminder_timeValue {
@@ -187,7 +175,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 - (void)setPrimitiveCrm_reminder_timeValue:(int16_t)value_ {
-	[self setPrimitiveCrm_reminder_time:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_reminder_time:@(value_)];
 }
 
 @dynamic crm_sendnotification;
@@ -206,33 +194,7 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 
 @dynamic my_custom_fields;
 
-@dynamic my_datetime_end;
-
-@dynamic my_datetime_start;
-
-@dynamic my_deleted;
-
-- (BOOL)my_deletedValue {
-	NSNumber *result = [self my_deleted];
-	return [result boolValue];
-}
-
-- (void)setMy_deletedValue:(BOOL)value_ {
-	[self setMy_deleted:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveMy_deletedValue {
-	NSNumber *result = [self primitiveMy_deleted];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveMy_deletedValue:(BOOL)value_ {
-	[self setPrimitiveMy_deleted:[NSNumber numberWithBool:value_]];
-}
-
 @dynamic my_timezone;
-
-@dynamic service;
 
 @dynamic activity_relatedlead;
 

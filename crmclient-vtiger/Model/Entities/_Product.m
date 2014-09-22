@@ -77,7 +77,7 @@ const struct ProductRelationships ProductRelationships = {
 }
 
 - (void)setCrm_discontinuedValue:(BOOL)value_ {
-	[self setCrm_discontinued:[NSNumber numberWithBool:value_]];
+	[self setCrm_discontinued:@(value_)];
 }
 
 - (BOOL)primitiveCrm_discontinuedValue {
@@ -86,7 +86,7 @@ const struct ProductRelationships ProductRelationships = {
 }
 
 - (void)setPrimitiveCrm_discontinuedValue:(BOOL)value_ {
-	[self setPrimitiveCrm_discontinued:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_discontinued:@(value_)];
 }
 
 @dynamic crm_glacct;

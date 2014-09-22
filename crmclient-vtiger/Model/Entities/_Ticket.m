@@ -83,7 +83,7 @@ const struct TicketRelationships TicketRelationships = {
 }
 
 - (void)setCrm_daysValue:(int16_t)value_ {
-	[self setCrm_days:[NSNumber numberWithShort:value_]];
+	[self setCrm_days:@(value_)];
 }
 
 - (int16_t)primitiveCrm_daysValue {
@@ -92,7 +92,7 @@ const struct TicketRelationships TicketRelationships = {
 }
 
 - (void)setPrimitiveCrm_daysValue:(int16_t)value_ {
-	[self setPrimitiveCrm_days:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_days:@(value_)];
 }
 
 @dynamic crm_description;
@@ -105,7 +105,7 @@ const struct TicketRelationships TicketRelationships = {
 }
 
 - (void)setCrm_hoursValue:(int16_t)value_ {
-	[self setCrm_hours:[NSNumber numberWithShort:value_]];
+	[self setCrm_hours:@(value_)];
 }
 
 - (int16_t)primitiveCrm_hoursValue {
@@ -114,7 +114,7 @@ const struct TicketRelationships TicketRelationships = {
 }
 
 - (void)setPrimitiveCrm_hoursValue:(int16_t)value_ {
-	[self setPrimitiveCrm_hours:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_hours:@(value_)];
 }
 
 @dynamic crm_id;

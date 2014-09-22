@@ -102,7 +102,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setCrm_annual_revenueValue:(int16_t)value_ {
-	[self setCrm_annual_revenue:[NSNumber numberWithShort:value_]];
+	[self setCrm_annual_revenue:@(value_)];
 }
 
 - (int16_t)primitiveCrm_annual_revenueValue {
@@ -111,7 +111,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setPrimitiveCrm_annual_revenueValue:(int16_t)value_ {
-	[self setPrimitiveCrm_annual_revenue:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_annual_revenue:@(value_)];
 }
 
 @dynamic crm_assigned_user_id;
@@ -132,7 +132,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setCrm_emailoptoutValue:(BOOL)value_ {
-	[self setCrm_emailoptout:[NSNumber numberWithBool:value_]];
+	[self setCrm_emailoptout:@(value_)];
 }
 
 - (BOOL)primitiveCrm_emailoptoutValue {
@@ -141,7 +141,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setPrimitiveCrm_emailoptoutValue:(BOOL)value_ {
-	[self setPrimitiveCrm_emailoptout:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_emailoptout:@(value_)];
 }
 
 @dynamic crm_employees;
@@ -152,7 +152,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setCrm_employeesValue:(int16_t)value_ {
-	[self setCrm_employees:[NSNumber numberWithShort:value_]];
+	[self setCrm_employees:@(value_)];
 }
 
 - (int16_t)primitiveCrm_employeesValue {
@@ -161,7 +161,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setPrimitiveCrm_employeesValue:(int16_t)value_ {
-	[self setPrimitiveCrm_employees:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveCrm_employees:@(value_)];
 }
 
 @dynamic crm_fax;
@@ -182,7 +182,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setCrm_notify_ownerValue:(BOOL)value_ {
-	[self setCrm_notify_owner:[NSNumber numberWithBool:value_]];
+	[self setCrm_notify_owner:@(value_)];
 }
 
 - (BOOL)primitiveCrm_notify_ownerValue {
@@ -191,7 +191,7 @@ const struct AccountRelationships AccountRelationships = {
 }
 
 - (void)setPrimitiveCrm_notify_ownerValue:(BOOL)value_ {
-	[self setPrimitiveCrm_notify_owner:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveCrm_notify_owner:@(value_)];
 }
 
 @dynamic crm_otherphone;

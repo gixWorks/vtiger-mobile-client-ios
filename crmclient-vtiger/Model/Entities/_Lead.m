@@ -94,7 +94,7 @@ const struct LeadRelationships LeadRelationships = {
 }
 
 - (void)setLead_company_annualrevenueValue:(int16_t)value_ {
-	[self setLead_company_annualrevenue:[NSNumber numberWithShort:value_]];
+	[self setLead_company_annualrevenue:@(value_)];
 }
 
 - (int16_t)primitiveLead_company_annualrevenueValue {
@@ -103,7 +103,7 @@ const struct LeadRelationships LeadRelationships = {
 }
 
 - (void)setPrimitiveLead_company_annualrevenueValue:(int16_t)value_ {
-	[self setPrimitiveLead_company_annualrevenue:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveLead_company_annualrevenue:@(value_)];
 }
 
 @dynamic lead_company_industry;
@@ -116,7 +116,7 @@ const struct LeadRelationships LeadRelationships = {
 }
 
 - (void)setLead_company_noofemployeesValue:(int16_t)value_ {
-	[self setLead_company_noofemployees:[NSNumber numberWithShort:value_]];
+	[self setLead_company_noofemployees:@(value_)];
 }
 
 - (int16_t)primitiveLead_company_noofemployeesValue {
@@ -125,7 +125,7 @@ const struct LeadRelationships LeadRelationships = {
 }
 
 - (void)setPrimitiveLead_company_noofemployeesValue:(int16_t)value_ {
-	[self setPrimitiveLead_company_noofemployees:[NSNumber numberWithShort:value_]];
+	[self setPrimitiveLead_company_noofemployees:@(value_)];
 }
 
 @dynamic lead_company_website;

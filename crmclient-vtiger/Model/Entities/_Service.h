@@ -1,7 +1,7 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to Service.h instead.
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 extern const struct ServiceAttributes {
 	__unsafe_unretained NSString *crm_active;
@@ -17,7 +17,7 @@ extern const struct ServiceAttributes {
 
 extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *accounts;
-	__unsafe_unretained NSString *activities;
+	__unsafe_unretained NSString *calendarItems;
 	__unsafe_unretained NSString *campaigns;
 	__unsafe_unretained NSString *comments;
 	__unsafe_unretained NSString *contacts;
@@ -30,6 +30,7 @@ extern const struct ServiceRelationships {
 	__unsafe_unretained NSString *modules;
 	__unsafe_unretained NSString *potentials;
 	__unsafe_unretained NSString *products;
+	__unsafe_unretained NSString *projects;
 	__unsafe_unretained NSString *syncs;
 	__unsafe_unretained NSString *synctokens;
 	__unsafe_unretained NSString *tickets;
@@ -37,7 +38,7 @@ extern const struct ServiceRelationships {
 } ServiceRelationships;
 
 @class Account;
-@class Activity;
+@class CalendarItem;
 @class Campaign;
 @class NSManagedObject;
 @class Contact;
@@ -50,6 +51,7 @@ extern const struct ServiceRelationships {
 @class Module;
 @class Potential;
 @class Product;
+@class Project;
 @class Sync;
 @class SyncToken;
 @class Ticket;
@@ -112,9 +114,9 @@ extern const struct ServiceRelationships {
 
 - (NSMutableSet*)accountsSet;
 
-@property (nonatomic, strong) NSSet *activities;
+@property (nonatomic, strong) NSSet *calendarItems;
 
-- (NSMutableSet*)activitiesSet;
+- (NSMutableSet*)calendarItemsSet;
 
 @property (nonatomic, strong) NSSet *campaigns;
 
@@ -164,6 +166,10 @@ extern const struct ServiceRelationships {
 
 - (NSMutableSet*)productsSet;
 
+@property (nonatomic, strong) NSSet *projects;
+
+- (NSMutableSet*)projectsSet;
+
 @property (nonatomic, strong) NSSet *syncs;
 
 - (NSMutableSet*)syncsSet;
@@ -190,11 +196,11 @@ extern const struct ServiceRelationships {
 
 @end
 
-@interface _Service (ActivitiesCoreDataGeneratedAccessors)
-- (void)addActivities:(NSSet*)value_;
-- (void)removeActivities:(NSSet*)value_;
-- (void)addActivitiesObject:(Activity*)value_;
-- (void)removeActivitiesObject:(Activity*)value_;
+@interface _Service (CalendarItemsCoreDataGeneratedAccessors)
+- (void)addCalendarItems:(NSSet*)value_;
+- (void)removeCalendarItems:(NSSet*)value_;
+- (void)addCalendarItemsObject:(CalendarItem*)value_;
+- (void)removeCalendarItemsObject:(CalendarItem*)value_;
 
 @end
 
@@ -294,6 +300,14 @@ extern const struct ServiceRelationships {
 
 @end
 
+@interface _Service (ProjectsCoreDataGeneratedAccessors)
+- (void)addProjects:(NSSet*)value_;
+- (void)removeProjects:(NSSet*)value_;
+- (void)addProjectsObject:(Project*)value_;
+- (void)removeProjectsObject:(Project*)value_;
+
+@end
+
 @interface _Service (SyncsCoreDataGeneratedAccessors)
 - (void)addSyncs:(NSSet*)value_;
 - (void)removeSyncs:(NSSet*)value_;
@@ -364,8 +378,8 @@ extern const struct ServiceRelationships {
 - (NSMutableSet*)primitiveAccounts;
 - (void)setPrimitiveAccounts:(NSMutableSet*)value;
 
-- (NSMutableSet*)primitiveActivities;
-- (void)setPrimitiveActivities:(NSMutableSet*)value;
+- (NSMutableSet*)primitiveCalendarItems;
+- (void)setPrimitiveCalendarItems:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveCampaigns;
 - (void)setPrimitiveCampaigns:(NSMutableSet*)value;
@@ -402,6 +416,9 @@ extern const struct ServiceRelationships {
 
 - (NSMutableSet*)primitiveProducts;
 - (void)setPrimitiveProducts:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveProjects;
+- (void)setPrimitiveProjects:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveSyncs;
 - (void)setPrimitiveSyncs:(NSMutableSet*)value;
