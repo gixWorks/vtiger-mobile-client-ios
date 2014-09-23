@@ -44,7 +44,14 @@
     if ([module isEqualToString:kVTModuleProducts]) {
         return [Product MR_findFirstByAttribute:@"crm_id" withValue:recordId];
     }
-    
+	if ([module isEqualToString:kVTModuleProjects]) {
+		return [Project MR_findFirstByAttribute:@"crm_id" withValue:recordId];
+	}
+	if ([module isEqualToString:kVTModuleProjectTask]) {
+		return [ProjectTask MR_findFirstByAttribute:@"crm_id" withValue:recordId];
+	}
+	
+	
     return nil;
 }
 
