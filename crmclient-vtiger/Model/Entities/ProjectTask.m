@@ -89,12 +89,12 @@
 			
 			//Properties defined by CRM
 			
-			self.crm_date_end = end_date;
+			self.crm_due_date = end_date;
 			self.crm_date_start = start_date;
 			self.crm_description = [dict objectForKey:kFieldDescription];
 			self.crm_hours = [dict objectForKey:kProjecttaskHours];
 			self.crm_id = [dict objectForKey:kProjecttaskId];
-			self.crm_name = [dict objectForKey:kProjecttaskName];
+			self.crm_subject = [dict objectForKey:kProjecttaskName];
 			self.crm_priority = [dict objectForKey:kProjecttaskPriority];
 			self.crm_progress = [dict objectForKey:kProjecttaskProgress];
 			self.crm_status = [dict objectForKey:kProjecttaskStatus];
@@ -107,7 +107,7 @@
 			NSCalendar *cal = [NSCalendar currentCalendar];
 			NSDateComponents *comps = [[NSDateComponents alloc] init];
 			NSDateComponents *start_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_date_start];
-			NSDateComponents *end_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_date_end];
+			NSDateComponents *end_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_due_date];
 			NSDateComponents *start_time_comp;
 
 			start_time_comp = [NSDateComponents alloc];
@@ -119,6 +119,7 @@
 			[comps setDay:[start_date_comp day]];
 			[comps setHour:[start_time_comp hour]];
 			[comps setMinute:[start_time_comp minute]];
+			[comps setSecond:[start_time_comp second]];
 			
 			self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
 			self.my_datetime_end = [cal dateFromComponents:end_date_comp];
@@ -126,14 +127,14 @@
 
 
 			//Now that we have end date, we check if we should actually sync it
-			NSDate *syncBackTo = [GWPreferencesHelper getDateToSyncBackTo];
-			if ([self.crm_date_end compare:syncBackTo] == NSOrderedAscending) {
-				//Means we should not sync this item
-#if DEBUG
-				NSLog(@"%@ Skipping item %@ as it happens earlier than the date to sync back to: %@", NSStringFromSelector(_cmd), self.crm_id, syncBackTo);
-#endif
-				return NO;
-			}
+//			NSDate *syncBackTo = [GWPreferencesHelper getDateToSyncBackTo];
+//			if ([self.crm_due_date compare:syncBackTo] == NSOrderedAscending) {
+//				//Means we should not sync this item
+//#if DEBUG
+//				NSLog(@"%@ Skipping item %@ as it happens earlier than the date to sync back to: %@", NSStringFromSelector(_cmd), self.crm_id, syncBackTo);
+//#endif
+//				return NO;
+//			}
 
 			//Related records
 			NSDictionary *assigned_user = [dict objectForKey:kProjecttaskAssigned_user_id];

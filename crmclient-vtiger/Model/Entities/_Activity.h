@@ -10,9 +10,6 @@ extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *crm_assigned_user_name;
 	__unsafe_unretained NSString *crm_contact_id;
 	__unsafe_unretained NSString *crm_contact_name;
-	__unsafe_unretained NSString *crm_date_start;
-	__unsafe_unretained NSString *crm_description;
-	__unsafe_unretained NSString *crm_due_date;
 	__unsafe_unretained NSString *crm_duration_hours;
 	__unsafe_unretained NSString *crm_duration_minutes;
 	__unsafe_unretained NSString *crm_eventstatus;
@@ -26,7 +23,6 @@ extern const struct ActivityAttributes {
 	__unsafe_unretained NSString *crm_recurringtype;
 	__unsafe_unretained NSString *crm_reminder_time;
 	__unsafe_unretained NSString *crm_sendnotification;
-	__unsafe_unretained NSString *crm_subject;
 	__unsafe_unretained NSString *crm_time_created;
 	__unsafe_unretained NSString *crm_time_end;
 	__unsafe_unretained NSString *crm_time_modified;
@@ -68,18 +64,6 @@ extern const struct ActivityFetchedProperties {
 @property (nonatomic, strong) NSString* crm_contact_name;
 
 //- (BOOL)validateCrm_contact_name:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSDate* crm_date_start;
-
-//- (BOOL)validateCrm_date_start:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSString* crm_description;
-
-//- (BOOL)validateCrm_description:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSDate* crm_due_date;
-
-//- (BOOL)validateCrm_due_date:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSNumber* crm_duration_hours;
 
@@ -145,10 +129,6 @@ extern const struct ActivityFetchedProperties {
 
 //- (BOOL)validateCrm_sendnotification:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSString* crm_subject;
-
-//- (BOOL)validateCrm_subject:(id*)value_ error:(NSError**)error_;
-
 @property (nonatomic, strong) NSDate* crm_time_created;
 
 //- (BOOL)validateCrm_time_created:(id*)value_ error:(NSError**)error_;
@@ -198,15 +178,6 @@ extern const struct ActivityFetchedProperties {
 - (NSString*)primitiveCrm_contact_name;
 - (void)setPrimitiveCrm_contact_name:(NSString*)value;
 
-- (NSDate*)primitiveCrm_date_start;
-- (void)setPrimitiveCrm_date_start:(NSDate*)value;
-
-- (NSString*)primitiveCrm_description;
-- (void)setPrimitiveCrm_description:(NSString*)value;
-
-- (NSDate*)primitiveCrm_due_date;
-- (void)setPrimitiveCrm_due_date:(NSDate*)value;
-
 - (NSNumber*)primitiveCrm_duration_hours;
 - (void)setPrimitiveCrm_duration_hours:(NSNumber*)value;
 
@@ -254,9 +225,6 @@ extern const struct ActivityFetchedProperties {
 
 - (NSString*)primitiveCrm_sendnotification;
 - (void)setPrimitiveCrm_sendnotification:(NSString*)value;
-
-- (NSString*)primitiveCrm_subject;
-- (void)setPrimitiveCrm_subject:(NSString*)value;
 
 - (NSDate*)primitiveCrm_time_created;
 - (void)setPrimitiveCrm_time_created:(NSDate*)value;

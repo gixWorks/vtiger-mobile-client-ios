@@ -32,4 +32,14 @@
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
 }
 
++ (BOOL)isModuleEnabled:(NSString*)moduleName
+{
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ && crm_name = %@", [Service getActive], moduleName];
+	EnabledModules *module = [EnabledModules MR_findFirstWithPredicate:p];
+	if (module == nil) {
+		return NO;
+	}
+	return [module.enabled boolValue];
+}
+
 @end

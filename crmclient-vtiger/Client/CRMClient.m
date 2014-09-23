@@ -365,13 +365,10 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncModule:(NSString*)module
 {
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND service = %@", module, [Service getActive]];
-    EnabledModules *em =[EnabledModules MR_findFirstWithPredicate:p];
-    Module *crmmodule = [Module MR_findFirstWithPredicate:p];
-    if ([em.enabled isEqual:@NO] || crmmodule == nil) {
-        //If this module is specified NOT to be synchronized by the user OR it is not present in the table of the modules enabled on CRM, don't proceed.
-        return;
-    }
+	if ([EnabledModulesHelper isModuleEnabled:module] == NO) {
+		//If module is not enabled, don't sync
+		return;
+	}
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:module andOrderBy:@"datetime" ascending:YES] lastObject];
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
@@ -407,6 +404,8 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncCalendarRequestedByUser:(BOOL)requested
 {
+	[self syncModule:kVTModuleProjectTask];
+	
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];
     DDLogDebug(@"%@ with syncToken: %@", NSStringFromSelector(_cmd), syncToken.token);
     //If the date is > xx minutes since last sync
@@ -608,7 +607,9 @@ static int kMinutesToRetrySave = 15;
             DDLogDebug(@"%@ %@ Skipped record %@ because already in fetchqueue", NSStringFromClass([self class]), NSStringFromSelector(_cmd), record_id);
         }
     }
-    [_recordsToFetch setObject:queue forKey:module];
+	if(module != nil){
+		[_recordsToFetch setObject:queue forKey:module];
+	}
 }
 
 - (void)processFetchQueue

@@ -7,14 +7,10 @@
 extern const struct ProjectTaskAttributes {
 	__unsafe_unretained NSString *crm_assigned_user_id;
 	__unsafe_unretained NSString *crm_assigned_user_name;
-	__unsafe_unretained NSString *crm_date_end;
-	__unsafe_unretained NSString *crm_date_start;
-	__unsafe_unretained NSString *crm_description;
 	__unsafe_unretained NSString *crm_hours;
 	__unsafe_unretained NSString *crm_id;
 	__unsafe_unretained NSString *crm_modified_by_id;
 	__unsafe_unretained NSString *crm_modified_by_name;
-	__unsafe_unretained NSString *crm_name;
 	__unsafe_unretained NSString *crm_priority;
 	__unsafe_unretained NSString *crm_progress;
 	__unsafe_unretained NSString *crm_related_project_id;
@@ -52,18 +48,6 @@ extern const struct ProjectTaskRelationships {
 
 //- (BOOL)validateCrm_assigned_user_name:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSDate* crm_date_end;
-
-//- (BOOL)validateCrm_date_end:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSDate* crm_date_start;
-
-//- (BOOL)validateCrm_date_start:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSString* crm_description;
-
-//- (BOOL)validateCrm_description:(id*)value_ error:(NSError**)error_;
-
 @property (nonatomic, strong) NSString* crm_hours;
 
 //- (BOOL)validateCrm_hours:(id*)value_ error:(NSError**)error_;
@@ -79,10 +63,6 @@ extern const struct ProjectTaskRelationships {
 @property (nonatomic, strong) NSString* crm_modified_by_name;
 
 //- (BOOL)validateCrm_modified_by_name:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSString* crm_name;
-
-//- (BOOL)validateCrm_name:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSString* crm_priority;
 
@@ -146,15 +126,6 @@ extern const struct ProjectTaskRelationships {
 - (NSString*)primitiveCrm_assigned_user_name;
 - (void)setPrimitiveCrm_assigned_user_name:(NSString*)value;
 
-- (NSDate*)primitiveCrm_date_end;
-- (void)setPrimitiveCrm_date_end:(NSDate*)value;
-
-- (NSDate*)primitiveCrm_date_start;
-- (void)setPrimitiveCrm_date_start:(NSDate*)value;
-
-- (NSString*)primitiveCrm_description;
-- (void)setPrimitiveCrm_description:(NSString*)value;
-
 - (NSString*)primitiveCrm_hours;
 - (void)setPrimitiveCrm_hours:(NSString*)value;
 
@@ -166,9 +137,6 @@ extern const struct ProjectTaskRelationships {
 
 - (NSString*)primitiveCrm_modified_by_name;
 - (void)setPrimitiveCrm_modified_by_name:(NSString*)value;
-
-- (NSString*)primitiveCrm_name;
-- (void)setPrimitiveCrm_name:(NSString*)value;
 
 - (NSString*)primitiveCrm_priority;
 - (void)setPrimitiveCrm_priority:(NSString*)value;

@@ -4,6 +4,10 @@
 #import "_CalendarItem.h"
 
 const struct CalendarItemAttributes CalendarItemAttributes = {
+	.crm_date_start = @"crm_date_start",
+	.crm_description = @"crm_description",
+	.crm_due_date = @"crm_due_date",
+	.crm_subject = @"crm_subject",
 	.my_datetime_end = @"my_datetime_end",
 	.my_datetime_start = @"my_datetime_start",
 	.my_deleted = @"my_deleted",
@@ -11,6 +15,10 @@ const struct CalendarItemAttributes CalendarItemAttributes = {
 
 const struct CalendarItemRelationships CalendarItemRelationships = {
 	.service = @"service",
+};
+
+const struct CalendarItemFetchedProperties CalendarItemFetchedProperties = {
+	.calc_search_date = @"calc_search_date",
 };
 
 @implementation CalendarItemID
@@ -48,6 +56,14 @@ const struct CalendarItemRelationships CalendarItemRelationships = {
 	return keyPaths;
 }
 
+@dynamic crm_date_start;
+
+@dynamic crm_description;
+
+@dynamic crm_due_date;
+
+@dynamic crm_subject;
+
 @dynamic my_datetime_end;
 
 @dynamic my_datetime_start;
@@ -73,6 +89,8 @@ const struct CalendarItemRelationships CalendarItemRelationships = {
 }
 
 @dynamic service;
+
+@dynamic calc_search_date;
 
 @end
 

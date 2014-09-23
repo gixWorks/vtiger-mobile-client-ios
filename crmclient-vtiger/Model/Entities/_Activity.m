@@ -9,9 +9,6 @@ const struct ActivityAttributes ActivityAttributes = {
 	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_contact_id = @"crm_contact_id",
 	.crm_contact_name = @"crm_contact_name",
-	.crm_date_start = @"crm_date_start",
-	.crm_description = @"crm_description",
-	.crm_due_date = @"crm_due_date",
 	.crm_duration_hours = @"crm_duration_hours",
 	.crm_duration_minutes = @"crm_duration_minutes",
 	.crm_eventstatus = @"crm_eventstatus",
@@ -25,7 +22,6 @@ const struct ActivityAttributes ActivityAttributes = {
 	.crm_recurringtype = @"crm_recurringtype",
 	.crm_reminder_time = @"crm_reminder_time",
 	.crm_sendnotification = @"crm_sendnotification",
-	.crm_subject = @"crm_subject",
 	.crm_time_created = @"crm_time_created",
 	.crm_time_end = @"crm_time_end",
 	.crm_time_modified = @"crm_time_modified",
@@ -93,12 +89,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 @dynamic crm_contact_id;
 
 @dynamic crm_contact_name;
-
-@dynamic crm_date_start;
-
-@dynamic crm_description;
-
-@dynamic crm_due_date;
 
 @dynamic crm_duration_hours;
 
@@ -179,8 +169,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 @dynamic crm_sendnotification;
-
-@dynamic crm_subject;
 
 @dynamic crm_time_created;
 

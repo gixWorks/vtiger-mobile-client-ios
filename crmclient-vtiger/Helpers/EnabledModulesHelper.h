@@ -15,4 +15,6 @@
  */
 + (void)initializeEnabledModulesTable;
 
++ (BOOL)isModuleEnabled:(NSString*)moduleName;
+
 @end

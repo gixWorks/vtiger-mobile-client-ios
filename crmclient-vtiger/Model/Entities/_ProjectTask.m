@@ -6,14 +6,10 @@
 const struct ProjectTaskAttributes ProjectTaskAttributes = {
 	.crm_assigned_user_id = @"crm_assigned_user_id",
 	.crm_assigned_user_name = @"crm_assigned_user_name",
-	.crm_date_end = @"crm_date_end",
-	.crm_date_start = @"crm_date_start",
-	.crm_description = @"crm_description",
 	.crm_hours = @"crm_hours",
 	.crm_id = @"crm_id",
 	.crm_modified_by_id = @"crm_modified_by_id",
 	.crm_modified_by_name = @"crm_modified_by_name",
-	.crm_name = @"crm_name",
 	.crm_priority = @"crm_priority",
 	.crm_progress = @"crm_progress",
 	.crm_related_project_id = @"crm_related_project_id",
@@ -65,12 +61,6 @@ const struct ProjectTaskRelationships ProjectTaskRelationships = {
 
 @dynamic crm_assigned_user_name;
 
-@dynamic crm_date_end;
-
-@dynamic crm_date_start;
-
-@dynamic crm_description;
-
 @dynamic crm_hours;
 
 @dynamic crm_id;
@@ -78,8 +68,6 @@ const struct ProjectTaskRelationships ProjectTaskRelationships = {
 @dynamic crm_modified_by_id;
 
 @dynamic crm_modified_by_name;
-
-@dynamic crm_name;
 
 @dynamic crm_priority;
 
