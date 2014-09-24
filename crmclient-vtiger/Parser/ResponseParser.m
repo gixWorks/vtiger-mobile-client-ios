@@ -74,6 +74,8 @@
                     timezoneServer = [tz name];
                 }
                 else{
+					//Post the notification that server did not have any Time Zone configured.
+					[[NSNotificationCenter defaultCenter] postNotificationName:kManagerReportedNoTimeZoneDefinedOnServer object:[[NSTimeZone defaultTimeZone] name]];
                     timezoneServer = [[NSTimeZone defaultTimeZone] name];
                     [parseResult setObject:timezoneServer forKey:@"crm_tz_assumed"];
                 }
@@ -737,6 +739,11 @@
                 ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i];
                 [mr MR_deleteEntity];
             }
+			else{
+				ModifiedRecord *mr = [ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:i];
+				mr.crm_number_of_triesValue = mr.crm_number_of_triesValue+1;
+			}
+			
         }
         [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
     }

@@ -267,6 +267,7 @@
     <entity name="ModifiedRecord" representedClassName="ModifiedRecord" syncable="YES">
         <attribute name="crm_action" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="crm_number_of_tries" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="crm_timestamp" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="Module" representedClassName="Module" syncable="YES">
@@ -466,7 +467,7 @@
         <element name="GWLocation" positionX="-162" positionY="243" width="128" height="118"/>
         <element name="Lead" positionX="-387" positionY="369" width="128" height="450"/>
         <element name="LeadAddress" positionX="-344" positionY="873" width="128" height="150"/>
-        <element name="ModifiedRecord" positionX="-227" positionY="1071" width="128" height="90"/>
+        <element name="ModifiedRecord" positionX="-227" positionY="1071" width="128" height="105"/>
         <element name="Module" positionX="-234" positionY="585" width="128" height="150"/>
         <element name="Potential" positionX="567" positionY="141" width="128" height="373"/>
         <element name="Product" positionX="403" positionY="72" width="128" height="390"/>

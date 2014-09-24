@@ -6,6 +6,7 @@
 extern const struct ModifiedRecordAttributes {
 	__unsafe_unretained NSString *crm_action;
 	__unsafe_unretained NSString *crm_id;
+	__unsafe_unretained NSString *crm_number_of_tries;
 	__unsafe_unretained NSString *crm_timestamp;
 } ModifiedRecordAttributes;
 
@@ -26,6 +27,14 @@ extern const struct ModifiedRecordAttributes {
 
 //- (BOOL)validateCrm_id:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) NSNumber* crm_number_of_tries;
+
+@property (atomic) int16_t crm_number_of_triesValue;
+- (int16_t)crm_number_of_triesValue;
+- (void)setCrm_number_of_triesValue:(int16_t)value_;
+
+//- (BOOL)validateCrm_number_of_tries:(id*)value_ error:(NSError**)error_;
+
 @property (nonatomic, strong) NSDate* crm_timestamp;
 
 //- (BOOL)validateCrm_timestamp:(id*)value_ error:(NSError**)error_;
@@ -39,6 +48,12 @@ extern const struct ModifiedRecordAttributes {
 
 - (NSString*)primitiveCrm_id;
 - (void)setPrimitiveCrm_id:(NSString*)value;
+
+- (NSNumber*)primitiveCrm_number_of_tries;
+- (void)setPrimitiveCrm_number_of_tries:(NSNumber*)value;
+
+- (int16_t)primitiveCrm_number_of_triesValue;
+- (void)setPrimitiveCrm_number_of_triesValue:(int16_t)value_;
 
 - (NSDate*)primitiveCrm_timestamp;
 - (void)setPrimitiveCrm_timestamp:(NSDate*)value;

@@ -49,6 +49,7 @@ NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecor
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
 NSString* const kManagerHasFinishedRelatedRecordsWithGrouping = @"kManagerHasFinishedRelatedRecordsWithGrouping";
+NSString* const kManagerReportedNoTimeZoneDefinedOnServer = @"kManagerReportedNoTimeZoneDefinedOnServer";
 
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
 NSString* const kManagerReportedError = @"kManagerReportedError";

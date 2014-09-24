@@ -55,11 +55,11 @@
     return nil;
 }
 
-+ (NSArray*)enabledModules
-{
-    //In the BETA we support only these modules
-    return @[kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads];
-}
+//+ (NSArray*)enabledModules
+//{
+//    //In the BETA we support only these modules
+//    return @[kVTModuleAccounts, kVTModuleContacts, kVTModuleLeads];
+//}
 
 + (NSString*)localizedLabelForModuleName:(NSString*)moduleName
 {

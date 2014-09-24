@@ -44,4 +44,8 @@
  */
 + (NSString*)localizedValueForActivityVisibility:(NSString*)value;
 
++ (NSString*)localizedValueForPicklistField:(NSString*)fieldName module:(NSString*)moduleName value:(NSString*)keyValue;
+
++ (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName;
+
 @end

@@ -131,4 +131,37 @@
     return value;
 }
 
++ (NSString*)localizedValueForPicklistField:(NSString*)fieldName module:(NSString*)moduleName value:(NSString*)keyValue
+{
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
+	Module *crmmodule = [Module MR_findFirstWithPredicate:p];
+	CRMField *field;
+	field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, fieldName]];
+	//Get the correct field depending on the calendar type Task or Meeting/Call
+	for (CRMFieldPicklistValue *picklistValue in field.picklist_values) {
+		if([picklistValue.crm_value isEqualToString:keyValue])
+		{
+			return picklistValue.crm_label;
+		}
+	}
+	//Otherwise return nil
+	//TODO: should inform user that they should re-sync the CRM labels
+	return nil;
+}
+
++ (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName
+{
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
+	Module *crmmodule = [Module MR_findFirstWithPredicate:p];
+	CRMField *field = [CRMField MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"module = %@ AND crm_name = %@", crmmodule, fieldName]];
+	NSMutableArray *localizedPicklistValues = [[NSMutableArray alloc] init];
+	for (CRMFieldPicklistValue *picklistValue in field.picklist_values) {
+		[localizedPicklistValues addObject:[GWActivitySelectItem itemWithLabel:picklistValue.crm_label value:picklistValue.crm_value]];
+	}
+	if ([localizedPicklistValues count] == 0) {
+		//TODO: this should NOT happen! Inform the user to re-sync CRM labels (?)
+	}
+	return localizedPicklistValues;
+}
+
 @end

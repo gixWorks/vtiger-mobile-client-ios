@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CRMConstants.h"
+#import "CRMFieldConstants.h"
 
 @interface ModulesHelper : NSObject
 
@@ -39,7 +41,8 @@
  *
  *  @return an array of strings with the module names
  */
-+ (NSArray*)enabledModules;
+//+ (NSArray*)enabledModules;
+
 
 /**
  *  Returns the label for the module `key`
