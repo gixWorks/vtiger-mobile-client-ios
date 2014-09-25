@@ -73,6 +73,19 @@
     }
 }
 
++ (NSString*)localizedSingularModuleNameForModule:(NSString*)moduleName
+{
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
+	Module *module = [Module MR_findFirstWithPredicate:p];
+	if(module != nil){
+		return module.crm_singular;
+	}
+	else{
+		return moduleName;
+	}
+
+}
+
 + (NSString*)moduleIdForModuleName:(NSString*)moduleName
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];

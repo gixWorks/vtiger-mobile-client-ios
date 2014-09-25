@@ -43,6 +43,7 @@
  */
 //+ (NSArray*)enabledModules;
 
++ (NSString*)localizedSingularModuleNameForModule:(NSString*)moduleName;
 
 /**
  *  Returns the label for the module `key`
