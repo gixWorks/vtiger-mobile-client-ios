@@ -18,6 +18,10 @@
 #define kNSUserDefaultsServiceUrl @"ServiceURL"
 #define kNSUserDefaultsUsername @"username"
 
+#define kBasicHTTPAuthUsername @"BasicHTTPAuthUSername"
+#define kBasicHTTPAuthPassword @"BasicHTTPAuthPassword"
+
+
 @implementation CredentialsHelper
 
 #pragma mark - Getting data
@@ -99,6 +103,28 @@
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
     return (__bridge NSString *)string;
+}
+
+#pragma mark - HTTP Basic Auth
+
++(NSString*)getBasicHTTPAuthUsernameForService:(NSString*)url
+{
+	return [SSKeychain passwordForService:url account:kBasicHTTPAuthUsername];
+}
+
++(NSString*)getBasicHTTPAuthPasswordForService:(NSString*)url
+{
+	return [SSKeychain passwordForService:url account:kBasicHTTPAuthPassword];
+}
+
++ (void)setBasicHTTPAuthUsername:(NSString*)username forService:(NSString*)url
+{
+	[SSKeychain setPassword:username forService:url account:kBasicHTTPAuthUsername];
+}
+
++ (void)setBasicHTTPAuthPassword:(NSString*)password forService:(NSString*)url
+{
+	[SSKeychain setPassword:password forService:url account:kBasicHTTPAuthPassword];
 }
 
 @end

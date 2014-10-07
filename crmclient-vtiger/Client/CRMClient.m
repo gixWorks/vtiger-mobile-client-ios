@@ -86,6 +86,8 @@ static int kMinutesToRetrySave = 15;
     //TODO: This is quite ugly for managing multiple Describe operations. Find a way to manage the queue of operations
     NSInteger countOfDescribes;
     NSInteger receivedDescribes;
+	NSString *http_basic_auth_username;
+	NSString *http_basic_auth_password;
 }
 
 @property (nonatomic, strong) NSMutableDictionary* recordsToFetch;
@@ -141,7 +143,7 @@ static int kMinutesToRetrySave = 15;
 
 #pragma mark - Actions
 
-- (void)checkURL:(NSString*)serverUrl withCertificateData:(NSData*)certificateData
+- (void)checkURL:(NSString*)serverUrl withCertificateData:(NSData*)certificateData HTTPUsername:(NSString*)username HTTPPassword:(NSString*)password
 {
     //Check if the url entered is valid
     if (![self validateUrl:serverUrl]) {
@@ -187,7 +189,9 @@ static int kMinutesToRetrySave = 15;
     }
     
     //We now send a request to URL, to check if it points to an existing resource (HTTP CODE = 200)
-    URLCheckerClient *client =  [[URLCheckerClient alloc] initWithDelegate:self url:secureUserUrl certificateData:certificateData];
+	http_basic_auth_username = username;
+	http_basic_auth_password = password;
+    URLCheckerClient *client =  [[URLCheckerClient alloc] initWithDelegate:self url:secureUserUrl certificateData:certificateData basicHTTPUsername:username basicHTTPPassword:password];
     [client startTestingReachability];
 }
 
@@ -219,13 +223,13 @@ static int kMinutesToRetrySave = 15;
         return NO;
 }
 
-- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl responseCode:(NSInteger)responseCode invalid_certificate:(BOOL)invalid_certificate requestedClientCertificate:(BOOL)requested_client_certificate
+- (void)urlCheckerDidFinishWithError:(NSString *)error url:(NSURL *)testedUrl responseCode:(NSInteger)responseCode invalid_certificate:(BOOL)invalid_certificate requestedClientCertificate:(BOOL)requested_client_certificate requestedHTTPBasicAuth:(BOOL)requested_http_basic_auth
 {
     if (error != nil) {
         //There was an error when trying to reach the URL
         if ([[testedUrl scheme] isEqualToString:@"http"]) {
             //if we were in http:// scheme, means that we totally failed the check
-            NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
+            NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate),@"http_basic_auth" : @(requested_http_basic_auth)};
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                                 object:self
                                                               userInfo:userInfo];
@@ -233,18 +237,18 @@ static int kMinutesToRetrySave = 15;
         }
         else if([[testedUrl scheme] isEqualToString:@"https"]){
             //we were checking https: and there was an error
-            if (requested_client_certificate == YES) {
+            if (requested_client_certificate == YES || requested_http_basic_auth == YES) {
                 //If a Client Certificate was requested and we failed (for whatever reason), inform back the client
-                NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
+                NSDictionary *userInfo = @{@"url": testedUrl, kErrorKey: [error description], @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate),@"http_basic_auth" : @(requested_http_basic_auth)};
                 [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                                     object:self
                                                                   userInfo:userInfo];
                 return;
             }
-            
+			
             //if it was a https: and there was an error, we can still try http://
             NSURL *userUrl = [testedUrl GW_nonSecureURL];
-            URLCheckerClient *client = [[URLCheckerClient alloc] initWithDelegate:self url:userUrl certificateData:nil];
+            URLCheckerClient *client = [[URLCheckerClient alloc] initWithDelegate:self url:userUrl certificateData:nil basicHTTPUsername:http_basic_auth_username basicHTTPPassword:http_basic_auth_password];
             [client startTestingReachability];
         }
         else{
@@ -255,7 +259,7 @@ static int kMinutesToRetrySave = 15;
         //There was no error, means the check resulted successful and we post the notification
         NSString *u = [[testedUrl absoluteString] stringByReplacingOccurrencesOfString:@"api.php" withString:@""];
         testedUrl = [NSURL URLWithString:u];
-        NSDictionary *userInfo = @{@"url" : testedUrl, @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate)};
+        NSDictionary *userInfo = @{@"url" : testedUrl, @"invalid_certificate" : @(invalid_certificate), @"client_certificate" : @(requested_client_certificate), @"http_basic_auth": @(requested_http_basic_auth)};
         [[NSNotificationCenter defaultCenter] postNotificationName:kManagerHasFinishedCheckURL
                                                             object:self
                                                           userInfo:userInfo

@@ -17,9 +17,12 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 {
     BOOL _using_invalid_certificate;
     BOOL _requested_client_certificate;
+	BOOL _requested_basic_auth;
     NSURL *_url;
     NSURLConnection *_connection;
     NSData *_certificateData;
+	NSString *_basicHTTPAuthUsername;
+	NSString *_basicHTTPAuthPassword;
 }
 
 @end
@@ -32,7 +35,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     [request setHTTPMethod: @"HEAD"];
     _connection = [NSURLConnection connectionWithRequest:request delegate:self];
     if (!_connection) {
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:@"Connection failed" url:_url responseCode:0 invalid_certificate:NO requestedClientCertificate:NO];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:@"Connection failed" url:_url responseCode:0 invalid_certificate:NO requestedClientCertificate:NO requestedHTTPBasicAuth:NO];
         return;
     }
     [_connection start];
@@ -45,7 +48,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     return self;
 }
 
-- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL *)urlToTest certificateData:(NSData*)data
+- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL *)urlToTest certificateData:(NSData*)data basicHTTPUsername:(NSString*)username basicHTTPPassword:(NSString*)password
 {
     self = [super init];
     if (self) {
@@ -54,7 +57,10 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         _connection = nil;
         _certificateData = data;
         _using_invalid_certificate = NO; //we start without self-signed certificate
-        _requested_client_certificate = NO; //we assume the server has not (yet) requested client certificate        
+        _requested_client_certificate = NO; //we assume the server has not (yet) requested client certificate
+		_requested_basic_auth = NO;
+		_basicHTTPAuthUsername = username;
+		_basicHTTPAuthPassword = password;
     }
     return self;
 }
@@ -75,7 +81,9 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
     NSLog(@"AuthenticationMethod: %@", protectionSpace.authenticationMethod);
 #endif
     return ([protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust ] ||
-            [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]);
+            [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate] ||
+			[protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic] ||
+			([protectionSpace.protocol isEqualToString:@"http"] && [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodDefault]));
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
@@ -131,6 +139,25 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }
     }
+	else if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodHTTPBasic] || ([challenge.protectionSpace.protocol isEqualToString:@"http"] && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodDefault])){
+		//HTTP Basic Authentication
+#if DEBUG
+		NSLog(@"%@ HTTP Basic Auth requested", NSStringFromClass([self class]));
+#endif
+		_requested_basic_auth = YES;
+		if ([_basicHTTPAuthUsername length] > 0 && [_basicHTTPAuthPassword length] > 0) {
+			NSURLCredential *newCredential;
+			
+			newCredential = [NSURLCredential credentialWithUser:_basicHTTPAuthUsername
+													   password:_basicHTTPAuthPassword
+													persistence:NSURLCredentialPersistenceNone];
+			
+			[[challenge sender] useCredential:newCredential forAuthenticationChallenge:challenge];
+		}
+		else{
+			[[challenge sender] cancelAuthenticationChallenge:challenge];
+		}
+	}
     else {
         [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
     }
@@ -140,7 +167,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 {
     _connection = nil;
     DDLogDebug(@"%@ %@ connection failed with error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error description]);
-    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:_url responseCode:-1 invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate];
+    [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:[error localizedDescription] url:_url responseCode:-1 invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate requestedHTTPBasicAuth:_requested_basic_auth];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -151,23 +178,23 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
         //Something is wrong with the url provided by the server
         DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate requestedHTTPBasicAuth:_requested_basic_auth];
     }
     else if (httpResponse.statusCode == 403) // && requested_client_certificate == YES)
     {
         //Unauthorized (could be due to client certificate but could also be relative to any other authentication failure -e.g. Basic Authentication-)
         NSString *err = [NSString stringWithFormat:@"Unauthorized (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate requestedHTTPBasicAuth:_requested_basic_auth];
     }
     else if(httpResponse.statusCode == 200){
         //Everything OK - the best outcome
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:nil url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate requestedHTTPBasicAuth:_requested_basic_auth];
     }
     else{
         //any other error
         DDLogDebug(@"%@ %@ The server is not available (Response code %ld)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)httpResponse.statusCode);
         NSString *err = [NSString stringWithFormat:@"The server is not available (Response code %ld)", (long)httpResponse.statusCode];
-        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate];
+        [self.URLCheckerClientDelegate urlCheckerDidFinishWithError:err url:_url responseCode:httpResponse.statusCode invalid_certificate:_using_invalid_certificate requestedClientCertificate:_requested_client_certificate requestedHTTPBasicAuth:_requested_basic_auth];
     }
 }
 

@@ -32,10 +32,13 @@ extern NSString* const kManagerHasStartedSyncCalendar;
 /**
  *  Checks for exisiting server for the specified URL, first trying https then https
  *
- *  @param serverUrl the server URL to check
- *  @param data      the optional certificate data
+ *  @param serverUrl	the server URL to check
+ *  @param data			the optional certificate data
+ *	@param username		the HTTP Basic Auth username
+ *	@param password		the HTTP Basic Auth password
  */
-- (void)checkURL:(NSString*)serverUrl withCertificateData:(NSData*)data;
+- (void)checkURL:(NSString*)serverUrl withCertificateData:(NSData*)certificateData HTTPUsername:(NSString*)username HTTPPassword:(NSString*)password;
+
 
 /**
  *  Checks for reachability of network using Apple reachability

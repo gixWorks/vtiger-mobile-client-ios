@@ -16,13 +16,15 @@
 /**
  *  Instantiates the client
  *
- *  @param delegate  the delegate of the URL Checker Client
- *  @param urlToTest CRM url to test
- *  @param data      data containing certificate keychain reference
+ *  @param delegate		the delegate of the URL Checker Client
+ *  @param urlToTest	CRM url to test
+ *  @param data			data containing certificate keychain reference
+ *	@param username		HTTP Basic Auth username
+ *	@param password		HTTP Basic Auth password
  *
  *  @return the URLCheckerClient
  */
-- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL *)urlToTest certificateData:(NSData*)data;
+- (id)initWithDelegate:(id<URLCheckerClientDelegate>)delegate url:(NSURL *)urlToTest certificateData:(NSData*)data basicHTTPUsername:(NSString*)username basicHTTPPassword:(NSString*)password;
 
 /**
  *  Instantiates the NSURLRequest and starts the NSURLConnection
