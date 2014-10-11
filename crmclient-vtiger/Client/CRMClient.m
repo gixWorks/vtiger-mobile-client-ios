@@ -270,7 +270,7 @@ static int kMinutesToRetrySave = 15;
 
 - (BOOL)checkReachability
 {
-    //It's used only to veryfy if the device is connected, not if it can reach the server!
+    //It's used only to verify if the device is connected, not if it can reach the server!
     //Reachability uses only the server "root" and it's hard to extract from the URL we saved in the database.
     NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com"];
     AFHTTPSessionManager *client = [[AFHTTPSessionManager alloc] initWithBaseURL:testURL];
@@ -409,6 +409,7 @@ static int kMinutesToRetrySave = 15;
 
 - (void)syncCalendarRequestedByUser:(BOOL)requested
 {
+	//TODO: We sync projecttasks here so they are synchronized together with calendar.
 	[self syncModule:kVTModuleProjectTask];
 	
     SyncToken *syncToken = [[SyncToken MR_findByAttribute:@"module" withValue:kVTModuleCalendar andOrderBy:@"datetime" ascending:YES] lastObject];

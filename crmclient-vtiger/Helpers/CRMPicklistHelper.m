@@ -144,12 +144,17 @@
 			return picklistValue.crm_label;
 		}
 	}
-	//Otherwise return nil
-	//TODO: should inform user that they should re-sync the CRM labels
-	return nil;
+	//Otherwise return the non-localized value
+	//TODO: should inform user that should re-sync the CRM labels if the localized value has not been found
+	return keyValue;
 }
 
 + (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName
+{
+	return [self localizedPicklistValuesForField:fieldName module:moduleName sorted:-1];
+}
+
++ (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName sorted:(CRMPicklistOrdering)ordering;
 {
 	NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@ AND crm_name = %@", [Service getActive], moduleName];
 	Module *crmmodule = [Module MR_findFirstWithPredicate:p];
@@ -161,7 +166,20 @@
 	if ([localizedPicklistValues count] == 0) {
 		//TODO: this should NOT happen! Inform the user to re-sync CRM labels (?)
 	}
+	if (ordering!=kCRMPicklistOrderingUnordered) {
+		return [localizedPicklistValues sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+			NSString *first = [(GWActivitySelectItem*)a label];
+			NSString *second = [(GWActivitySelectItem*)b label];
+			if (ordering==kCRMPicklistOrderingAsc) {
+				return [first localizedCaseInsensitiveCompare:second];
+			}
+			else{
+				return [second localizedCaseInsensitiveCompare:first];
+			}
+		}];
+	}
 	return localizedPicklistValues;
 }
+
 
 @end

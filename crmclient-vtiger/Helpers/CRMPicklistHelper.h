@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, CRMPicklistOrdering){
+	kCRMPicklistOrderingUnordered = -1,
+	kCRMPicklistOrderingAsc = 0,
+	kCRMPicklistOrderingDesc
+};
+
 @interface CRMPicklistHelper : NSObject
 /**
  *  Returns a NSArray of GWActivitySelectItems with the picklist values for the Activity Status depending on the activity
@@ -47,5 +53,7 @@
 + (NSString*)localizedValueForPicklistField:(NSString*)fieldName module:(NSString*)moduleName value:(NSString*)keyValue;
 
 + (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName;
+
++ (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName sorted:(CRMPicklistOrdering)ordering;
 
 @end

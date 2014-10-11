@@ -146,9 +146,7 @@ static BOOL user_wants_to_trust_invalid_certificates = YES;
 #endif
 		_requested_basic_auth = YES;
 		if ([_basicHTTPAuthUsername length] > 0 && [_basicHTTPAuthPassword length] > 0) {
-			NSURLCredential *newCredential;
-			
-			newCredential = [NSURLCredential credentialWithUser:_basicHTTPAuthUsername
+			NSURLCredential *newCredential = [NSURLCredential credentialWithUser:_basicHTTPAuthUsername
 													   password:_basicHTTPAuthPassword
 													persistence:NSURLCredentialPersistenceNone];
 			
