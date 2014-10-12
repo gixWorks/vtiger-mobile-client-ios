@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GWNotificationNames.h"
 #import "URLCheckerClientDelegate.h"
 
 @class URLCheckerClient;
@@ -21,6 +22,7 @@ extern NSString* const kManagerHasFinishedFetchRecordWithGrouping;
 extern NSString* const kManagerHasFinishedFetchRecordsWithGrouping;
 extern NSString* const kManagerErrorUserHasUnvalidCredentials;
 extern NSString* const kManagerReportedError;
+extern NSString* const kManagerHasFinishedSyncModule;
 extern NSString* const kManagerReportedNoTimeZoneDefinedOnServer;
 
 extern NSString* const kManagerHasStartedSyncCalendar;

@@ -19,7 +19,6 @@
 #import "CRMFieldConstants.h"
 #import "NotificationsHandler.h"
 #import "CRMConstants.h"
-#import "GWNotificationNames.h"
 #import "ParserResult.h"
 //Log
 #import <CocoaLumberjack.h>
@@ -49,6 +48,7 @@ NSString* const kManagerHasFinishedFetchRecord = @"kManagerHasFinishedFetchRecor
 NSString* const kManagerHasFinishedFetchRecordWithGrouping = @"kManagerHasFinishedFetchRecordWithGrouping";
 NSString* const kManagerHasFinishedFetchRecordsWithGrouping = @"kManagerHasFinishedFetchRecordsWithGrouping";
 NSString* const kManagerHasFinishedRelatedRecordsWithGrouping = @"kManagerHasFinishedRelatedRecordsWithGrouping";
+NSString* const kManagerHasFinishedSyncModule = @"kManagerHasFinishedSyncModule";
 NSString* const kManagerReportedNoTimeZoneDefinedOnServer = @"kManagerReportedNoTimeZoneDefinedOnServer";
 
 NSString* const kManagerErrorUserHasUnvalidCredentials = @"kManagerUserHasUnvalidCredentials";
@@ -840,6 +840,8 @@ static int kMinutesToRetrySave = 15;
             DDLogError(@"%@", [exception description]);
         }
     }
+	NSString *notificationName = [NSString stringWithFormat:@"%@%@%@", kManagerHasFinishedSyncModule, kNotificationSeparator, moduleName];
+	[[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self userInfo:nil];
 }
 
 - (void)handleClientFinishedDescribe:(NSNotification*)notification

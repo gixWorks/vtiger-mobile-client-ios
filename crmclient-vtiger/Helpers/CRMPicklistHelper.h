@@ -56,4 +56,6 @@ typedef NS_ENUM(NSInteger, CRMPicklistOrdering){
 
 + (NSArray*)localizedPicklistValuesForField:(NSString*)fieldName module:(NSString*)moduleName sorted:(CRMPicklistOrdering)ordering;
 
++ (NSArray*)listOfRelatedModulesForActivityType:(NSString*)activityType;
+
 @end

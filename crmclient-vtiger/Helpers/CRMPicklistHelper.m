@@ -181,5 +181,16 @@
 	return localizedPicklistValues;
 }
 
++ (NSArray*)listOfRelatedModulesForActivityType:(NSString*)activityType
+{
+	if ([activityType isEqualToString:kCRMActivityTypeTask]) {
+		
+		return @[kVTModuleLeads, kVTModuleContacts, kVTModuleAccounts, kVTModuleHelpDesk, kVTModulePotentials, kVTModuleCampaigns];
+		//Also in the future Quotes, Purchase Orders, Sales Order and Invoice
+	}
+	else{
+		return @[kVTModuleContacts, kVTModuleLeads, kVTModuleAccounts, kVTModuleHelpDesk, kVTModulePotentials, kVTModuleCampaigns];
+	}
+}
 
 @end
