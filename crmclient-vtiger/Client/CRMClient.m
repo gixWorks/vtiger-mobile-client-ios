@@ -834,7 +834,12 @@ static int kMinutesToRetrySave = 15;
     else{
         //There was an error in the HTTPClient
         @try {
-            DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+			if ([[[notification userInfo] objectForKey:kClientNotificationErrorKey] isKindOfClass:[NSDictionary class]]) {
+				DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[[notification userInfo] objectForKey:kClientNotificationErrorKey] objectForKey:@"message"]);
+			}
+			else{
+				DDLogWarn(@"HTTPClient Error in %@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+			}
         }
         @catch (NSException *exception) {
             DDLogError(@"%@", [exception description]);
