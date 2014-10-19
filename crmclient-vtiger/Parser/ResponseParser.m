@@ -1,4 +1,4 @@
-	//
+//
 //  Parser.m
 //  VTFunctionalitiesApp
 //
@@ -42,7 +42,7 @@
     @try {
         if ([kMinimumRequiredVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
             // actualVersion is lower than the requiredVersion
-            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"vTiger Version (%@) lower than minimum required (%@)", @"vTiger Version (%@) lower than minimum required (%@) "), version, kMinimumRequiredVersion];
+            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"CRM_VERSION_TOO_LOW", @"CRM Version (%@) lower than minimum required (%@)"), version, kMinimumRequiredVersion];
             NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil];
             [parseResult setObject:errorInfo forKey:kErrorKey];
             return parseResult;
@@ -696,6 +696,15 @@
         NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND service = %@", moduleName, [Service getActive]];
         
         Module *m = [Module MR_findFirstWithPredicate:p];
+		if (!m) { //This happens for example for the Events module that was not sent by the CRM in loginAndFetchModules. We create module now
+			m = [Module MR_createEntity];
+			m.crm_id = [moduleDescription objectForKey:@"idPrefix"];
+			m.crm_name = moduleName;
+			m.crm_label = [moduleDescription objectForKey:@"label"];
+			m.crm_isEntity = @([[moduleDescription objectForKey:@"isEntity"] boolValue]);
+			m.crm_singular = moduleName;
+			m.service = [Service getActive];
+		}
         BOOL result = [m setDescriptionWithDictionary:moduleDescription];
         if (result == NO) {
             DDLogError(@"%@ %@ failed to create fields for module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);

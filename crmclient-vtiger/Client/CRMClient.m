@@ -723,6 +723,8 @@ static int kMinutesToRetrySave = 15;
             for (Module *module in modules) {
                 [self describeModule:module.crm_name];
             }
+			//Descibe the Events (which is not listed
+			[self describeModule:kVTModuleEvents];
         }
         //Don't notify yet. Notification will be sent when all Describe operations are over
     }

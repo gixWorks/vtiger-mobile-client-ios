@@ -7,7 +7,9 @@ const struct CalendarItemAttributes CalendarItemAttributes = {
 	.crm_date_start = @"crm_date_start",
 	.crm_description = @"crm_description",
 	.crm_due_date = @"crm_due_date",
+	.crm_id = @"crm_id",
 	.crm_subject = @"crm_subject",
+	.my_custom_fields = @"my_custom_fields",
 	.my_datetime_end = @"my_datetime_end",
 	.my_datetime_start = @"my_datetime_start",
 	.my_deleted = @"my_deleted",
@@ -62,7 +64,11 @@ const struct CalendarItemFetchedProperties CalendarItemFetchedProperties = {
 
 @dynamic crm_due_date;
 
+@dynamic crm_id;
+
 @dynamic crm_subject;
+
+@dynamic my_custom_fields;
 
 @dynamic my_datetime_end;
 

@@ -8,7 +8,6 @@ extern const struct ProjectTaskAttributes {
 	__unsafe_unretained NSString *crm_assigned_user_id;
 	__unsafe_unretained NSString *crm_assigned_user_name;
 	__unsafe_unretained NSString *crm_hours;
-	__unsafe_unretained NSString *crm_id;
 	__unsafe_unretained NSString *crm_modified_by_id;
 	__unsafe_unretained NSString *crm_modified_by_name;
 	__unsafe_unretained NSString *crm_priority;
@@ -21,7 +20,6 @@ extern const struct ProjectTaskAttributes {
 	__unsafe_unretained NSString *crm_time_created;
 	__unsafe_unretained NSString *crm_time_modified;
 	__unsafe_unretained NSString *crm_type;
-	__unsafe_unretained NSString *my_custom_fields;
 	__unsafe_unretained NSString *my_timezone;
 } ProjectTaskAttributes;
 
@@ -51,10 +49,6 @@ extern const struct ProjectTaskRelationships {
 @property (nonatomic, strong) NSString* crm_hours;
 
 //- (BOOL)validateCrm_hours:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSString* crm_id;
-
-//- (BOOL)validateCrm_id:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSString* crm_modified_by_id;
 
@@ -104,10 +98,6 @@ extern const struct ProjectTaskRelationships {
 
 //- (BOOL)validateCrm_type:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSData* my_custom_fields;
-
-//- (BOOL)validateMy_custom_fields:(id*)value_ error:(NSError**)error_;
-
 @property (nonatomic, strong) NSString* my_timezone;
 
 //- (BOOL)validateMy_timezone:(id*)value_ error:(NSError**)error_;
@@ -128,9 +118,6 @@ extern const struct ProjectTaskRelationships {
 
 - (NSString*)primitiveCrm_hours;
 - (void)setPrimitiveCrm_hours:(NSString*)value;
-
-- (NSString*)primitiveCrm_id;
-- (void)setPrimitiveCrm_id:(NSString*)value;
 
 - (NSString*)primitiveCrm_modified_by_id;
 - (void)setPrimitiveCrm_modified_by_id:(NSString*)value;
@@ -167,9 +154,6 @@ extern const struct ProjectTaskRelationships {
 
 - (NSString*)primitiveCrm_type;
 - (void)setPrimitiveCrm_type:(NSString*)value;
-
-- (NSData*)primitiveMy_custom_fields;
-- (void)setPrimitiveMy_custom_fields:(NSData*)value;
 
 - (NSString*)primitiveMy_timezone;
 - (void)setPrimitiveMy_timezone:(NSString*)value;

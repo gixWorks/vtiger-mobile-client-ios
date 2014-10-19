@@ -7,7 +7,9 @@ extern const struct CalendarItemAttributes {
 	__unsafe_unretained NSString *crm_date_start;
 	__unsafe_unretained NSString *crm_description;
 	__unsafe_unretained NSString *crm_due_date;
+	__unsafe_unretained NSString *crm_id;
 	__unsafe_unretained NSString *crm_subject;
+	__unsafe_unretained NSString *my_custom_fields;
 	__unsafe_unretained NSString *my_datetime_end;
 	__unsafe_unretained NSString *my_datetime_start;
 	__unsafe_unretained NSString *my_deleted;
@@ -44,9 +46,17 @@ extern const struct CalendarItemFetchedProperties {
 
 //- (BOOL)validateCrm_due_date:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) NSString* crm_id;
+
+//- (BOOL)validateCrm_id:(id*)value_ error:(NSError**)error_;
+
 @property (nonatomic, strong) NSString* crm_subject;
 
 //- (BOOL)validateCrm_subject:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSData* my_custom_fields;
+
+//- (BOOL)validateMy_custom_fields:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSDate* my_datetime_end;
 
@@ -83,8 +93,14 @@ extern const struct CalendarItemFetchedProperties {
 - (NSDate*)primitiveCrm_due_date;
 - (void)setPrimitiveCrm_due_date:(NSDate*)value;
 
+- (NSString*)primitiveCrm_id;
+- (void)setPrimitiveCrm_id:(NSString*)value;
+
 - (NSString*)primitiveCrm_subject;
 - (void)setPrimitiveCrm_subject:(NSString*)value;
+
+- (NSData*)primitiveMy_custom_fields;
+- (void)setPrimitiveMy_custom_fields:(NSData*)value;
 
 - (NSDate*)primitiveMy_datetime_end;
 - (void)setPrimitiveMy_datetime_end:(NSDate*)value;
