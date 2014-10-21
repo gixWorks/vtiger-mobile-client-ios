@@ -40,8 +40,6 @@
  */
 + (NSArray*)fieldsForModule:(NSString*)moduleName;
 
-+ (NSString*)fieldTypeForKey:(NSString*)fieldKey module:(NSString*)moduleName;
-
 + (CRMField*)fieldForKey:(NSString*)fieldKey module:(NSString*)moduleName;
 
 @end

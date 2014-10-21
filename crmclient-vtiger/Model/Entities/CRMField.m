@@ -28,14 +28,16 @@
     instance.crm_name = [dict objectForKey:kCRMFieldName];
     instance.crm_label = [dict objectForKey:kCRMFieldlabel];
     instance.crm_mandatory = [NSNumber numberWithBool:[[dict objectForKey:kCRMFieldmandatory] boolValue]];
+	//Intercept when <null> and when nil in this if/else
     if ([[dict objectForKey:kCRMFielduitype] isKindOfClass:[NSNull class]]) {
         instance.crm_uitype = nil;
     }else{
         instance.crm_uitype =  [dict objectForKey:kCRMFielduitype] == nil? nil : [[dict objectForKey:kCRMFielduitype] stringValue];
     }
-    if ([[[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ] isEqualToString:@"picklist"]) {
+	NSString *fieldTypeName = [[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ];
+    if ([fieldTypeName isEqualToString:@"picklist"] || [fieldTypeName isEqualToString:@"multipicklist"]) {
         NSError *jsonError;
-        instance.crm_type = @"picklist";
+		instance.crm_type = fieldTypeName;
         instance.crm_options = [NSJSONSerialization dataWithJSONObject:[[dict objectForKey:@"type"] objectForKey:@"picklistValues"] options:0 error:&jsonError];
         if (jsonError!=nil) {
 #if DEBUG

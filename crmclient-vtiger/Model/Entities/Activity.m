@@ -277,8 +277,14 @@
     [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
     [dict setValue:[timeFormat stringFromDate:self.my_datetime_end] forKey:kCalendarFieldtime_end];
     [dict setValue:[timeFormat stringFromDate:self.my_datetime_start] forKey:kCalendarFieldtime_start];
-    
-    
+	
+	//Custom fields
+	if (self.my_custom_fields) {
+		NSDictionary *cFields = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+		for (NSString *cFieldName in [cFields allKeys]) {
+			[dict setValue:[[cFields objectForKey:cFieldName] objectForKey:@"value"] forKey:cFieldName];
+		}
+	}
     //    //Time Zone Conversion
     //    NSTimeZone *activityTimeZone = [NSTimeZone timeZoneWithName:self.my_timezone];
     //    NSTimeZone *serverTimeZone = [NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server];

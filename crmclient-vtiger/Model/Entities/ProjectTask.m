@@ -216,7 +216,14 @@
 	[dict setObject:self.crm_task_no forKey:kProjecttaskNo];
 	[dict setObject:self.crm_task_number forKey:kProjecttaskNumber];
 	[dict setObject:self.crm_type forKey:kProjecttaskType];
-
+	//Custom fields
+	if (self.my_custom_fields) {
+		NSDictionary *cFields = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+		for (NSString *cFieldName in [cFields allKeys]) {
+			[dict setValue:[[cFields objectForKey:cFieldName] objectForKey:@"value"] forKey:cFieldName];
+		}
+	}
+	
 	return [dict copy]; //We return the immutable copy because dict is mutable.
 }
 
