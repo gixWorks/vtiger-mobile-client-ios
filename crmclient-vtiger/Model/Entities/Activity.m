@@ -159,10 +159,14 @@
             [comps setDay:[start_date_comp day]];
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
-            
+			
+			
+			NSDateComponents *end_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_due_date];
+			[end_date_comp setHour:[cal component:NSCalendarUnitHour fromDate:end_time]];
+			[end_date_comp setMinute:[cal component:NSCalendarUnitMinute fromDate:end_time]];
+			
             self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
-            NSTimeInterval duration = ( [self.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [self.crm_duration_minutes integerValue] * 60.0 );
-            self.my_datetime_end = [self.my_datetime_start dateByAddingTimeInterval:duration];
+			self.my_datetime_end = [[cal dateFromComponents:end_date_comp] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
             self.my_timezone = [Service getActive].crm_timezone_server;
             
             //Set again the other fields now that we have time zone applied
