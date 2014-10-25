@@ -1006,7 +1006,7 @@ static int kMinutesToRetrySave = 15;
 				message = errorInfo;
 			}
 			message = [message stringByAppendingString:[NSString stringWithFormat:@" - Record: %@", recordid]];
-            DDLogDebug(@"Save was not successful: %@", [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
+            DDLogDebug(@"Save was not successful for ID %@: %@", recordid, [[notification userInfo] objectForKey:kClientNotificationErrorKey]);
             [CRMErrorMessage addErrorMessageWithMessage:message];
             [[NSNotificationCenter defaultCenter] postNotificationName:kManagerReportedError object:nil];
             //we will retry

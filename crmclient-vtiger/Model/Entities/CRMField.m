@@ -61,4 +61,9 @@
     return instance;
 }
 
+- (BOOL)isCustomField
+{
+	return [self.crm_name hasPrefix:@"cf_"];
+}
+
 @end
