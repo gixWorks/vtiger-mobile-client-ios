@@ -162,8 +162,8 @@
 			
 			
 			NSDateComponents *end_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_due_date];
-			[end_date_comp setHour:[cal component:NSCalendarUnitHour fromDate:end_time]];
-			[end_date_comp setMinute:[cal component:NSCalendarUnitMinute fromDate:end_time]];
+			[end_date_comp setHour:[[cal components:NSCalendarUnitHour fromDate:end_time] hour]];
+			[end_date_comp setMinute:[[cal components:NSCalendarUnitMinute fromDate:end_time] minute]];
 			
             self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
 			self.my_datetime_end = [[cal dateFromComponents:end_date_comp] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
