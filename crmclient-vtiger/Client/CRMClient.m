@@ -30,7 +30,6 @@
 #import "Service.h"
 #import "Sync.h"
 #import "SyncToken.h"
-#import "Activity.h"
 #import "Module.h"
 #import "EnabledModules.h"
 #import "CRMErrorMessage.h"
@@ -430,7 +429,7 @@ static int kMinutesToRetrySave = 15;
 {
     //Drop all from Calendar
     NSPredicate *p = [NSPredicate predicateWithFormat:@"service = %@", [Service getActive]];
-    [Activity MR_deleteAllMatchingPredicate:p];
+    [CalendarItem MR_deleteAllMatchingPredicate:p];
     //Remove all SyncTokens if any. Deleting this will also delete all syncTokens for other modules
     [SyncToken MR_deleteAllMatchingPredicate:p];
     
@@ -521,20 +520,34 @@ static int kMinutesToRetrySave = 15;
     NSArray *updated = [ModifiedRecord MR_findByAttribute:@"crm_action" withValue:kModifiedRecordActionUPDATE];
     NSMutableArray *updated_records = [[NSMutableArray alloc] init];
     for (ModifiedRecord *mr in updated) {
-        //TODO: FOR NOW CAN BE ONLY ACTIVITIES
+        ///FOR NOW CAN BE ONLY ACTIVITIES OR PROJECT TASKS
         NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_id = %@ AND service = %@ AND my_deleted != %@", mr.crm_id, [Service getActive], @YES];
-        Activity *a = [Activity MR_findFirstWithPredicate:p];
+        CalendarItem *a = [CalendarItem MR_findFirstWithPredicate:p];
         if(a != nil){
             NSDictionary *r = [a crmRepresentation];
             if (r == nil) {
-                DDLogError(@"%@ %@ CRMRepresentation is nil for Activity %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), a.crm_id);
+                DDLogError(@"%@ %@ CRMRepresentation is nil for CalendarItem %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), a.crm_id);
             }
             [updated_records addObject:r];
             //Notification name is structured like xxxxx_yyyyyy where yyyyy is the record id
             NSString *notificationName = [NSString stringWithFormat:@"%@%@%@",kClientHasFinishedSaveRecord, kNotificationSeparator, a.crm_id];
             NSString *valuesString = [r gw_jsonStringWithPrettyPrint:NO];
-            NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSaveRecord,@"_operation", session, @"_session", kVTModuleCalendar, @"module", valuesString, @"values",  nil];
-            DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), kVTModuleCalendar, r);
+			NSString *module = @"";
+			if ([a isKindOfClass:[Activity class]]) {
+				module = kVTModuleCalendar;
+			}
+			else if ([a isKindOfClass:[ProjectTask class]])
+			{
+				module = kVTModuleProjectTask;
+			}
+			else{
+				DDLogDebug(@"%@ %@ What kind of module is element %@ ?", NSStringFromClass([self class]), NSStringFromSelector(_cmd), a.crm_id);
+				//Delete this "orphan" reference
+				[[ModifiedRecord MR_findFirstByAttribute:@"crm_id" withValue:mr.crm_id] MR_deleteEntity];
+				return;
+			}
+            NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:kOperationSaveRecord,@"_operation", session, @"_session", module, @"module", valuesString, @"values",  nil];
+            DDLogDebug(@"%@ %@ Starting SaveRecord for module %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), module, r);
             //Dispatch this operation after some delay to not overload server (?)
             NSInteger delayInSeconds = 0.5;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
