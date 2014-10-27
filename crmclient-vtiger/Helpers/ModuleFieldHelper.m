@@ -26,8 +26,11 @@
 
 + (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName
 {
-    //TODO
-    return nil;
+	CRMField *f = [self fieldForKey:fieldName module:moduleName];
+	if (f) {
+		return f.crm_default_value;
+	}
+	return nil;
 }
 
 + (NSArray*)fieldsForModule:(NSString*)moduleName
