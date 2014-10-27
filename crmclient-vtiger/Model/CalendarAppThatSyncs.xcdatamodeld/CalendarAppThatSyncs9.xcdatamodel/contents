@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Account" representedClassName="Account" syncable="YES">
         <attribute name="crm_account_no" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_accountname" optional="YES" attributeType="String" syncable="YES"/>
@@ -176,6 +176,7 @@
         <relationship name="service" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Service" inverseName="errorMessages" inverseEntity="Service" syncable="YES"/>
     </entity>
     <entity name="CRMField" representedClassName="CRMField" syncable="YES">
+        <attribute name="crm_default_value" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="crm_mandatory" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="crm_name" attributeType="String" syncable="YES"/>
@@ -457,7 +458,7 @@
         <element name="ContactAddress" positionX="574" positionY="768" width="128" height="240"/>
         <element name="CRMComment" positionX="-180" positionY="225" width="128" height="193"/>
         <element name="CRMErrorMessage" positionX="-171" positionY="234" width="128" height="88"/>
-        <element name="CRMField" positionX="-173" positionY="870" width="128" height="165"/>
+        <element name="CRMField" positionX="-173" positionY="870" width="128" height="180"/>
         <element name="CRMFieldPicklistValue" positionX="7" positionY="1233" width="128" height="90"/>
         <element name="Document" positionX="252" positionY="72" width="128" height="298"/>
         <element name="EnabledModules" positionX="-180" positionY="225" width="128" height="90"/>

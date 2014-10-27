@@ -4,6 +4,7 @@
 #import "_CRMField.h"
 
 const struct CRMFieldAttributes CRMFieldAttributes = {
+	.crm_default_value = @"crm_default_value",
 	.crm_label = @"crm_label",
 	.crm_mandatory = @"crm_mandatory",
 	.crm_name = @"crm_name",
@@ -51,6 +52,8 @@ const struct CRMFieldRelationships CRMFieldRelationships = {
 
 	return keyPaths;
 }
+
+@dynamic crm_default_value;
 
 @dynamic crm_label;
 
