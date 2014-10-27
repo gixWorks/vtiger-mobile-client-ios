@@ -32,7 +32,7 @@
     if ([[dict objectForKey:kCRMFielduitype] isKindOfClass:[NSNull class]]) {
         instance.crm_uitype = nil;
     }else{
-        instance.crm_uitype =  [dict objectForKey:kCRMFielduitype] == nil? nil : [[dict objectForKey:kCRMFielduitype] stringValue];
+		instance.crm_uitype =  [dict objectForKey:kCRMFielduitype] == nil? nil : [NSString stringWithFormat:@"%@",[dict objectForKey:kCRMFielduitype]];
     }
 	NSString *fieldTypeName = [[dict objectForKey:kCRMFieldtype] objectForKey:@"name" ];
     if ([fieldTypeName isEqualToString:@"picklist"] || [fieldTypeName isEqualToString:@"multipicklist"]) {
