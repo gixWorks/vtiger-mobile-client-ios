@@ -2,5 +2,5 @@
 
 @interface CalendarItem : _CalendarItem {}
 // Custom logic goes here.
-- (NSDictionary*)crmRepresentation;
+- (NSDictionary*)crmRepresentation;  //This will be called to subclasses!
 @end
