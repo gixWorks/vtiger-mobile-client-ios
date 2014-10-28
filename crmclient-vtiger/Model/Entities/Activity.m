@@ -159,10 +159,14 @@
             [comps setDay:[start_date_comp day]];
             [comps setHour:[start_time_comp hour]];
             [comps setMinute:[start_time_comp minute]];
-            
+			
+			
+			NSDateComponents *end_date_comp = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self.crm_due_date];
+			[end_date_comp setHour:[[cal components:NSCalendarUnitHour fromDate:end_time] hour]];
+			[end_date_comp setMinute:[[cal components:NSCalendarUnitMinute fromDate:end_time] minute]];
+			
             self.my_datetime_start = [[cal dateFromComponents:comps] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
-            NSTimeInterval duration = ( [self.crm_duration_hours integerValue] * 60.0 * 60.0 ) + ( [self.crm_duration_minutes integerValue] * 60.0 );
-            self.my_datetime_end = [self.my_datetime_start dateByAddingTimeInterval:duration];
+			self.my_datetime_end = [[cal dateFromComponents:end_date_comp] gw_convertToTimeZone:[Service getActive].crm_timezone_server];
             self.my_timezone = [Service getActive].crm_timezone_server;
             
             //Set again the other fields now that we have time zone applied
@@ -244,7 +248,6 @@
     if (self.crm_contact_id != nil) {
         //There's a related Contact
         [dict setObject:self.crm_contact_id forKey:kCalendarFieldcontact_id];
-        //        [dict setObject:@{ @"value" : self.crm_contact_id, @"label" : self.crm_contact_name} forKey:kCalendarFieldcontact_id];
     }
     [dict setValue:self.crm_description forKey:kCalendarFielddescription];
     [dict setValue:[numberFormatter stringFromNumber:self.crm_duration_hours] forKey:kCalendarFieldduration_hours];
@@ -260,25 +263,27 @@
     if (self.crm_parent_id != nil) {
         //There is a related record (not a Contact, for Contacts there is "contact_id")
         [dict setObject:self.crm_parent_id forKey:kCalendarFieldparent_id];
-        //        [dict setObject:@{ @"value" : self.crm_parent_id, @"label" : self.crm_parent_name } forKey:kCalendarFieldparent_id];
     }
     [dict setValue:self.crm_recurringtype forKey:kCalendarFieldrecurringtype];
-    //    [dict setObject:self.crm_remindertime forKey:kCalendarFieldreminder_time]; //skip for the moment
     //    [dict setObject:self.crm_sendnotification forKey:kCalendarFieldsendnotification]; //skip for the moment
     [dict setValue:self.crm_subject forKey:kCalendarFieldsubject];
-    //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
-    //    [dict setObject:[dateTimeFormat stringFromDate:self.crm_time_created] forKey:kFieldCreatedTime]; //skip for the moment
-    //    [dict setObject:self.crm_priority forKey:kCalendarFieldtaskpriority];
-    
+	//    [dict setObject:self.crm_priority forKey:kCalendarFieldtaskpriority];
+	
     
     [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server]];
     [timeFormat setTimeZone:[NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server]];
     [dict setValue:[dateFormat stringFromDate:self.my_datetime_start] forKey:kCalendarFielddate_start];
-    [dict setValue:[dateFormat stringFromDate:self.crm_due_date] forKey:kCalendarFielddue_date];
+    [dict setValue:[dateFormat stringFromDate:self.my_datetime_end] forKey:kCalendarFielddue_date];
     [dict setValue:[timeFormat stringFromDate:self.my_datetime_end] forKey:kCalendarFieldtime_end];
     [dict setValue:[timeFormat stringFromDate:self.my_datetime_start] forKey:kCalendarFieldtime_start];
-    
-    
+	
+	//Custom fields
+	if (self.my_custom_fields) {
+		NSDictionary *cFields = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+		for (NSString *cFieldName in [cFields allKeys]) {
+			[dict setValue:[[cFields objectForKey:cFieldName] objectForKey:@"value"] forKey:cFieldName];
+		}
+	}
     //    //Time Zone Conversion
     //    NSTimeZone *activityTimeZone = [NSTimeZone timeZoneWithName:self.my_timezone];
     //    NSTimeZone *serverTimeZone = [NSTimeZone timeZoneWithName:[Service getActive].crm_timezone_server];

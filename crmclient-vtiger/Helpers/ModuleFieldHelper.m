@@ -26,8 +26,27 @@
 
 + (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName
 {
-    //TODO
-    return nil;
+	CRMField *f = [self fieldForKey:fieldName module:moduleName];
+	if (f) {
+		return f.crm_default_value;
+	}
+	return nil;
+}
+
++ (NSArray*)fieldsForModule:(NSString*)moduleName
+{
+	NSPredicate *mp = [NSPredicate predicateWithFormat:@"service = %@ and crm_name = %@", [Service getActive], moduleName];
+	Module *m = [Module MR_findFirstWithPredicate:mp];
+	return [m.fields allObjects];
+}
+
++ (CRMField*)fieldForKey:(NSString*)fieldKey module:(NSString*)moduleName
+{
+	NSPredicate *mp = [NSPredicate predicateWithFormat:@"service = %@ and crm_name = %@", [Service getActive], moduleName];
+	Module *m = [Module MR_findFirstWithPredicate:mp];
+	NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND module = %@", fieldKey, m];
+	CRMField *f = [CRMField MR_findFirstWithPredicate:p];
+	return f;
 }
 
 @end

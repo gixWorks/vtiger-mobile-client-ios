@@ -207,16 +207,24 @@
 	[dict setObject:[dateFormat stringFromDate:self.crm_due_date] forKey:kProjecttaskEnddate];
 	[dict setObject:self.crm_hours forKey:kProjecttaskHours];
 	if (isNewRecord == NO) { [dict setObject:self.crm_id forKey:kProjecttaskId]; }
-	[dict setObject:self.crm_modified_by_id forKey:kProjecttaskModifiedby];
 	[dict setObject:self.crm_priority forKey:kProjecttaskPriority];
 	[dict setObject:self.crm_progress forKey:kProjecttaskProgress];
 	if([self.crm_related_project_id length] > 0){ 	[dict setObject:self.crm_related_project_id forKey:kProjecttaskProjectid]; }
-	[dict setObject:self.crm_status forKey:kProjecttaskStatus];
+	if (self.crm_status) {
+		[dict setObject:self.crm_status forKey:kProjecttaskStatus];
+	}
 	[dict setObject:self.crm_subject forKey:kProjecttaskName];
 	[dict setObject:self.crm_task_no forKey:kProjecttaskNo];
 	[dict setObject:self.crm_task_number forKey:kProjecttaskNumber];
 	[dict setObject:self.crm_type forKey:kProjecttaskType];
-
+	//Custom fields
+	if (self.my_custom_fields) {
+		NSDictionary *cFields = [NSJSONSerialization JSONObjectWithData:self.my_custom_fields options:0 error:nil];
+		for (NSString *cFieldName in [cFields allKeys]) {
+			[dict setValue:[[cFields objectForKey:cFieldName] objectForKey:@"value"] forKey:cFieldName];
+		}
+	}
+	
 	return [dict copy]; //We return the immutable copy because dict is mutable.
 }
 

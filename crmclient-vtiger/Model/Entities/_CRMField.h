@@ -4,6 +4,7 @@
 @import CoreData;
 
 extern const struct CRMFieldAttributes {
+	__unsafe_unretained NSString *crm_default_value;
 	__unsafe_unretained NSString *crm_label;
 	__unsafe_unretained NSString *crm_mandatory;
 	__unsafe_unretained NSString *crm_name;
@@ -28,6 +29,10 @@ extern const struct CRMFieldRelationships {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 @property (nonatomic, readonly, strong) CRMFieldID* objectID;
+
+@property (nonatomic, strong) NSString* crm_default_value;
+
+//- (BOOL)validateCrm_default_value:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSString* crm_label;
 
@@ -76,6 +81,9 @@ extern const struct CRMFieldRelationships {
 @end
 
 @interface _CRMField (CoreDataGeneratedPrimitiveAccessors)
+
+- (NSString*)primitiveCrm_default_value;
+- (void)setPrimitiveCrm_default_value:(NSString*)value;
 
 - (NSString*)primitiveCrm_label;
 - (void)setPrimitiveCrm_label:(NSString*)value;

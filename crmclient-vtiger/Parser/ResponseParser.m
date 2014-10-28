@@ -1,4 +1,4 @@
-	//
+//
 //  Parser.m
 //  VTFunctionalitiesApp
 //
@@ -42,7 +42,7 @@
     @try {
         if ([kMinimumRequiredVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
             // actualVersion is lower than the requiredVersion
-            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"vTiger Version (%@) lower than minimum required (%@)", @"vTiger Version (%@) lower than minimum required (%@) "), version, kMinimumRequiredVersion];
+            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"CRM_VERSION_TOO_LOW", @"CRM Version (%@) lower than minimum required (%@)"), version, kMinimumRequiredVersion];
             NSDictionary *errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:message, @"message", nil];
             [parseResult setObject:errorInfo forKey:kErrorKey];
             return parseResult;
@@ -183,7 +183,7 @@
             }
             //D - create the item, using the fields from the Dictionary. The item is already added to persistent storage.
             NSManagedObject *returnedRecord;
-            if ([module isEqualToString:kVTModuleCalendar]) {
+            if ([module isEqualToString:kVTModuleCalendar]|| [module isEqualToString:kVTModuleEvents]) {
                 returnedRecord = [Activity modelObjectWithDictionary:entityFields];
                 //D1 - Remove existing notification and schedule a new one (we don't know if the event time has changed or if it's a new item)
                 [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationRescheduleNotification object:self userInfo:@{kNotificationUserInfoActivity: (Activity*)returnedRecord}];
@@ -439,7 +439,7 @@
 #if DEBUG
         NSLog(@"%@ parsing %@ record %@", NSStringFromSelector(_cmd), module, identifier);
 #endif
-        if ([module isEqualToString:kVTModuleCalendar]) {
+        if ([module isEqualToString:kVTModuleCalendar] || [module isEqualToString:kVTModuleEvents]) {
             returnedRecord = [Activity modelObjectWithDictionary:record];
         }
         else if([module isEqualToString:kVTModuleAccounts]){
@@ -522,7 +522,7 @@
         
         //To create the new entity, we need to decode the type
         NSString *module = [ModulesHelper decodeModuleForRecordId:identifier];
-        if ([module isEqualToString:kVTModuleCalendar]) {
+        if ([module isEqualToString:kVTModuleCalendar]|| [module isEqualToString:kVTModuleEvents]) {
             if(tempRecordId != nil){
                 Activity *a = [Activity MR_findFirstByAttribute:@"crm_id" withValue:tempRecordId];
                 [a updateModelObjectWithDictionary:entityFields customFields:entityCustomFields];
@@ -624,7 +624,7 @@
                 }
             }
             //D - create the items starting from the dictionary
-            if ([module isEqualToString:kVTModuleCalendar]) {
+            if ([module isEqualToString:kVTModuleCalendar] || [module isEqualToString:kVTModuleEvents]) {
                 [Activity modelObjectWithDictionary:entityFields customFields:entityCustomFields];
             }
             else if ([module isEqualToString:kVTModuleAccounts]) {
@@ -696,6 +696,15 @@
         NSPredicate *p = [NSPredicate predicateWithFormat:@"crm_name = %@ AND service = %@", moduleName, [Service getActive]];
         
         Module *m = [Module MR_findFirstWithPredicate:p];
+		if (!m) { //This happens for example for the Events module that was not sent by the CRM in loginAndFetchModules. We create module now
+			m = [Module MR_createEntity];
+			m.crm_id = [moduleDescription objectForKey:@"idPrefix"];
+			m.crm_name = moduleName;
+			m.crm_label = [moduleDescription objectForKey:@"label"];
+			m.crm_isEntity = @([[moduleDescription objectForKey:@"isEntity"] boolValue]);
+			m.crm_singular = moduleName;
+			m.service = [Service getActive];
+		}
         BOOL result = [m setDescriptionWithDictionary:moduleDescription];
         if (result == NO) {
             DDLogError(@"%@ %@ failed to create fields for module %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), moduleName);
@@ -782,7 +791,7 @@
     }
     else{
         //TODO: we should not get here!
-        return @{@"error" : @"Unknown error when saving new record!"};
+        return @{@"error" : [NSString stringWithFormat:@"Unknown error when saving new record! Error: %@", [resultRecordParse objectForKey:kErrorKey]]};
     }
     return  @{};
 }

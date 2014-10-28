@@ -4,10 +4,7 @@
 #import "_ProjectTask.h"
 
 const struct ProjectTaskAttributes ProjectTaskAttributes = {
-	.crm_assigned_user_id = @"crm_assigned_user_id",
-	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_hours = @"crm_hours",
-	.crm_id = @"crm_id",
 	.crm_modified_by_id = @"crm_modified_by_id",
 	.crm_modified_by_name = @"crm_modified_by_name",
 	.crm_priority = @"crm_priority",
@@ -20,7 +17,6 @@ const struct ProjectTaskAttributes ProjectTaskAttributes = {
 	.crm_time_created = @"crm_time_created",
 	.crm_time_modified = @"crm_time_modified",
 	.crm_type = @"crm_type",
-	.my_custom_fields = @"my_custom_fields",
 	.my_timezone = @"my_timezone",
 };
 
@@ -57,13 +53,7 @@ const struct ProjectTaskRelationships ProjectTaskRelationships = {
 	return keyPaths;
 }
 
-@dynamic crm_assigned_user_id;
-
-@dynamic crm_assigned_user_name;
-
 @dynamic crm_hours;
-
-@dynamic crm_id;
 
 @dynamic crm_modified_by_id;
 
@@ -88,8 +78,6 @@ const struct ProjectTaskRelationships ProjectTaskRelationships = {
 @dynamic crm_time_modified;
 
 @dynamic crm_type;
-
-@dynamic my_custom_fields;
 
 @dynamic my_timezone;
 

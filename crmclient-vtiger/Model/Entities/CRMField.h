@@ -3,5 +3,6 @@
 @interface CRMField : _CRMField {}
 
 + (CRMField *)modelObjectWithDictionary:(NSDictionary*)dict module:(Module*)module;
+- (BOOL)isCustomField;
 
 @end

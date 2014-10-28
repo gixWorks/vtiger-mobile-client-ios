@@ -25,6 +25,15 @@
     return [NSString stringWithFormat:@"%@x%@", moduleId, userId];
 }
 
++ (NSString *)fullUserIdForCurrentUser
+{
+	NSString *currentUserId = [[Service getActive] crm_userid];
+	if (!currentUserId) {
+		return nil;
+	}
+	return [self fullUserIdForUserId:currentUserId];
+}
+
 + (NSString *)gw_userNameForUserId:(NSString *)userId
 {
     Service *s = [Service getActive];

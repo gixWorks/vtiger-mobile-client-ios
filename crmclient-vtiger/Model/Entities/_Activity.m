@@ -5,14 +5,11 @@
 
 const struct ActivityAttributes ActivityAttributes = {
 	.crm_activitytype = @"crm_activitytype",
-	.crm_assigned_user_id = @"crm_assigned_user_id",
-	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_contact_id = @"crm_contact_id",
 	.crm_contact_name = @"crm_contact_name",
 	.crm_duration_hours = @"crm_duration_hours",
 	.crm_duration_minutes = @"crm_duration_minutes",
 	.crm_eventstatus = @"crm_eventstatus",
-	.crm_id = @"crm_id",
 	.crm_location = @"crm_location",
 	.crm_notime = @"crm_notime",
 	.crm_parent_id = @"crm_parent_id",
@@ -27,7 +24,6 @@ const struct ActivityAttributes ActivityAttributes = {
 	.crm_time_modified = @"crm_time_modified",
 	.crm_time_start = @"crm_time_start",
 	.crm_visibility = @"crm_visibility",
-	.my_custom_fields = @"my_custom_fields",
 	.my_timezone = @"my_timezone",
 };
 
@@ -82,10 +78,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 
 @dynamic crm_activitytype;
 
-@dynamic crm_assigned_user_id;
-
-@dynamic crm_assigned_user_name;
-
 @dynamic crm_contact_id;
 
 @dynamic crm_contact_name;
@@ -132,8 +124,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 
 @dynamic crm_eventstatus;
 
-@dynamic crm_id;
-
 @dynamic crm_location;
 
 @dynamic crm_notime;
@@ -179,8 +169,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 @dynamic crm_time_start;
 
 @dynamic crm_visibility;
-
-@dynamic my_custom_fields;
 
 @dynamic my_timezone;
 

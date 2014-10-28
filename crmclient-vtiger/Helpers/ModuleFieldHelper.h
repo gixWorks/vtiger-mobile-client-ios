@@ -31,4 +31,15 @@
  */
 + (id)defaultValueForField:(NSString*)fieldName module:(NSString*)moduleName;
 
+/**
+ *  Returns an array of CRMFields for the requested module
+ *
+ *  @param moduleName the module name
+ *
+ *  @return an array of `CRMField` objects
+ */
++ (NSArray*)fieldsForModule:(NSString*)moduleName;
+
++ (CRMField*)fieldForKey:(NSString*)fieldKey module:(NSString*)moduleName;
+
 @end

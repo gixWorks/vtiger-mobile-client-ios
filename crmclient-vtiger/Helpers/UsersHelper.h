@@ -15,7 +15,7 @@
  *
  *  @param userId the user ID without module
  *
- *  @return The Full user ID ModuleXuserId
+ *  @return Full User ID <module_id>x<user_id>
  */
 + (NSString*)fullUserIdForUserId:(NSString*)userId;
 
@@ -27,5 +27,12 @@
  *  @return The display label for the user
  */
 + (NSString*)gw_userNameForUserId:(NSString*)userId;
+
+/**
+ *  Returns the full User id (<module_id>x<user_id>) for the current user ID
+ *
+ *  @return Full User ID <module_id>x<user_id>
+ */
++ (NSString *)fullUserIdForCurrentUser;
 
 @end
