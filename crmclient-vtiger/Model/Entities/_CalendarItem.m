@@ -4,6 +4,8 @@
 #import "_CalendarItem.h"
 
 const struct CalendarItemAttributes CalendarItemAttributes = {
+	.crm_assigned_user_id = @"crm_assigned_user_id",
+	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_date_start = @"crm_date_start",
 	.crm_description = @"crm_description",
 	.crm_due_date = @"crm_due_date",
@@ -57,6 +59,10 @@ const struct CalendarItemFetchedProperties CalendarItemFetchedProperties = {
 
 	return keyPaths;
 }
+
+@dynamic crm_assigned_user_id;
+
+@dynamic crm_assigned_user_name;
 
 @dynamic crm_date_start;
 

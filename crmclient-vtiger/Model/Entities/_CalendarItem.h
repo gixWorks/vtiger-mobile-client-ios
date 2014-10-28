@@ -4,6 +4,8 @@
 @import CoreData;
 
 extern const struct CalendarItemAttributes {
+	__unsafe_unretained NSString *crm_assigned_user_id;
+	__unsafe_unretained NSString *crm_assigned_user_name;
 	__unsafe_unretained NSString *crm_date_start;
 	__unsafe_unretained NSString *crm_description;
 	__unsafe_unretained NSString *crm_due_date;
@@ -33,6 +35,14 @@ extern const struct CalendarItemFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 @property (nonatomic, readonly, strong) CalendarItemID* objectID;
+
+@property (nonatomic, strong) NSString* crm_assigned_user_id;
+
+//- (BOOL)validateCrm_assigned_user_id:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSString* crm_assigned_user_name;
+
+//- (BOOL)validateCrm_assigned_user_name:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSDate* crm_date_start;
 
@@ -83,6 +93,12 @@ extern const struct CalendarItemFetchedProperties {
 @end
 
 @interface _CalendarItem (CoreDataGeneratedPrimitiveAccessors)
+
+- (NSString*)primitiveCrm_assigned_user_id;
+- (void)setPrimitiveCrm_assigned_user_id:(NSString*)value;
+
+- (NSString*)primitiveCrm_assigned_user_name;
+- (void)setPrimitiveCrm_assigned_user_name:(NSString*)value;
 
 - (NSDate*)primitiveCrm_date_start;
 - (void)setPrimitiveCrm_date_start:(NSDate*)value;

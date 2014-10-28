@@ -5,8 +5,6 @@
 
 const struct ActivityAttributes ActivityAttributes = {
 	.crm_activitytype = @"crm_activitytype",
-	.crm_assigned_user_id = @"crm_assigned_user_id",
-	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_contact_id = @"crm_contact_id",
 	.crm_contact_name = @"crm_contact_name",
 	.crm_duration_hours = @"crm_duration_hours",
@@ -79,10 +77,6 @@ const struct ActivityFetchedProperties ActivityFetchedProperties = {
 }
 
 @dynamic crm_activitytype;
-
-@dynamic crm_assigned_user_id;
-
-@dynamic crm_assigned_user_name;
 
 @dynamic crm_contact_id;
 

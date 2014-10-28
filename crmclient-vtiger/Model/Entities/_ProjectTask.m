@@ -4,8 +4,6 @@
 #import "_ProjectTask.h"
 
 const struct ProjectTaskAttributes ProjectTaskAttributes = {
-	.crm_assigned_user_id = @"crm_assigned_user_id",
-	.crm_assigned_user_name = @"crm_assigned_user_name",
 	.crm_hours = @"crm_hours",
 	.crm_modified_by_id = @"crm_modified_by_id",
 	.crm_modified_by_name = @"crm_modified_by_name",
@@ -54,10 +52,6 @@ const struct ProjectTaskRelationships ProjectTaskRelationships = {
 
 	return keyPaths;
 }
-
-@dynamic crm_assigned_user_id;
-
-@dynamic crm_assigned_user_name;
 
 @dynamic crm_hours;
 
